@@ -18,7 +18,7 @@ public class Player extends GameThing{
 		this.handler = handler;
 		this.main = main;
 		this.screen = screen;
-		
+
 		width = 32;
 		height = 32;
 	}
@@ -26,12 +26,12 @@ public class Player extends GameThing{
 	public void tick() {
 		x += velX;
 		y += velY;
-		
+
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Pickup")){
 				if (getBounds().intersects(thing.getBounds())){
-					screen.setWeapon(thing.getId().substring(7));
+					screen.addWeapon((Weapon)thing);
 					handler.removeObject(thing);
 				}
 			}
@@ -45,7 +45,7 @@ public class Player extends GameThing{
 					if (hp == 0){
 						//game over
 					}
-					
+
 				}
 			}
 		}
@@ -56,7 +56,7 @@ public class Player extends GameThing{
 		else {
 			invincible = false;
 		}
-			
+
 	}
 
 	public void render(Graphics g) {

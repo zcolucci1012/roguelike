@@ -5,9 +5,12 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Font;
 
 public class Screen extends MouseAdapter{
-	
+
 	private Handler handler;
 	private Main main;
 	private int mx;
@@ -20,35 +23,35 @@ public class Screen extends MouseAdapter{
 	private int reloadTime = 100;
 	private int time2 = 0;
 	private int time = 0;
-	private String weapon = "";
-	private ArrayList <String> weapons = new ArrayList <String> ();
+	private Weapon weapon;
+	private ArrayList <Weapon> weapons = new ArrayList <Weapon> ();
 	private ArrayList <Integer> ammo = new ArrayList <Integer> ();
 	private boolean firing = false;
 	private boolean reloading = false;
-	
+
 	public Screen (Handler handler, Main main){
 		this.handler = handler;
 		this.main = main;
 	}
-	
+
 	public void mousePressed(MouseEvent e){
 		mx = e.getX();
 		my = e.getY();
-		
+
 		if (mouseOver(mx, my, 0, 0, 800, 800)){
 			firing = true;
 		}
 	}
-	
+
 	public void mouseReleased(MouseEvent e){
 		mx = e.getX();
 		my = e.getY();
-		
+
 		time = 0;
 		firing = false;
 	}
-	
-	
+
+
 	private boolean mouseOver(int mx, int my, int x1, int y1, int x2, int y2){
 		if(mx > x1 && mx < x2){
 			if (my > y1 && my < y2){
@@ -58,7 +61,7 @@ public class Screen extends MouseAdapter{
 		}
 		else return false;
 	}
-	
+
 	public void tick(){
 		Point a = MouseInfo.getPointerInfo().getLocation();
 		Point b = main.getLocationOnScreen();
@@ -82,8 +85,8 @@ public class Screen extends MouseAdapter{
 								handler.addObject(shot);
 								bullets--;
 								System.out.println(bullets);
-								if (weapons.size() >= 1) ammo.set(weapons.indexOf(weapon), new Integer(bullets));
-								if (bullets == 0){
+								weapon.setAmmo(bullets);
+								if (bullets <= 0){
 									time2 = reloadTime;
 									System.out.println("Reloading...");
 									reloading = true;
@@ -101,64 +104,62 @@ public class Screen extends MouseAdapter{
 				System.out.println("Reloaded!");
 				reloading = false;
 				bullets = magazine;
-				ammo.set(weapons.indexOf(weapon), new Integer(magazine));
+				weapon.setAmmo(magazine);
 				time = 0;
 			}
 		}
 	}
-	
-	public void setWeapon(String weapon){
-		this.weapon = weapon;
-		boolean newWeapon = false;
+
+	public void addWeapon(Weapon weapon){
 		if (!weapons.contains(weapon)) {
 			weapons.add(weapon);
-			newWeapon = true;
 		}
-		if (this.weapon.equals("pistol")){
-			System.out.println("Switched to pistol!");
-			this.fireDelay = 25;
-			this.shotSpeed = 5;
-			this.damage = 5;
-			this.magazine = 8;
-			this.reloadTime = 150;
-		
+		if (weapons.size() == 1){
+			setWeapon(weapon);
 		}
-		if (this.weapon.equals("smg")){
-			System.out.println("Switched to smg!");
-			this.fireDelay = 5;
-			this.shotSpeed = 5;
-			this.damage = 2;
-			this.magazine = 35;
-			this.reloadTime = 200;
-		}
-		if (newWeapon) {
-			ammo.add(weapons.indexOf(weapon), new Integer(magazine));
-		}
-		this.bullets = ammo.get(weapons.indexOf(weapon)).intValue();
 	}
-	
+
+	public void setWeapon(Weapon weapon){
+		System.out.println(weapon.getFireDelay());
+		this.weapon = weapon;
+		System.out.println("Switched to " + weapon.getName());
+		this.fireDelay = weapon.getFireDelay();
+		this.shotSpeed = weapon.getShotSpeed();
+		this.damage = weapon.getDamage();
+		this.magazine = weapon.getMagazine();
+		this.reloadTime = weapon.getReloadTime();
+		this.bullets = weapon.getAmmo();
+	}
+
 	public void changeWeapon(){
-		System.out.println(weapon);
-		for (int i=0; i<weapons.size(); i++){
-			if (weapon.equals(weapons.get(i))){
-				if (i < weapons.size()-1){
-					setWeapon(weapons.get(i+1));
-					break;
-				}
-				else {
-					setWeapon(weapons.get(0));
-					break;
+		if (!reloading && weapons.size() > 1){
+			for (int i=0; i<weapons.size(); i++){
+				if (weapon.equals(weapons.get(i))){
+					if (i < weapons.size()-1){
+						setWeapon(weapons.get(i+1));
+						break;
+					}
+					else {
+						setWeapon(weapons.get(0));
+						break;
+					}
 				}
 			}
 		}
 	}
-	
+
 	public boolean hasWeapon(){
-		if (weapon.equals("")){
+		if (weapon == null){
 			return false;
 		}
 		return true;
 	}
+
+	public void render(Graphics g){
+		g.setColor(new Color(112, 193, 179));
+		g.setFont(new Font("Trebuchet MS", Font.BOLD, 24));
+		if (weapon != null) g.drawString("Weapon: " + weapon.getName(), 600, 700);
+		else g.drawString("Weapon: None", 600, 700);
+		g.drawString("Bullets: " + bullets, 600, 725);
+	}
 }
-
-
