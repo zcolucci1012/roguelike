@@ -105,6 +105,8 @@ public class Main extends Canvas implements Runnable{
 		handler.addObject(new Player(400,400,"Player", handler, this, screen));
 		handler.addObject(new Weapon(250,250,"pistol"));
 		handler.addObject(new Weapon(250,600,"smg"));
-		handler.addObject(new Enemy(600,600,"Enemy", handler));
+		handler.addObject(new Enemy(500,600,"Enemy", handler, screen));
+		handler.addObject(new Enemy(400,600,"Enemy", handler, screen));
+		handler.addObject(new Enemy(300,600,"Enemy", handler, screen));
 	}
 }

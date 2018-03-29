@@ -84,11 +84,9 @@ public class Screen extends MouseAdapter{
 								shot.setVelY(sVelY);
 								handler.addObject(shot);
 								bullets--;
-								System.out.println(bullets);
 								weapon.setAmmo(bullets);
 								if (bullets <= 0){
 									time2 = reloadTime;
-									System.out.println("Reloading...");
 									reloading = true;
 								}
 							}
@@ -101,7 +99,6 @@ public class Screen extends MouseAdapter{
 		else {
 			time2--;
 			if (time2 == 0){
-				System.out.println("Reloaded!");
 				reloading = false;
 				bullets = magazine;
 				weapon.setAmmo(magazine);
@@ -120,9 +117,8 @@ public class Screen extends MouseAdapter{
 	}
 
 	public void setWeapon(Weapon weapon){
-		System.out.println(weapon.getFireDelay());
 		this.weapon = weapon;
-		System.out.println("Switched to " + weapon.getName());
+		//System.out.println("Switched to " + weapon.getName());
 		this.fireDelay = weapon.getFireDelay();
 		this.shotSpeed = weapon.getShotSpeed();
 		this.damage = weapon.getDamage();
@@ -155,11 +151,16 @@ public class Screen extends MouseAdapter{
 		return true;
 	}
 
+	public Weapon getWeapon(){
+		return weapon;
+	}
+
 	public void render(Graphics g){
 		g.setColor(new Color(112, 193, 179));
 		g.setFont(new Font("Trebuchet MS", Font.BOLD, 24));
 		if (weapon != null) g.drawString("Weapon: " + weapon.getName(), 600, 700);
 		else g.drawString("Weapon: None", 600, 700);
 		g.drawString("Bullets: " + bullets, 600, 725);
+		if (reloading) g.drawString("Reloading...", 25, 25);
 	}
 }

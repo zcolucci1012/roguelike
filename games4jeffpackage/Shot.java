@@ -7,16 +7,18 @@ import java.awt.Rectangle;
 public class Shot extends GameThing{
 
 	private int damage;
-	
+	private int timer = 0;
+
 	public Shot(float x, float y, String id, int damage) {
 		super(x, y, id);
 		this.damage = damage;
-		
+
 		width = 16;
 		height = 16;
 	}
 
 	public void tick() {
+		timer++;
 		x += velX;
 		y += velY;
 	}
@@ -27,9 +29,11 @@ public class Shot extends GameThing{
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle((int)x, (int)y, (int)width, (int)height); 
+		return new Rectangle((int)x, (int)y, (int)width, (int)height);
 	}
-	
-	
-	
+
+	public int getDamage(){
+		return damage;
+	}
+
 }

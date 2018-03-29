@@ -7,11 +7,14 @@ import java.awt.Rectangle;
 public class Enemy extends GameThing{
 
 	private Handler handler;
-	
-	public Enemy(float x, float y, String id, Handler handler) {
+	private Screen screen;
+	private int hp = 20;
+
+	public Enemy(float x, float y, String id, Handler handler, Screen screen) {
 		super(x, y, id);
 		this.handler = handler;
-		
+		this.screen = screen;
+
 		width = 28;
 		height = 28;
 	}
@@ -30,12 +33,23 @@ public class Enemy extends GameThing{
 					velY = -(y - (int)pY)/d*2;
 				}
 			}
+			if (thing.getId() == "Shot"){
+				if (thing.getBounds().intersects(getBounds())){
+					hp-=screen.getWeapon().getDamage();
+					handler.removeObject(thing);
+					if (hp <= 0){
+						handler.removeObject(this);
+					}
+				}
+			}
 		}
 	}
 
 	public void render(Graphics g) {
 		g.setColor(new Color(255,22,84));
 		g.fillRect((int)x, (int)y, (int)width, (int)height);
+		g.setColor(Color.BLACK);
+		g.drawString(hp+"", (int)x, (int)y-10);
 	}
 
 	public Rectangle getBounds() {
