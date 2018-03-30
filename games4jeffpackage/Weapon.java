@@ -77,10 +77,10 @@ public class Weapon extends Pickup {
       reloadTime = 150;
     }
     if (name.equals("smg")){
-      fireDelay = 5;
+      fireDelay = 7;
       shotSpeed = 5;
       damage = 2;
-      magazine = 35;
+      magazine = 30;
       reloadTime = 200;
     }
     ammo = magazine;

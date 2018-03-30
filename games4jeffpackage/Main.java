@@ -14,11 +14,13 @@ public class Main extends Canvas implements Runnable{
 	private boolean running = false;
 	private Handler handler;
 	private Screen screen;
+	public static int WIDTH = 800;
+	public static int HEIGHT = 800;
 
 	public Main(){
 		handler = new Handler();
 
-		new Window(800,800,"jeff",this);
+		new Window(WIDTH,HEIGHT,"jeff",this);
 
 		screen = new Screen(handler, this);
 		this.addKeyListener(new KeyInput(handler, screen));
@@ -92,7 +94,7 @@ public class Main extends Canvas implements Runnable{
 		Graphics2D g2d = (Graphics2D)g;
 
 		g.setColor(new Color(36,123,160));
-		g.fillRect(0, 0, 800, 800);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
 
 		handler.render(g);
 		screen.render(g);
@@ -106,7 +108,11 @@ public class Main extends Canvas implements Runnable{
 		handler.addObject(new Weapon(250,250,"pistol"));
 		handler.addObject(new Weapon(250,600,"smg"));
 		handler.addObject(new Enemy(500,600,"Enemy", handler, screen));
-		handler.addObject(new Enemy(400,600,"Enemy", handler, screen));
-		handler.addObject(new Enemy(300,600,"Enemy", handler, screen));
+		//handler.addObject(new Enemy(400,600,"Enemy", handler, screen));
+		//handler.addObject(new Enemy(300,600,"Enemy", handler, screen));
+		for (int i=0; i<800; i+=32){
+			handler.addObject(new MoveBlock(300,i,"MoveBlock", handler));
+			handler.addObject(new Block(0, i, "Block"));
+		}
 	}
 }

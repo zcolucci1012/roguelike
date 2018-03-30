@@ -34,10 +34,10 @@ public class Enemy extends GameThing{
     for(int i = 0; i < handler.stuff.size(); i++){
       GameThing thing = handler.stuff.get(i);
       if (thing.getId() == "Player"){
-        float pX = thing.getX() + thing.getWidth()/2;
-        float pY = thing.getY() + thing.getHeight()/2;
+        float pX = thing.getX();
+        float pY = thing.getY();
         float d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));
-				if (d > 25) {
+				if (d > 50) {
 					pX = thing.getX() + thing.getWidth()/2 + imperfections[0];
 	        pY = thing.getY() + thing.getHeight()/2 + imperfections[1];
 					d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));
@@ -56,7 +56,7 @@ public class Enemy extends GameThing{
           }
         }
       }
-      if (thing.getId() == "Enemy" && thing != this){
+      if (thing.getId() == "Block" || (thing.getId() == "Enemy" && thing != this)){
         if (thing.getBounds().intersects(getBoundsRight())){
 					x = thing.getX() - width;
         }

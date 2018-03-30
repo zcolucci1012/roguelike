@@ -172,6 +172,34 @@ public class Screen extends MouseAdapter{
 		if (weapon != null) g.drawString("Weapon: " + weapon.getName(), 600, 700);
 		else g.drawString("Weapon: None", 600, 700);
 		g.drawString("Bullets: " + bullets, 600, 725);
-		if (reloading) g.drawString("Reloading " + weapon.getName() + "...", 25, 25);
+		g.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+		if (reloading) g.drawString("Reloading " + weapon.getName() + "...", 25, 75);
+		renderHP(g);
+	}
+
+	private void renderHP(Graphics g){
+		int hp = 0;
+		for(int i = 0; i < handler.stuff.size(); i++){
+			GameThing thing = handler.stuff.get(i);
+			if (thing.getId() == "Player"){
+				Player player = (Player)thing;
+				hp = player.getHp();
+			}
+		}
+		g.setColor(Color.BLACK);
+		g.drawRect(24, 24, 101, 26);
+		g.setColor(Color.GRAY);
+		g.fillRect(25, 25, 100, 25);
+		if (hp >= 0){
+			g.setColor(new Color((int)(255-hp*(255.0/100.0)), (int)(hp*(255.0/100.0)), 0));
+			g.fillRect(25, 25, hp, 25);
+		}
+	}
+
+	public void reload(){
+		if (bullets != magazine && !reloading){
+			reloading = true;
+			time2 = reloadTime;
+		}
 	}
 }
