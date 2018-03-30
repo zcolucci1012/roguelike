@@ -48,7 +48,7 @@ public class Player extends GameThing{
 					}
 				}
 			}
-			if (thing.getId().equals("Enemy") || thing.getId().equals("MoveBlock")){
+			if (thing.getId().equals("MoveBlock")){
 				if (thing.getBounds().intersects(getBoundsRight())){
 					thing.setX(x+width);
         }

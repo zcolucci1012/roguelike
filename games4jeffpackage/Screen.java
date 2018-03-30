@@ -29,6 +29,9 @@ public class Screen extends MouseAdapter{
 	private boolean reloading = false;
 	private boolean auto = false;
 	private int time = fireDelay;
+	private int pickupAlertTimer = 0;
+	private boolean pickupAlertFlag = false;
+	private String lastAddedWeapon = "";
 
 	public Screen (Handler handler, Main main){
 		this.handler = handler;
@@ -90,19 +93,27 @@ public class Screen extends MouseAdapter{
 			time2 = reloadTime;
 			reloading = true;
 		}
+		if (pickupAlertTimer != 0){
+			pickupAlertTimer--;
+			if (pickupAlertTimer == 0){
+				pickupAlertFlag = false;
+			}
+		}
 	}
 
 	private void fire(){
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
-				float x = thing.getX() + thing.getWidth()/2;
+				int randX = (int)(Math.random()*51)-25;
+				int randY = (int)(Math.random()*51)-25;
+				float x = thing.getX() + thing.getWidth()/2 ;
 				float y = thing.getY() + thing.getHeight()/2;
-				float d = (float)Math.sqrt(Math.pow((mx-(int)x),2) + Math.pow((my-(int)y),2));
+				float d = (float)Math.sqrt(Math.pow((mx+randX-(int)x),2) + Math.pow((my+randY-(int)y),2));
 				if (d != 0){
-					float sVelX = ((mx - (int)x)/d*shotSpeed);
-					float sVelY = ((my - (int)y)/d*shotSpeed);
-					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", damage);
+					float sVelX = ((mx+randX - (int)x)/d*shotSpeed);
+					float sVelY = ((my+randY + ((int)(Math.random()*51)-25) - (int)y)/d*shotSpeed);
+					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", damage, handler);
 					shot.setVelX(sVelX);
 					shot.setVelY(sVelY);
 					handler.addObject(shot);
@@ -114,9 +125,18 @@ public class Screen extends MouseAdapter{
 	}
 
 	public void addWeapon(Weapon weapon){
-		if (!weapons.contains(weapon)) {
+		boolean owned = false;
+		for (Weapon ownedWeapon: weapons){
+			if (ownedWeapon.getId().equals(weapon.getId())){
+				owned = true;
+			}
+		}
+		if (!owned) {
 			weapons.add(weapon);
 		}
+		lastAddedWeapon = weapon.getName();
+		pickupAlertTimer = 200;
+		pickupAlertFlag = true;
 		if (weapons.size() == 1){
 			setWeapon(weapon);
 		}
@@ -174,6 +194,7 @@ public class Screen extends MouseAdapter{
 		g.drawString("Bullets: " + bullets, 600, 725);
 		g.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		if (reloading) g.drawString("Reloading " + weapon.getName() + "...", 25, 75);
+		if (pickupAlertFlag) g.drawString("Picked up " + lastAddedWeapon + "!", 650, 50);
 		renderHP(g);
 	}
 
