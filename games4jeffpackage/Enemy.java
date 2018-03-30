@@ -34,7 +34,6 @@ public class Enemy extends GameThing{
     for(int i = 0; i < handler.stuff.size(); i++){
       GameThing thing = handler.stuff.get(i);
       if (thing.getId() == "Player"){
-				System.out.println(imperfections[0] + " " + imperfections[1]);
         float pX = thing.getX() + thing.getWidth()/2;
         float pY = thing.getY() + thing.getHeight()/2;
         float d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));

@@ -22,13 +22,13 @@ public class Screen extends MouseAdapter{
 	private int bullets = 8;
 	private int reloadTime = 100;
 	private int time2 = 0;
-	private int time = 0;
 	private Weapon weapon;
 	private ArrayList <Weapon> weapons = new ArrayList <Weapon> ();
 	private ArrayList <Integer> ammo = new ArrayList <Integer> ();
 	private boolean firing = false;
 	private boolean reloading = false;
-	private int clicks = 0;
+	private boolean auto = false;
+	private int time = fireDelay;
 
 	public Screen (Handler handler, Main main){
 		this.handler = handler;
@@ -41,7 +41,6 @@ public class Screen extends MouseAdapter{
 
 		if (mouseOver(mx, my, 0, 0, 800, 800)){
 			firing = true;
-			clicks++;
 		}
 	}
 
@@ -49,7 +48,6 @@ public class Screen extends MouseAdapter{
 		mx = e.getX();
 		my = e.getY();
 
-		time = 0;
 		firing = false;
 	}
 
@@ -70,10 +68,13 @@ public class Screen extends MouseAdapter{
 		mx = (int) a.getX() - (int)b.getX();
 		my = (int) a.getY() - (int)b.getY();
 		if (time2 == 0){
-			if (firing){
-				if (time % fireDelay == 0){
+			if (time == fireDelay){
+				if (firing){
 					fire();
+					time = 0;
 				}
+			}
+			else {
 				time++;
 			}
 		}
@@ -83,7 +84,6 @@ public class Screen extends MouseAdapter{
 				reloading = false;
 				bullets = magazine;
 				weapon.setAmmo(magazine);
-				time = 0;
 			}
 		}
 		if (bullets <= 0 && !reloading){
@@ -125,17 +125,21 @@ public class Screen extends MouseAdapter{
 	public void setWeapon(Weapon weapon){
 		this.weapon = weapon;
 		//System.out.println("Switched to " + weapon.getName());
-		this.fireDelay = weapon.getFireDelay();
-		this.shotSpeed = weapon.getShotSpeed();
-		this.damage = weapon.getDamage();
-		this.magazine = weapon.getMagazine();
-		this.reloadTime = weapon.getReloadTime();
-		this.bullets = weapon.getAmmo();
+		fireDelay = weapon.getFireDelay();
+		shotSpeed = weapon.getShotSpeed();
+		damage = weapon.getDamage();
+		magazine = weapon.getMagazine();
+		reloadTime = weapon.getReloadTime();
+		bullets = weapon.getAmmo();
+		time = weapon.getFireDelay();
 	}
 
 	public void changeWeapon(){
 		if (weapons.size() > 1){
-			if (reloading) reloading = false;
+			if (reloading) {
+				reloading = false;
+				time2 = 0;
+			}
 			for (int i=0; i<weapons.size(); i++){
 				if (weapon.equals(weapons.get(i))){
 					if (i < weapons.size()-1){
@@ -168,6 +172,6 @@ public class Screen extends MouseAdapter{
 		if (weapon != null) g.drawString("Weapon: " + weapon.getName(), 600, 700);
 		else g.drawString("Weapon: None", 600, 700);
 		g.drawString("Bullets: " + bullets, 600, 725);
-		if (reloading) g.drawString("Reloading...", 25, 25);
+		if (reloading) g.drawString("Reloading " + weapon.getName() + "...", 25, 25);
 	}
 }
