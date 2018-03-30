@@ -28,6 +28,7 @@ public class Screen extends MouseAdapter{
 	private ArrayList <Integer> ammo = new ArrayList <Integer> ();
 	private boolean firing = false;
 	private boolean reloading = false;
+	private int clicks = 0;
 
 	public Screen (Handler handler, Main main){
 		this.handler = handler;
@@ -40,6 +41,7 @@ public class Screen extends MouseAdapter{
 
 		if (mouseOver(mx, my, 0, 0, 800, 800)){
 			firing = true;
+			clicks++;
 		}
 	}
 
@@ -70,28 +72,7 @@ public class Screen extends MouseAdapter{
 		if (time2 == 0){
 			if (firing){
 				if (time % fireDelay == 0){
-					for(int i = 0; i < handler.stuff.size(); i++){
-						GameThing thing = handler.stuff.get(i);
-						if (thing.getId() == "Player"){
-							float x = thing.getX() + thing.getWidth()/2;
-							float y = thing.getY() + thing.getHeight()/2;
-							float d = (float)Math.sqrt(Math.pow((mx-(int)x),2) + Math.pow((my-(int)y),2));
-							if (d != 0){
-								float sVelX = ((mx - (int)x)/d*shotSpeed);
-								float sVelY = ((my - (int)y)/d*shotSpeed);
-								Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", damage);
-								shot.setVelX(sVelX);
-								shot.setVelY(sVelY);
-								handler.addObject(shot);
-								bullets--;
-								weapon.setAmmo(bullets);
-								if (bullets <= 0){
-									time2 = reloadTime;
-									reloading = true;
-								}
-							}
-						}
-					}
+					fire();
 				}
 				time++;
 			}
@@ -103,6 +84,31 @@ public class Screen extends MouseAdapter{
 				bullets = magazine;
 				weapon.setAmmo(magazine);
 				time = 0;
+			}
+		}
+		if (bullets <= 0 && !reloading){
+			time2 = reloadTime;
+			reloading = true;
+		}
+	}
+
+	private void fire(){
+		for(int i = 0; i < handler.stuff.size(); i++){
+			GameThing thing = handler.stuff.get(i);
+			if (thing.getId() == "Player"){
+				float x = thing.getX() + thing.getWidth()/2;
+				float y = thing.getY() + thing.getHeight()/2;
+				float d = (float)Math.sqrt(Math.pow((mx-(int)x),2) + Math.pow((my-(int)y),2));
+				if (d != 0){
+					float sVelX = ((mx - (int)x)/d*shotSpeed);
+					float sVelY = ((my - (int)y)/d*shotSpeed);
+					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", damage);
+					shot.setVelX(sVelX);
+					shot.setVelY(sVelY);
+					handler.addObject(shot);
+					bullets--;
+					weapon.setAmmo(bullets);
+				}
 			}
 		}
 	}
@@ -128,7 +134,8 @@ public class Screen extends MouseAdapter{
 	}
 
 	public void changeWeapon(){
-		if (!reloading && weapons.size() > 1){
+		if (weapons.size() > 1){
+			if (reloading) reloading = false;
 			for (int i=0; i<weapons.size(); i++){
 				if (weapon.equals(weapons.get(i))){
 					if (i < weapons.size()-1){
