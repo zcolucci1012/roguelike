@@ -40,7 +40,6 @@ public class Player extends GameThing{
 				if (getBounds().intersects(thing.getBounds())){
 					if (iTimer == 0) {
 						hp-=10;
-						System.out.println(hp);
 						iTimer = iFrames;
 					}
 					if (hp == 0){
@@ -62,7 +61,6 @@ public class Player extends GameThing{
 					thing.setY(y+height);
 				}
 			}
-
 			if (thing.getId().equals("Block")){
 				if (thing.getBounds().intersects(getBoundsRight())){
 					x = thing.getX() - width;

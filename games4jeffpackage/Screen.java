@@ -13,6 +13,7 @@ public class Screen extends MouseAdapter{
 
 	private Handler handler;
 	private Main main;
+	private Camera cam;
 	private int mx;
 	private int my;
 	private int fireDelay = 25;
@@ -33,18 +34,17 @@ public class Screen extends MouseAdapter{
 	private boolean pickupAlertFlag = false;
 	private String lastAddedWeapon = "";
 
-	public Screen (Handler handler, Main main){
+	public Screen (Handler handler, Main main, Camera cam){
 		this.handler = handler;
 		this.main = main;
+		this.cam = cam;
 	}
 
 	public void mousePressed(MouseEvent e){
 		mx = e.getX();
 		my = e.getY();
 
-		if (mouseOver(mx, my, 0, 0, 800, 800)){
-			firing = true;
-		}
+		firing = true;
 	}
 
 	public void mouseReleased(MouseEvent e){
@@ -109,10 +109,12 @@ public class Screen extends MouseAdapter{
 				int randY = (int)(Math.random()*51)-25;
 				float x = thing.getX() + thing.getWidth()/2 ;
 				float y = thing.getY() + thing.getHeight()/2;
-				float d = (float)Math.sqrt(Math.pow((mx+randX-(int)x),2) + Math.pow((my+randY-(int)y),2));
+				float sx = mx - cam.getX();
+				float sy = my - cam.getY();
+				float d = (float)Math.sqrt(Math.pow((sx+randX-(int)x),2) + Math.pow((sy+randY-(int)y),2));
 				if (d != 0){
-					float sVelX = ((mx+randX - (int)x)/d*shotSpeed);
-					float sVelY = ((my+randY + ((int)(Math.random()*51)-25) - (int)y)/d*shotSpeed);
+					float sVelX = ((sx+randX - (int)x)/d*shotSpeed);
+					float sVelY = ((sy+randY + ((int)(Math.random()*51)-25) - (int)y)/d*shotSpeed);
 					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", damage, handler);
 					shot.setVelX(sVelX);
 					shot.setVelY(sVelY);
@@ -144,7 +146,6 @@ public class Screen extends MouseAdapter{
 
 	public void setWeapon(Weapon weapon){
 		this.weapon = weapon;
-		//System.out.println("Switched to " + weapon.getName());
 		fireDelay = weapon.getFireDelay();
 		shotSpeed = weapon.getShotSpeed();
 		damage = weapon.getDamage();
@@ -161,7 +162,7 @@ public class Screen extends MouseAdapter{
 				time2 = 0;
 			}
 			for (int i=0; i<weapons.size(); i++){
-				if (weapon.equals(weapons.get(i))){
+				if (weapon.getId().equals(weapons.get(i).getId())){
 					if (i < weapons.size()-1){
 						setWeapon(weapons.get(i+1));
 						break;

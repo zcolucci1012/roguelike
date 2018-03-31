@@ -9,7 +9,7 @@ public class Block extends GameThing {
   public Block (float x, float y, String id){
     super(x, y, id);
 
-    width = 32;
+    width = 33;
     height = 32;
   }
 
