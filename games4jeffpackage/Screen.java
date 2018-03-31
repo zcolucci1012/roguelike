@@ -22,13 +22,14 @@ public class Screen extends MouseAdapter{
 	private int magazine = 8;
 	private int bullets = 8;
 	private int reloadTime = 100;
+	private int inaccuracy = 50;
+	private boolean auto = false;
 	private int time2 = 0;
 	private Weapon weapon;
 	private ArrayList <Weapon> weapons = new ArrayList <Weapon> ();
 	private ArrayList <Integer> ammo = new ArrayList <Integer> ();
 	private boolean firing = false;
 	private boolean reloading = false;
-	private boolean auto = false;
 	private int time = fireDelay;
 	private int pickupAlertTimer = 0;
 	private boolean pickupAlertFlag = false;
@@ -74,6 +75,7 @@ public class Screen extends MouseAdapter{
 			if (time == fireDelay){
 				if (firing){
 					fire();
+					if (!auto) firing = false;
 					time = 0;
 				}
 			}
@@ -87,6 +89,7 @@ public class Screen extends MouseAdapter{
 				reloading = false;
 				bullets = magazine;
 				weapon.setAmmo(magazine);
+				time = fireDelay;
 			}
 		}
 		if (bullets <= 0 && !reloading){
@@ -105,8 +108,8 @@ public class Screen extends MouseAdapter{
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
-				int randX = (int)(Math.random()*51)-25;
-				int randY = (int)(Math.random()*51)-25;
+				int randX = (int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2);
+				int randY = (int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2);
 				float x = thing.getX() + thing.getWidth()/2 ;
 				float y = thing.getY() + thing.getHeight()/2;
 				float sx = mx - cam.getX();
@@ -152,6 +155,8 @@ public class Screen extends MouseAdapter{
 		magazine = weapon.getMagazine();
 		reloadTime = weapon.getReloadTime();
 		bullets = weapon.getAmmo();
+		inaccuracy = weapon.getInaccuracy();
+		auto = weapon.getAuto();
 		time = weapon.getFireDelay();
 	}
 

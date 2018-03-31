@@ -19,15 +19,13 @@ public class Main extends Canvas implements Runnable{
 	public static int WIDTH = 800;
 	public static int HEIGHT = 800;
 	private BufferedImage level = null;
+	private BufferedImageLoader loader = new BufferedImageLoader();
 	private ArrayList <Point> points = new ArrayList <Point> ();
   private ArrayList <Vector> vectors = new ArrayList <Vector> ();
 	private Camera cam;
 	private Player player;
 
 	public Main(){
-		BufferedImageLoader loader = new BufferedImageLoader();
-
-
 		handler = new Handler();
 
 		cam = new Camera(0, 0);
@@ -136,18 +134,6 @@ public class Main extends Canvas implements Runnable{
 		bs.show();
 	}
 
-	public void addStuff(){
-		handler.addObject(new Player(400,400,"Player", handler, this, screen));
-		handler.addObject(new Weapon(250,250,"pistol"));
-		handler.addObject(new Weapon(250,600,"smg"));
-		handler.addObject(new Enemy(500,600,"Enemy", handler, screen));
-		//handler.addObject(new Enemy(400,600,"Enemy", handler, screen));
-		//handler.addObject(new Enemy(300,600,"Enemy", handler, screen));
-		for (int i=0; i<800; i+=32){
-			handler.addObject(new Block(0, i, "Block"));
-		}
-	}
-
 	private void LoadImageLevel(BufferedImage image, int dx, int dy, boolean [] doors){
 		int w = image.getWidth();
 		int h = image.getHeight();
@@ -173,61 +159,21 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new Enemy(xx*33 + 800*dx, yy*32 + 800*dy, "Enemy", handler, screen));
 					}
 					if (red == 0 && green == 255 && blue == 0){
-						int choice = (int)(Math.random()*2);
+						int choice = (int)(Math.random()*5);
 						String weapon = "";
 						if (choice == 0) weapon = "smg";
+						else if (choice == 1) weapon = "sniper";
+						else if (choice == 2) weapon = "assault rifle";
+						else if (choice == 3) weapon = "designated marksman rifle";
 						else weapon = "pistol";
+
 						handler.addObject(new Weapon(xx*33 + 800*dx, yy*32 + 800*dy, weapon));
 					}
 				}
 			}
 		}
-		/*
-		if (doors[0]){
-			for (int i=0; i<handler.stuff.size(); i++){
-				GameThing thing = handler.stuff.get(i);
-				if (thing.getX() == 12 * 32 + 800*dx && thing.getY() == 0 * 32 + 800*dy){
-					handler.removeObject(thing);
-				}
-				if (thing.getX() == 13 * 32 + 800*dx && thing.getY() == 0 * 32 + 800*dy){
-					handler.removeObject(thing);
-				}
-			}
-		}
-		if (doors[1]){
-			for (int i=0; i<handler.stuff.size(); i++){
-				GameThing thing = handler.stuff.get(i);
-				if (thing.getX() == 24 * 32 + 800*dx && thing.getY() == 11 * 32 + 800*dy){
-					handler.removeObject(thing);
-				}
-				if (thing.getX() == 24 * 32 + 800*dx && thing.getY() == 12 * 32 + 800*dy){
-					handler.removeObject(thing);
-				}
-			}
-		}
-		if (doors[2]){
-			for (int i=0; i<handler.stuff.size(); i++){
-				GameThing thing = handler.stuff.get(i);
-				if (thing.getX() == 12 * 32 + 800*dx && thing.getY() == 23 * 32 + 800*dy){
-					handler.removeObject(thing);
-				}
-				if (thing.getX() == 13 * 32 + 800*dx && thing.getY() == 23 * 32 + 800*dy){
-					handler.removeObject(thing);
-				}
-			}
-		}
-		if (doors[3]){
-			for (int i=0; i<handler.stuff.size(); i++){
-				GameThing thing = handler.stuff.get(i);
-				if (thing.getX() == 0 * 32 + 800*dx && thing.getY() == 11 * 32 + 800*dy){
-					handler.removeObject(thing);
-				}
-				if (thing.getX() == 0 * 32 + 800*dx && thing.getY() == 12 * 32 + 800*dy){
-					handler.removeObject(thing);
-				}
-			}
-		}
-		*/
+		handler.addObject(new Block(10*33 + 800*dx, -1*32 + 800*dy, "Block"));
+		handler.addObject(new Block(13*33 + 800*dx, -1*32 + 800*dy, "Block"));
 	}
 
 	private void generateMap(){
@@ -241,8 +187,17 @@ public class Main extends Canvas implements Runnable{
 				}
 			}
 		}
+		int i=0;
 		for (Point point: points){
+			i++;
 			boolean [] doors = getDoors(point);
+			if (i == 1){
+				level = loader.loadImage("room0.png");
+			}
+			else {
+				int roomNum = (int)(Math.random()*15) + 1;
+				level = loader.loadImage("room" + roomNum + ".png");
+			}
 			LoadImageLevel(level, point.getX(), -point.getY(), doors);
 		}
 	}

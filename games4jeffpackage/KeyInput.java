@@ -23,10 +23,10 @@ public class KeyInput extends KeyAdapter{
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
-				if (key == KeyEvent.VK_W){ thing.setVelY(-3); keyDown[0]=true;}
-				if (key == KeyEvent.VK_S) {thing.setVelY(3); keyDown[1]=true;}
-				if (key == KeyEvent.VK_D) {thing.setVelX(3); keyDown[2]=true;}
-				if (key == KeyEvent.VK_A) {thing.setVelX(-3); keyDown[3]=true;}
+				if (key == KeyEvent.VK_W) {thing.setVelY(-4); keyDown[0]=true;}
+				if (key == KeyEvent.VK_S) {thing.setVelY(4); keyDown[1]=true;}
+				if (key == KeyEvent.VK_D) {thing.setVelX(4); keyDown[2]=true;}
+				if (key == KeyEvent.VK_A) {thing.setVelX(-4); keyDown[3]=true;}
 			}
 		}
 		if (key == KeyEvent.VK_SPACE){
@@ -50,6 +50,5 @@ public class KeyInput extends KeyAdapter{
 				if(!keyDown[2] && !keyDown[3]) thing.setVelX(0);
 			}
 		}
-
 	}
 }
