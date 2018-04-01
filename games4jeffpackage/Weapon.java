@@ -123,7 +123,7 @@ public class Weapon extends Pickup {
       inaccuracy = 50;
       auto = true;
     }
-    if (name.equals("designated marksman rifle")){
+    if (name.equals("DMR")){
       fireDelay = 20;
       shotSpeed = 11;
       damage = 9;

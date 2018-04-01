@@ -24,11 +24,16 @@ public class Pickup extends GameThing{
 	}
 
 	public void render(Graphics g) {
-		if (name.equals("pistol")) g.drawImage(tex.weapon[0], (int)x, (int)y, null);
-		if (name.equals("smg")) g.drawImage(tex.weapon[1], (int)x, (int)y, null);
-		if (name.equals("sniper")) g.drawImage(tex.weapon[2], (int)x, (int)y, null);
-		if (name.equals("assault rifle")) g.drawImage(tex.weapon[3], (int)x, (int)y, null);
-		if (name.equals("designated marksman rifle")) g.drawImage(tex.weapon[4], (int)x, (int)y, null);
+		g.drawImage(tex.weapon[getType()], (int)x, (int)y, null);
+	}
+
+	public int getType(){
+		if (name.equals("pistol")) return 0;
+		if (name.equals("smg")) return 1;
+		if (name.equals("sniper")) return 2;
+		if (name.equals("assault rifle")) return 3;
+		if (name.equals("DMR")) return 4;
+		return -1;
 	}
 
 	public Rectangle getBounds() {

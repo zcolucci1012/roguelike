@@ -6,8 +6,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.AlphaComposite;
 
 public class Screen extends MouseAdapter{
 
@@ -36,11 +38,16 @@ public class Screen extends MouseAdapter{
 	private int pickupAlertTimer = 0;
 	private boolean pickupAlertFlag = false;
 	private String lastAddedWeapon = "";
+	private BufferedImageLoader loader;
+
+	private Texture tex = Main.getInstance();
 
 	public Screen (Handler handler, Main main, Camera cam){
 		this.handler = handler;
 		this.main = main;
 		this.cam = cam;
+
+		loader = new BufferedImageLoader();
 	}
 
 	public void mousePressed(MouseEvent e){
@@ -202,14 +209,32 @@ public class Screen extends MouseAdapter{
 	}
 
 	public void render(Graphics g){
-		g.setColor(new Color(112, 193, 179));
-		g.setFont(new Font("Trebuchet MS", Font.BOLD, 24));
-		if (weapon != null) g.drawString("Weapon: " + weapon.getName(), 600, 700);
-		else g.drawString("Weapon: None", 600, 700);
-		g.drawString("Bullets: " + bullets, 600, 725);
-		g.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-		if (reloading) g.drawString("Reloading " + weapon.getName() + "...", 25, 75);
-		if (pickupAlertFlag) g.drawString("Picked up " + lastAddedWeapon + "!", 650, 50);
+		Graphics2D g2d = (Graphics2D) g.create();
+		float alpha = 0.5f;
+		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+		g2d.setComposite(ac);
+		g2d.drawImage(loader.loadImage("weaponGUI.png"), 600, 650, 180, 108, null);
+		if (weapon != null){
+			g2d.drawImage(tex.weapon[weapon.getType()], 612, 662, 72, 72, null);
+		}
+		g2d.setColor(Color.BLACK);
+		g2d.setFont(new Font("Trebuchet MS", Font.BOLD, 14));
+		if (weapon != null) {
+			g2d.drawString("Weapon:", 690, 682);
+			g2d.setFont(new Font("Trebuchet MS", Font.BOLD, 10));
+			g2d.drawString(weapon.getName(), 690, 696);
+			g2d.setFont(new Font("Trebuchet MS", Font.BOLD, 14));
+		}
+		else {
+			g2d.drawString("Weapon:", 690, 682);
+			g2d.drawString("None", 690, 696);
+		}
+		g2d.drawString("Bullets:", 690, 710);
+		g2d.drawString(bullets + "/" + magazine, 690, 724);
+		g2d.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+		if (reloading) g2d.drawString("Reloading " + weapon.getName() + "...", 25, 75);
+		if (pickupAlertFlag) g2d.drawString("Picked up " + lastAddedWeapon + "!", 650, 50);
+		g2d.dispose();
 		renderHP(g);
 	}
 

@@ -144,7 +144,7 @@ public class Main extends Canvas implements Runnable{
 						!(xx==0 && (yy==11 || yy==12) && doors[3])){
 					if (red == 0 && green == 0 && blue == 0){
 						int type = (int)(Math.random()*4);
-						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", type));
+						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", 0));
 					}
 					if (red == 0 && green == 0 && blue == 255){
 						handler.addObject(new Player(xx*33 + 800*dx, yy*32 + 800*dy, "Player", 0, handler, this, screen));
@@ -158,7 +158,7 @@ public class Main extends Canvas implements Runnable{
 						if (choice == 0) weapon = "smg";
 						else if (choice == 1) weapon = "sniper";
 						else if (choice == 2) weapon = "assault rifle";
-						else if (choice == 3) weapon = "designated marksman rifle";
+						else if (choice == 3) weapon = "DMR";
 						else weapon = "pistol";
 
 						handler.addObject(new Weapon(xx*33 + 800*dx, yy*32 + 800*dy, weapon));
