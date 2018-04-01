@@ -60,16 +60,16 @@ public class Enemy extends GameThing{
       }
       if (thing.getId() == "Block" || (thing.getId() == "Enemy" && thing != this)){
         if (thing.getBounds().intersects(getBoundsRight())){
-					x = thing.getX() - width;
+					x = thing.getX() - thing.getWidth();
         }
 				if (thing.getBounds().intersects(getBoundsLeft())){
-					x = thing.getX() + width;
+					x = thing.getX() + thing.getWidth();
         }
 				if (thing.getBounds().intersects(getBoundsTop())){
-					y = thing.getY() + height;
+					y = thing.getY() + thing.getHeight();
 				}
 				if (thing.getBounds().intersects(getBoundsBottom())){
-					y = thing.getY() - height;
+					y = thing.getY() - thing.getHeight();
 				}
       }
     }
@@ -80,19 +80,21 @@ public class Enemy extends GameThing{
 		/*
 	    g.setColor(new Color(255,22,84));
 	    g.fillRect((int)x, (int)y, (int)width, (int)height);
-	    g.setColor(Color.BLUE);
-
-	    Graphics2D g2d = (Graphics2D)g;
-
-	    g2d.draw(getBoundsLeft());
-	    g2d.draw(getBoundsRight());
-	    g2d.draw(getBoundsTop());
-	    g2d.draw(getBoundsBottom());
 		*/
+
 		g.setColor(Color.BLACK);
 		g.drawString(hp+"", (int)x, (int)y-10);
 		if (velX > 0) g.drawImage(tex.enemy[0], (int)x, (int)y, null);
 		else g.drawImage(tex.enemy[1], (int)x, (int)y, null);
+		/*
+		g.setColor(Color.BLUE);
+	  Graphics2D g2d = (Graphics2D)g;
+		g2d.draw(getBounds());
+    g2d.draw(getBoundsLeft());
+    g2d.draw(getBoundsRight());
+    g2d.draw(getBoundsTop());
+    g2d.draw(getBoundsBottom());
+		*/
   }
 
   public Rectangle getBounds() {
