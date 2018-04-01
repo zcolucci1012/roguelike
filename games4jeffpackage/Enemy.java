@@ -60,16 +60,16 @@ public class Enemy extends GameThing{
       }
       if (thing.getId() == "Block" || (thing.getId() == "Enemy" && thing != this)){
         if (thing.getBounds().intersects(getBoundsRight())){
-					x = thing.getX() - thing.getWidth();
+					x = thing.getX() - width;
         }
 				if (thing.getBounds().intersects(getBoundsLeft())){
-					x = thing.getX() + thing.getWidth();
+					x = thing.getX() + width;
         }
 				if (thing.getBounds().intersects(getBoundsTop())){
-					y = thing.getY() + thing.getHeight();
+					y = thing.getY() + height;
 				}
 				if (thing.getBounds().intersects(getBoundsBottom())){
-					y = thing.getY() - thing.getHeight();
+					y = thing.getY() - height;
 				}
       }
     }
