@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public abstract class GameThing {
-	protected float x, y, velX, velY, width, height, aX, aY;
+	protected float x, y, velX, velY, width, height;
 
 	protected String id;
 

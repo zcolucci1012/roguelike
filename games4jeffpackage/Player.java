@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.Graphics2D;
 
 public class Player extends GameThing{
+	private int type;
 	private Handler handler;
 	private Main main;
 	private Screen screen;
@@ -14,8 +15,11 @@ public class Player extends GameThing{
 	private int iTimer = 0;
 	private boolean invincible = false;
 
-	public Player(float x, float y, String id, Handler handler, Main main, Screen screen) {
+	private Texture tex = Main.getInstance();
+
+	public Player(float x, float y, String id, int type, Handler handler, Main main, Screen screen) {
 		super(x, y, id);
+		this.type = type;
 		this.handler = handler;
 		this.main = main;
 		this.screen = screen;
@@ -86,6 +90,7 @@ public class Player extends GameThing{
 	}
 
 	public void render(Graphics g) {
+		/*
 		g.setColor(new Color(178,219,191));
 		if (invincible){
 			g.setColor(new Color(208,249,221,75));
@@ -99,6 +104,8 @@ public class Player extends GameThing{
     g2d.draw(getBoundsRight());
     g2d.draw(getBoundsTop());
     g2d.draw(getBoundsBottom());
+		*/
+		g.drawImage(tex.player[type], (int)x, (int)y, null);
 	}
 
 	public Rectangle getBounds() {
@@ -123,5 +130,13 @@ public class Player extends GameThing{
 
 	public int getHp(){
 		return hp;
+	}
+
+	public int getType(){
+		return type;
+	}
+
+	public void setType(int type){
+		this.type = type;
 	}
 }

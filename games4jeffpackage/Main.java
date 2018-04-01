@@ -24,8 +24,11 @@ public class Main extends Canvas implements Runnable{
   private ArrayList <Vector> vectors = new ArrayList <Vector> ();
 	private Camera cam;
 	private Player player;
+	public static Texture tex;
 
 	public Main(){
+		tex = new Texture();
+
 		handler = new Handler();
 
 		cam = new Camera(0, 0);
@@ -37,17 +40,9 @@ public class Main extends Canvas implements Runnable{
 		this.addMouseListener(screen);
 
 		level = loader.loadImage("room1.png"); //load level
-		player = new Player(400,400,"Player",handler, this, screen);
+		player = new Player(400,400,"Player", 0, handler, this, screen);
 		handler.addObject(player);
 		generateMap();
-
-
-		//LoadImageLevel(level);
-		//addStuff();
-	}
-
-	public static void main(String [] args){
-		new Main();
 	}
 
 	public synchronized void start(){
@@ -97,9 +92,7 @@ public class Main extends Canvas implements Runnable{
 		if (cam != null){
 			handler.tick(cam);
 		}
-		if (screen.hasWeapon()){
-			screen.tick();
-		}
+		screen.tick();
 		for (int i=0; i<handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId().equals("Player")){
@@ -150,10 +143,11 @@ public class Main extends Canvas implements Runnable{
 						!((xx==11 || xx==12) && yy==23 && doors[2]) &&
 						!(xx==0 && (yy==11 || yy==12) && doors[3])){
 					if (red == 0 && green == 0 && blue == 0){
-						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block"));
+						int type = (int)(Math.random()*4);
+						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", type));
 					}
 					if (red == 0 && green == 0 && blue == 255){
-						handler.addObject(new Player(xx*33 + 800*dx, yy*32 + 800*dy, "Player", handler, this, screen));
+						handler.addObject(new Player(xx*33 + 800*dx, yy*32 + 800*dy, "Player", 0, handler, this, screen));
 					}
 					if (red == 255 && green == 0 && blue == 0){
 						handler.addObject(new Enemy(xx*33 + 800*dx, yy*32 + 800*dy, "Enemy", handler, screen));
@@ -172,8 +166,8 @@ public class Main extends Canvas implements Runnable{
 				}
 			}
 		}
-		handler.addObject(new Block(10*33 + 800*dx, -1*32 + 800*dy, "Block"));
-		handler.addObject(new Block(13*33 + 800*dx, -1*32 + 800*dy, "Block"));
+		handler.addObject(new Block(10*33 + 800*dx, -1*32 + 800*dy, "Block", 0));
+		handler.addObject(new Block(13*33 + 800*dx, -1*32 + 800*dy, "Block", 0));
 	}
 
 	private void generateMap(){
@@ -249,4 +243,13 @@ public class Main extends Canvas implements Runnable{
 		}
 		return doors;
 	}
+
+	public static Texture getInstance(){
+		return tex;
+	}
+
+	public static void main(String [] args){
+		new Main();
+	}
+
 }

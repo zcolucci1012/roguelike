@@ -16,6 +16,8 @@ public class Screen extends MouseAdapter{
 	private Camera cam;
 	private int mx;
 	private int my;
+	private float sx;
+	private float sy;
 	private int fireDelay = 25;
 	private int shotSpeed = 5;
 	private int damage = 5;
@@ -71,35 +73,50 @@ public class Screen extends MouseAdapter{
 		Point b = main.getLocationOnScreen();
 		mx = (int) a.getX() - (int)b.getX();
 		my = (int) a.getY() - (int)b.getY();
-		if (time2 == 0){
-			if (time == fireDelay){
-				if (firing){
-					fire();
-					if (!auto) firing = false;
-					time = 0;
+		sx = mx - cam.getX();
+		sy = my - cam.getY();
+		for(int i = 0; i < handler.stuff.size(); i++){
+			GameThing thing = handler.stuff.get(i);
+			if (thing.getId() == "Player"){
+				float x = thing.getX() + thing.getWidth()/2 ;
+				float y = thing.getY() + thing.getHeight()/2;
+				if (Math.abs(sy-y) < Math.abs(sx-x) && sx > thing.getX()) ((Player)thing).setType(0);
+				if (Math.abs(sy-y) > Math.abs(sx-x) && sy > thing.getY()) ((Player)thing).setType(1);
+				if (Math.abs(sy-y) < Math.abs(sx-x) && sx < thing.getX()) ((Player)thing).setType(2);
+				if (Math.abs(sy-y) > Math.abs(sx-x) && sy < thing.getY()) ((Player)thing).setType(0);
+			}
+		}
+		if (weapon != null){
+			if (time2 == 0){
+				if (time == fireDelay){
+					if (firing){
+						fire();
+						if (!auto) firing = false;
+						time = 0;
+					}
+				}
+				else {
+					time++;
 				}
 			}
 			else {
-				time++;
+				time2--;
+				if (time2 == 0){
+					reloading = false;
+					bullets = magazine;
+					weapon.setAmmo(magazine);
+					time = fireDelay;
+				}
 			}
-		}
-		else {
-			time2--;
-			if (time2 == 0){
-				reloading = false;
-				bullets = magazine;
-				weapon.setAmmo(magazine);
-				time = fireDelay;
+			if (bullets <= 0 && !reloading){
+				time2 = reloadTime;
+				reloading = true;
 			}
-		}
-		if (bullets <= 0 && !reloading){
-			time2 = reloadTime;
-			reloading = true;
-		}
-		if (pickupAlertTimer != 0){
-			pickupAlertTimer--;
-			if (pickupAlertTimer == 0){
-				pickupAlertFlag = false;
+			if (pickupAlertTimer != 0){
+				pickupAlertTimer--;
+				if (pickupAlertTimer == 0){
+					pickupAlertFlag = false;
+				}
 			}
 		}
 	}
@@ -112,13 +129,12 @@ public class Screen extends MouseAdapter{
 				int randY = (int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2);
 				float x = thing.getX() + thing.getWidth()/2 ;
 				float y = thing.getY() + thing.getHeight()/2;
-				float sx = mx - cam.getX();
-				float sy = my - cam.getY();
 				float d = (float)Math.sqrt(Math.pow((sx+randX-(int)x),2) + Math.pow((sy+randY-(int)y),2));
 				if (d != 0){
 					float sVelX = ((sx+randX - (int)x)/d*shotSpeed);
 					float sVelY = ((sy+randY + ((int)(Math.random()*51)-25) - (int)y)/d*shotSpeed);
-					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", damage, handler);
+					float angle = (float)Math.atan(sVelY / sVelX);
+					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", angle, damage, handler);
 					shot.setVelX(sVelX);
 					shot.setVelY(sVelY);
 					handler.addObject(shot);
@@ -179,13 +195,6 @@ public class Screen extends MouseAdapter{
 				}
 			}
 		}
-	}
-
-	public boolean hasWeapon(){
-		if (weapon == null){
-			return false;
-		}
-		return true;
 	}
 
 	public Weapon getWeapon(){

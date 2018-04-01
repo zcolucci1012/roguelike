@@ -2,21 +2,24 @@ package games4jeffpackage;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 public class Shot extends GameThing{
 
+	private float angle;
 	private int damage;
-	private int timer = 0;
 	private Handler handler;
+	private int timer = 0;
 
-	public Shot(float x, float y, String id, int damage, Handler handler) {
+	public Shot(float x, float y, String id, float angle, int damage, Handler handler) {
 		super(x, y, id);
+		this.angle = angle;
 		this.damage = damage;
 		this.handler = handler;
 
-		width = 16;
-		height = 16;
+		width = 8;
+		height = 4;
 	}
 
 	public void tick() {
@@ -31,8 +34,11 @@ public class Shot extends GameThing{
 	}
 
 	public void render(Graphics g) {
-		g.setColor(new Color(243,255,189));
-		g.fillOval((int)x, (int)y, (int)width, (int)height);
+		Graphics2D g2d = (Graphics2D)g.create();
+		g2d.setColor(Color.BLACK);
+		g2d.rotate(angle, x + width/2, y + height/2);
+		g2d.fill(getBounds());
+		g2d.dispose();
 	}
 
 	public Rectangle getBounds() {

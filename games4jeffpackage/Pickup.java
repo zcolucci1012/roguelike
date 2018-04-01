@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 
 public class Pickup extends GameThing{
 
+	private Texture tex = Main.getInstance();
+
 	public Pickup(float x, float y, String id) {
 		super(x, y, "Pickup." + id);
 
