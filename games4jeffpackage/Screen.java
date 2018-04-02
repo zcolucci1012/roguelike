@@ -13,34 +13,57 @@ import java.awt.AlphaComposite;
 
 public class Screen extends MouseAdapter{
 
+	//class imports
 	private Handler handler;
 	private Main main;
 	private Camera cam;
+
+	//mouse and shot positions
 	private int mx;
 	private int my;
 	private float sx;
 	private float sy;
+
+	//gun stats
+	private Weapon weapon;
 	private int fireDelay = 25;
 	private int shotSpeed = 5;
 	private int damage = 5;
-	private int magazine = 8;
-	private int bullets = 8;
+	private int magazine = 0;
+	private int bullets = 0;
 	private int reloadTime = 100;
 	private int inaccuracy = 50;
 	private boolean auto = false;
+	private int range = 50;
+
+	//timers
+	private int time = fireDelay;
 	private int time2 = 0;
-	private Weapon weapon;
+	private int pickupAlertTimer = 0;
+	private int doorTimer = 0;
+
+	//lists
 	private ArrayList <Weapon> weapons = new ArrayList <Weapon> ();
 	private ArrayList <Integer> ammo = new ArrayList <Integer> ();
+
+	//flags
 	private boolean firing = false;
 	private boolean reloading = false;
-	private int time = fireDelay;
-	private int pickupAlertTimer = 0;
 	private boolean pickupAlertFlag = false;
+	private boolean doorFlag = false;
+	private boolean doorsUnlocked = false;
+
+	//textures
+	private Texture tex = Main.getInstance();
+
+	//etc.
 	private String lastAddedWeapon = "";
 	private BufferedImageLoader loader;
-
-	private Texture tex = Main.getInstance();
+	private RoomPoint room = null;
+	private RoomPoint tempRoom = null;
+	private boolean movement = true;
+	private float dx;
+	private float dy;
 
 	public Screen (Handler handler, Main main, Camera cam){
 		this.handler = handler;
@@ -76,6 +99,55 @@ public class Screen extends MouseAdapter{
 	}
 
 	public void tick(){
+		room = new RoomPoint ((int)(-cam.getX()/800), (int)(cam.getY()/800));
+		if (tempRoom != null && !room.isPoint(tempRoom)){
+			doorsUnlocked = false;
+			Vector pair = new Vector(tempRoom, room);
+			dx = pair.getDX();
+			dy = pair.getDY();
+			for(int i = 0; i < handler.stuff.size(); i++){
+				GameThing thing = handler.stuff.get(i);
+				if (thing.getId() == "Enemy"){
+					if (((Enemy)thing).getRoom().isPoint(room)){
+						doorTimer = 10;
+						break;
+					}
+				}
+			}
+		}
+		boolean found = false;
+		for(int i = 0; i < handler.stuff.size(); i++){
+			GameThing thing = handler.stuff.get(i);
+			if (thing.getId() == "Enemy"){
+				if (((Enemy)thing).getRoom().isPoint(room)){
+					found = true;
+					break;
+				}
+			}
+		}
+		if (!found  && !doorsUnlocked){
+			unlockDoors();
+			doorsUnlocked = true;
+		}
+		if (doorTimer != 0){
+			closeDoors();
+			doorTimer--;
+			if (doorTimer == 0){
+				movement = true;
+				for(int i = 0; i < handler.stuff.size(); i++){
+					GameThing thing = handler.stuff.get(i);
+					if (thing.getId() == "Player"){
+						thing.setVelX(0);
+						thing.setVelY(0);
+					}
+					if (thing.getId() == "Door"){
+						if (((Door)thing).getRoom().isPoint(room)){
+							((Door)thing).close();
+						}
+					}
+				}
+			}
+		}
 		Point a = MouseInfo.getPointerInfo().getLocation();
 		Point b = main.getLocationOnScreen();
 		mx = (int) a.getX() - (int)b.getX();
@@ -91,6 +163,7 @@ public class Screen extends MouseAdapter{
 				if (Math.abs(sy-y) > Math.abs(sx-x) && sy > thing.getY()) ((Player)thing).setType(1);
 				if (Math.abs(sy-y) < Math.abs(sx-x) && sx < thing.getX()) ((Player)thing).setType(2);
 				if (Math.abs(sy-y) > Math.abs(sx-x) && sy < thing.getY()) ((Player)thing).setType(0);
+				break;
 			}
 		}
 		if (weapon != null){
@@ -126,6 +199,7 @@ public class Screen extends MouseAdapter{
 				}
 			}
 		}
+		tempRoom = room;
 	}
 
 	private void fire(){
@@ -141,13 +215,14 @@ public class Screen extends MouseAdapter{
 					float sVelX = ((sx+randX - (int)x)/d*shotSpeed);
 					float sVelY = ((sy+randY + ((int)(Math.random()*51)-25) - (int)y)/d*shotSpeed);
 					float angle = (float)Math.atan(sVelY / sVelX);
-					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", angle, damage, handler);
+					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", angle, damage, (10*range)/shotSpeed, handler);
 					shot.setVelX(sVelX);
 					shot.setVelY(sVelY);
 					handler.addObject(shot);
 					bullets--;
 					weapon.setAmmo(bullets);
 				}
+				break;
 			}
 		}
 	}
@@ -180,6 +255,7 @@ public class Screen extends MouseAdapter{
 		bullets = weapon.getAmmo();
 		inaccuracy = weapon.getInaccuracy();
 		auto = weapon.getAuto();
+		range = weapon.getRange();
 		time = weapon.getFireDelay();
 	}
 
@@ -262,5 +338,37 @@ public class Screen extends MouseAdapter{
 			reloading = true;
 			time2 = reloadTime;
 		}
+	}
+
+	private void closeDoors(){
+		movement = false;
+		for (int i=0; i<handler.stuff.size(); i++){
+			GameThing thing = handler.stuff.get(i);
+			if (thing.getId() == "Player"){
+				if (dx == 1) { thing.setVelX(5); thing.setVelY(0);}
+				if (dx == -1) { thing.setVelX(-6); thing.setVelY(0);}
+				if (dy == 1) { thing.setVelX(0); thing.setVelY(-8);}
+				if (dy == -1) { thing.setVelX(0); thing.setVelY(8);}
+			}
+		}
+	}
+
+	private void unlockDoors(){
+		for (int i=0; i<handler.stuff.size(); i++){
+			GameThing thing = handler.stuff.get(i);
+			if (thing.getId() == "Door"){
+				if (((Door)thing).getRoom().isPoint(room)){
+					((Door)thing).unlock();
+				}
+			}
+		}
+	}
+
+	public boolean getMovement(){
+		return movement;
+	}
+
+	public void toggleMovement(){
+		this.movement = !movement;
 	}
 }

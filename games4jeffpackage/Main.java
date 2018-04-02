@@ -20,7 +20,7 @@ public class Main extends Canvas implements Runnable{
 	public static int HEIGHT = 800;
 	private BufferedImage level = null;
 	private BufferedImageLoader loader = new BufferedImageLoader();
-	private ArrayList <Point> points = new ArrayList <Point> ();
+	private ArrayList <RoomPoint> points = new ArrayList <RoomPoint> ();
   private ArrayList <Vector> vectors = new ArrayList <Vector> ();
 	private Camera cam;
 	private Player player;
@@ -133,6 +133,35 @@ public class Main extends Canvas implements Runnable{
 
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
+				if (xx==11 && yy==0 && doors[0]){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 1, 2));
+				}
+				else if (xx==12 && yy==0 && doors[0]){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 1, 4));
+				}
+				else if (xx==23 && yy==11 && doors[1]){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 2, 3));
+				}
+				else if (xx==23 && yy==12 && doors[1]){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 2, 1));
+				}
+				else if (xx==11 && yy==23 && doors[2]){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 3, 2));
+				}
+				else if (xx==12 && yy==23 && doors[2]){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 3, 4));
+				}
+				else if (xx==0 && yy==11 && doors[3]){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 4, 3));
+				}
+				else if (xx==0 && yy==12 && doors[3]){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 4, 1));
+				}
+			}
+		}
+
+		for (int xx = 0; xx < w; xx++){
+			for (int yy = 0; yy < h; yy++){
 				int pixel = image.getRGB(xx,yy);
 				int red = (pixel >> 16) & 0xff;
 				int green = (pixel >> 8) & 0xff;
@@ -166,12 +195,13 @@ public class Main extends Canvas implements Runnable{
 				}
 			}
 		}
+
 		handler.addObject(new Block(10*33 + 800*dx, -1*32 + 800*dy, "Block", 0));
 		handler.addObject(new Block(13*33 + 800*dx, -1*32 + 800*dy, "Block", 0));
 	}
 
 	private void generateMap(){
-		Point startRoom = new Point(0, 0);
+		RoomPoint startRoom = new RoomPoint(0, 0);
 		points.add(startRoom);
 		while (points.size() < 8){
 			for (int i=0; i<points.size(); i++){
@@ -182,7 +212,7 @@ public class Main extends Canvas implements Runnable{
 			}
 		}
 		int i=0;
-		for (Point point: points){
+		for (RoomPoint point: points){
 			i++;
 			boolean [] doors = getDoors(point);
 			if (i == 1){
@@ -196,18 +226,18 @@ public class Main extends Canvas implements Runnable{
 		}
 	}
 
-	private void randVectors(Point A){
+	private void randVectors(RoomPoint A){
 		randVector(1, 0, A);
     randVector(-1, 0, A);
     randVector(0, 1, A);
     randVector(0, -1, A);
 	}
 
-	private void randVector(int dx, int dy, Point A){
+	private void randVector(int dx, int dy, RoomPoint A){
 		if ((int)(Math.random()*2) == 1){
-      Point point = new Point(A.getX()+dx, A.getY()+dy);
+      RoomPoint point = new RoomPoint(A.getX()+dx, A.getY()+dy);
       boolean found = false;
-      for (Point point2: points){
+      for (RoomPoint point2: points){
         if (point2.getX() == point.getX() && point2.getY() == point.getY()){
           found = true;
         }
@@ -219,7 +249,7 @@ public class Main extends Canvas implements Runnable{
     }
 	}
 
-	private boolean [] getDoors(Point A){
+	private boolean [] getDoors(RoomPoint A){
 		boolean [] doors = {false, false, false, false};
 		for (Vector vector: vectors){
 			int dx = 0;

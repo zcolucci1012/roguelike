@@ -14,6 +14,7 @@ public class Weapon extends Pickup {
   private int ammo;
   private int inaccuracy;
   private boolean auto;
+  private int range;
   private String name;
 
   public Weapon (float x, float y, String id){
@@ -86,6 +87,14 @@ public class Weapon extends Pickup {
     this.auto = !auto;
   }
 
+  public int getRange(){
+    return range;
+  }
+
+  public void setRange(int range){
+    this.range = range;
+  }
+
   private void makeWeapons(){
     if (name.equals("pistol")){
       fireDelay = 25;
@@ -95,6 +104,7 @@ public class Weapon extends Pickup {
       reloadTime = 100;
       inaccuracy = 50;
       auto = false;
+      range = 50;
     }
     if (name.equals("smg")){
       fireDelay = 7;
@@ -104,6 +114,7 @@ public class Weapon extends Pickup {
       reloadTime = 200;
       inaccuracy = 100;
       auto = true;
+      range = 30;
     }
     if (name.equals("sniper")){
       fireDelay = 100;
@@ -113,6 +124,7 @@ public class Weapon extends Pickup {
       reloadTime = 250;
       inaccuracy = 5;
       auto = false;
+      range = 100;
     }
     if (name.equals("assault rifle")){
       fireDelay = 12;
@@ -122,6 +134,7 @@ public class Weapon extends Pickup {
       reloadTime = 150;
       inaccuracy = 50;
       auto = true;
+      range = 60;
     }
     if (name.equals("DMR")){
       fireDelay = 20;
@@ -131,6 +144,7 @@ public class Weapon extends Pickup {
       reloadTime = 100;
       inaccuracy = 20;
       auto = false;
+      range = 80;
     }
     ammo = magazine;
   }

@@ -116,4 +116,14 @@ public class Enemy extends GameThing{
   public Rectangle getBoundsBottom(){
     return new Rectangle((int)x+(int)width/4, (int)y + (int)height/2, (int)width/2, (int)height/2);
   }
+
+	public RoomPoint getRoom(){
+		int roomX;
+		int roomY;
+		if (x < 0) roomX = ((int)x-800)/800;
+		else roomX = (int)x/800;
+		if (y < 0) roomY = ((int)y-800)/800;
+		else roomY = (int)y/800;
+		return new RoomPoint (roomX, -roomY);
+	}
 }

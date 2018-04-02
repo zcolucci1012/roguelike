@@ -12,11 +12,12 @@ public class Shot extends GameThing{
 	private Handler handler;
 	private int timer = 0;
 
-	public Shot(float x, float y, String id, float angle, int damage, Handler handler) {
+	public Shot(float x, float y, String id, float angle, int damage, int range, Handler handler) {
 		super(x, y, id);
 		this.angle = angle;
 		this.damage = damage;
 		this.handler = handler;
+		timer = range;
 
 		width = 8;
 		height = 4;
@@ -31,6 +32,8 @@ public class Shot extends GameThing{
 				handler.removeObject(this);
 			}
 		}
+		timer--;
+		if (timer == 0) handler.removeObject(this);
 	}
 
 	public void render(Graphics g) {

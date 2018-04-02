@@ -79,6 +79,27 @@ public class Player extends GameThing{
 					y = thing.getY() - height;
 				}
 			}
+			if (thing.getId().equals("Door")){
+				if (thing.getBounds().intersects(getBounds())){
+					if (((Door)thing).getUnlocked()){
+						((Door)thing).open();
+					}
+					else {
+						if (thing.getBounds().intersects(getBoundsRight())){
+							x = thing.getX() - width;
+						}
+						if (thing.getBounds().intersects(getBoundsLeft())){
+							x = thing.getX() + width - 20;
+						}
+						if (thing.getBounds().intersects(getBoundsTop())){
+							y = thing.getY() + height - 20;
+						}
+						if (thing.getBounds().intersects(getBoundsBottom())){
+							y = thing.getY() - height;
+						}
+					}
+				}
+			}
 		}
 		if (iTimer != 0){
 			iTimer--;
