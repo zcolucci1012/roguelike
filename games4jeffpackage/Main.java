@@ -25,6 +25,8 @@ public class Main extends Canvas implements Runnable{
 	private Camera cam;
 	private Player player;
 	public static Texture tex;
+	private Graphics g;
+	private Graphics2D g2d;
 
 	public Main(){
 		tex = new Texture();
@@ -81,7 +83,7 @@ public class Main extends Canvas implements Runnable{
 
 			if (System.currentTimeMillis() - timer > 1000){
 				timer += 1000;
-				//System.out.println("FPS: " + frames);
+				System.out.println("FPS: " + frames);
 				frames = 0;
 			}
 		}
@@ -108,9 +110,8 @@ public class Main extends Canvas implements Runnable{
 			this.createBufferStrategy(3);
 			return;
 		}
-
-		Graphics g = bs.getDrawGraphics();
-		Graphics2D g2d = (Graphics2D)g;
+		g = bs.getDrawGraphics();
+		g2d = (Graphics2D)g;
 
 		g.setColor(new Color(36,123,160));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -124,12 +125,21 @@ public class Main extends Canvas implements Runnable{
 		screen.render(g);
 
 		g.dispose();
+
+	 	bs.show();
+
+
+		/*
+		g.dispose();
 		bs.show();
+		*/
 	}
 
 	private void LoadImageLevel(BufferedImage image, int dx, int dy, boolean [] doors){
 		int w = image.getWidth();
 		int h = image.getHeight();
+
+		int enemyChoice = (int)(Math.random()*2);
 
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
@@ -179,7 +189,8 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new Player(xx*33 + 800*dx, yy*32 + 800*dy, "Player", 0, handler, this, screen));
 					}
 					if (red == 255 && green == 0 && blue == 0){
-						handler.addObject(new Enemy(xx*33 + 800*dx, yy*32 + 800*dy, "Enemy", handler, screen));
+						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + 800*dx, yy*32 + 800*dy, "Chaser", handler, screen));
+						else handler.addObject(new Shooter(xx*33 + 800*dx, yy*32 + 800*dy, "Shooter", handler, screen));
 					}
 					if (red == 0 && green == 255 && blue == 0){
 						int choice = (int)(Math.random()*5);
@@ -221,16 +232,17 @@ public class Main extends Canvas implements Runnable{
 			else {
 				int roomNum = (int)(Math.random()*15) + 1;
 				level = loader.loadImage("room" + roomNum + ".png");
+				System.out.println("room" + roomNum + " created");
 			}
 			LoadImageLevel(level, point.getX(), -point.getY(), doors);
 		}
 	}
 
 	private void randVectors(RoomPoint A){
-		randVector(1, 0, A);
-    randVector(-1, 0, A);
-    randVector(0, 1, A);
-    randVector(0, -1, A);
+		if (points.size() < 10) randVector(1, 0, A);
+    if (points.size() < 10) randVector(-1, 0, A);
+    if (points.size() < 10) randVector(0, 1, A);
+    if (points.size() < 10) randVector(0, -1, A);
 	}
 
 	private void randVector(int dx, int dy, RoomPoint A){

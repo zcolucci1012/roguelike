@@ -40,7 +40,7 @@ public class Player extends GameThing{
 					handler.removeObject(thing);
 				}
 			}
-			if (thing.getId().equals("Enemy")){
+			if (thing.getId().equals("Enemy.Chaser")){
 				if (getBounds().intersects(thing.getBounds())){
 					if (iTimer == 0) {
 						hp-=10;
@@ -49,6 +49,12 @@ public class Player extends GameThing{
 					if (hp == 0){
 						//game over
 					}
+				}
+			}
+			if (thing.getId().equals("EnemyShot")){
+				if (getBounds().intersects(thing.getBounds())){
+					hp -= ((EnemyShot)thing).getDamage();
+					handler.removeObject(thing);
 				}
 			}
 			if (thing.getId().equals("MoveBlock")){

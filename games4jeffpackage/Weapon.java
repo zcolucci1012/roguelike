@@ -109,7 +109,7 @@ public class Weapon extends Pickup {
     if (name.equals("smg")){
       fireDelay = 7;
       shotSpeed = 5;
-      damage = 2;
+      damage = 3;
       magazine = 30;
       reloadTime = 200;
       inaccuracy = 100;
@@ -129,7 +129,7 @@ public class Weapon extends Pickup {
     if (name.equals("assault rifle")){
       fireDelay = 12;
       shotSpeed = 8;
-      damage = 3;
+      damage = 4;
       magazine = 24;
       reloadTime = 150;
       inaccuracy = 50;

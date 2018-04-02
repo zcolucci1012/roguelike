@@ -107,7 +107,7 @@ public class Screen extends MouseAdapter{
 			dy = pair.getDY();
 			for(int i = 0; i < handler.stuff.size(); i++){
 				GameThing thing = handler.stuff.get(i);
-				if (thing.getId() == "Enemy"){
+				if (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.")){
 					if (((Enemy)thing).getRoom().isPoint(room)){
 						doorTimer = 10;
 						break;
@@ -118,7 +118,7 @@ public class Screen extends MouseAdapter{
 		boolean found = false;
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
-			if (thing.getId() == "Enemy"){
+			if (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.")){
 				if (((Enemy)thing).getRoom().isPoint(room)){
 					found = true;
 					break;
@@ -213,7 +213,7 @@ public class Screen extends MouseAdapter{
 				float d = (float)Math.sqrt(Math.pow((sx+randX-(int)x),2) + Math.pow((sy+randY-(int)y),2));
 				if (d != 0){
 					float sVelX = ((sx+randX - (int)x)/d*shotSpeed);
-					float sVelY = ((sy+randY + ((int)(Math.random()*51)-25) - (int)y)/d*shotSpeed);
+					float sVelY = ((sy+randY - (int)y)/d*shotSpeed);
 					float angle = (float)Math.atan(sVelY / sVelX);
 					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", angle, damage, (10*range)/shotSpeed, handler);
 					shot.setVelX(sVelX);
