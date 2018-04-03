@@ -203,16 +203,15 @@ public class Screen extends MouseAdapter{
 	}
 
 	private void fire(){
+		Sound.play("shotgun", 1);
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
 				float x = thing.getX() + thing.getWidth()/2 ;
 				float y = thing.getY() + thing.getHeight()/2;
 				float d = (float)Math.sqrt(Math.pow((sx-(int)x),2) + Math.pow((sy-(int)y),2));
-				System.out.println(d);
 				int randX = (int)(d*((int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2))/250.0);
 				int randY = (int)(d*((int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2))/250.0);
-				System.out.println(randX + " " + randY);
 				d = (float)Math.sqrt(Math.pow((sx+randX-(int)x),2) + Math.pow((sy+randY-(int)y),2));
 				if (d != 0){
 					float sVelX = ((sx+randX - (int)x)/d*shotSpeed);

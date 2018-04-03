@@ -21,6 +21,7 @@ public class Chaser extends Enemy{
     super(x, y, id);
     this.handler = handler;
     this.screen = screen;
+    timer = (int)(Math.random()*11) + 1;
 
     width = 28;
     height = 28;

@@ -166,6 +166,16 @@ public class Weapon extends Pickup {
       auto = true;
       range = 80;
     }
+    if (name.equals("revolver")){
+      fireDelay = 80;
+      shotSpeed = 10;
+      damage = 13;
+      magazine = 6;
+      reloadTime = 120;
+      inaccuracy = 10;
+      auto = false;
+      range = 100;
+    }
     ammo = magazine;
   }
 

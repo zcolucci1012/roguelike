@@ -45,6 +45,8 @@ public class Main extends Canvas implements Runnable{
 		player = new Player(400,400,"Player", 0, handler, this, screen);
 		handler.addObject(player);
 		generateMap();
+		Sound s = new Sound();
+		Sound.loop("background", 0.1);
 	}
 
 	public synchronized void start(){
@@ -199,7 +201,7 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new Shooter(xx*33 + 800*dx, yy*32 + 800*dy, "Shooter", handler, screen));
 					}
 					if (red == 0 && green == 255 && blue == 0){
-						int choice = (int)(Math.random()*7);
+						int choice = (int)(Math.random()*8);
 						String weapon = "";
 						if (choice == 0) weapon = "smg";
 						else if (choice == 1) weapon = "sniper";
@@ -207,6 +209,7 @@ public class Main extends Canvas implements Runnable{
 						else if (choice == 3) weapon = "DMR";
 						else if (choice == 4) weapon = "slugshot";
 						else if (choice == 5) weapon = "minigun";
+						else if (choice == 6) weapon = "revolver";
 						else weapon = "pistol";
 
 						handler.addObject(new Weapon(xx*33 + 800*dx, yy*32 + 800*dy, weapon));
@@ -238,7 +241,7 @@ public class Main extends Canvas implements Runnable{
 				level = loader.loadImage("room0.png");
 			}
 			else {
-				int roomNum = (int)(Math.random()*24) + 1;
+				int roomNum = (int)(Math.random()*35) + 1;
 				level = loader.loadImage("room" + roomNum + ".png");
 				System.out.println("room" + roomNum + " created");
 			}

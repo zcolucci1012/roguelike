@@ -17,6 +17,7 @@ public class Shooter extends Enemy{
     super(x, y, id);
     this.handler = handler;
     this.screen = screen;
+    timer = (int)(Math.random()*151) + 1;
 
     width = 24;
     height = 24;
