@@ -206,11 +206,14 @@ public class Screen extends MouseAdapter{
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
-				int randX = (int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2);
-				int randY = (int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2);
 				float x = thing.getX() + thing.getWidth()/2 ;
 				float y = thing.getY() + thing.getHeight()/2;
-				float d = (float)Math.sqrt(Math.pow((sx+randX-(int)x),2) + Math.pow((sy+randY-(int)y),2));
+				float d = (float)Math.sqrt(Math.pow((sx-(int)x),2) + Math.pow((sy-(int)y),2));
+				System.out.println(d);
+				int randX = (int)(d*((int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2))/250.0);
+				int randY = (int)(d*((int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2))/250.0);
+				System.out.println(randX + " " + randY);
+				d = (float)Math.sqrt(Math.pow((sx+randX-(int)x),2) + Math.pow((sy+randY-(int)y),2));
 				if (d != 0){
 					float sVelX = ((sx+randX - (int)x)/d*shotSpeed);
 					float sVelY = ((sy+randY - (int)y)/d*shotSpeed);
@@ -310,11 +313,11 @@ public class Screen extends MouseAdapter{
 		g2d.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		if (reloading) g2d.drawString("Reloading " + weapon.getName() + "...", 25, 75);
 		if (pickupAlertFlag) g2d.drawString("Picked up " + lastAddedWeapon + "!", 650, 50);
+		renderHP(g2d);
 		g2d.dispose();
-		renderHP(g);
 	}
 
-	private void renderHP(Graphics g){
+	private void renderHP(Graphics2D g2d){
 		int hp = 0;
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
@@ -323,13 +326,13 @@ public class Screen extends MouseAdapter{
 				hp = player.getHp();
 			}
 		}
-		g.setColor(Color.BLACK);
-		g.drawRect(24, 24, 101, 26);
-		g.setColor(Color.GRAY);
-		g.fillRect(25, 25, 100, 25);
+		g2d.setColor(Color.BLACK);
+		g2d.drawRect(24, 24, 101, 26);
+		g2d.setColor(Color.GRAY);
+		g2d.fillRect(25, 25, 100, 25);
 		if (hp >= 0){
-			g.setColor(new Color((int)(255-hp*(255.0/100.0)), (int)(hp*(255.0/100.0)), 0));
-			g.fillRect(25, 25, hp, 25);
+			g2d.setColor(new Color((int)(255-hp*(255.0/100.0)), (int)(hp*(255.0/100.0)), 0));
+			g2d.fillRect(25, 25, hp, 25);
 		}
 	}
 

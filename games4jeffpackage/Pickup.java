@@ -33,7 +33,7 @@ public class Pickup extends GameThing{
 		if (name.equals("sniper")) return 2;
 		if (name.equals("assault rifle")) return 3;
 		if (name.equals("DMR")) return 4;
-		return -1;
+		return 0;
 	}
 
 	public Rectangle getBounds() {

@@ -10,8 +10,8 @@ public class Player extends GameThing{
 	private Handler handler;
 	private Main main;
 	private Screen screen;
-	private int hp = 100;
-	private int iFrames = 50;
+	private int hp = 50;
+	private int iFrames = 100;
 	private int iTimer = 0;
 	private boolean invincible = false;
 
@@ -45,9 +45,6 @@ public class Player extends GameThing{
 					if (iTimer == 0) {
 						hp-=10;
 						iTimer = iFrames;
-					}
-					if (hp == 0){
-						//game over
 					}
 				}
 			}
@@ -105,6 +102,9 @@ public class Player extends GameThing{
 						}
 					}
 				}
+			}
+			if (hp <= 0){
+				handler.removeObject(this);
 			}
 		}
 		if (iTimer != 0){

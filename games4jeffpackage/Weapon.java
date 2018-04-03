@@ -141,9 +141,29 @@ public class Weapon extends Pickup {
       shotSpeed = 11;
       damage = 9;
       magazine = 10;
-      reloadTime = 100;
+      reloadTime = 200;
       inaccuracy = 20;
       auto = false;
+      range = 80;
+    }
+    if (name.equals("slugshot")){
+      fireDelay = 40;
+      shotSpeed = 7;
+      damage = 18;
+      magazine = 6;
+      reloadTime = 130;
+      inaccuracy = 5;
+      auto = false;
+      range = 15;
+    }
+    if (name.equals("minigun")){
+      fireDelay = 5;
+      shotSpeed = 11;
+      damage = 2;
+      magazine = 200;
+      reloadTime = 600;
+      inaccuracy = 85;
+      auto = true;
       range = 80;
     }
     ammo = magazine;

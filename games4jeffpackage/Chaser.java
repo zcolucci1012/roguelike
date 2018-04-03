@@ -13,6 +13,7 @@ public class Chaser extends Enemy{
   private int hp = 20;
 	private int randTimer = 0;
 	private int [] imperfections = new int [2];
+  private int timer = 0;
 
 	private Texture tex = Main.getInstance();
 
@@ -28,6 +29,8 @@ public class Chaser extends Enemy{
   public void tick() {
     x+=velX;
     y+=velY;
+    double max = 5.0;
+    float speed = (float)Math.pow((-(Math.pow(max, 1.0/10.0)/2.0*Math.cos(Math.PI*timer/25.0)) + Math.pow(max, 1.0/10.0)/2.0), 10.0) + 1;
 		if (randTimer == 50){
 			imperfections[0] = (int)(Math.random() * 51)-25;
 			imperfections[1] = (int)(Math.random() * 51)-25;
@@ -45,8 +48,8 @@ public class Chaser extends Enemy{
 					d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));
 				}
         if (d != 0){
-          velX = -(x - (int)pX)/d*2;
-          velY = -(y - (int)pY)/d*2;
+          velX = -(x - (int)pX)/d*speed;
+          velY = -(y - (int)pY)/d*speed;
         }
       }
       if (thing.getId() == "Shot"){
@@ -74,6 +77,7 @@ public class Chaser extends Enemy{
       }
     }
 		randTimer++;
+    timer++;
   }
 
   public void render(Graphics g) {

@@ -183,7 +183,7 @@ public class Main extends Canvas implements Runnable{
 						!(xx==0 && (yy==11 || yy==12) && doors[3])){
 					if (red == 0 && green == 0 && blue == 0){
 						int type = (int)(Math.random()*4);
-						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", 0));
+						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", type));
 					}
 					if (red == 0 && green == 0 && blue == 255){
 						handler.addObject(new Player(xx*33 + 800*dx, yy*32 + 800*dy, "Player", 0, handler, this, screen));
@@ -192,13 +192,21 @@ public class Main extends Canvas implements Runnable{
 						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + 800*dx, yy*32 + 800*dy, "Chaser", handler, screen));
 						else handler.addObject(new Shooter(xx*33 + 800*dx, yy*32 + 800*dy, "Shooter", handler, screen));
 					}
+					if (red == 255 && green == 1 && blue == 0){
+						handler.addObject(new Chaser(xx*33 + 800*dx, yy*32 + 800*dy, "Chaser", handler, screen));
+					}
+					if (red == 255 && green == 2 && blue == 0){
+						handler.addObject(new Shooter(xx*33 + 800*dx, yy*32 + 800*dy, "Shooter", handler, screen));
+					}
 					if (red == 0 && green == 255 && blue == 0){
-						int choice = (int)(Math.random()*5);
+						int choice = (int)(Math.random()*7);
 						String weapon = "";
 						if (choice == 0) weapon = "smg";
 						else if (choice == 1) weapon = "sniper";
 						else if (choice == 2) weapon = "assault rifle";
 						else if (choice == 3) weapon = "DMR";
+						else if (choice == 4) weapon = "slugshot";
+						else if (choice == 5) weapon = "minigun";
 						else weapon = "pistol";
 
 						handler.addObject(new Weapon(xx*33 + 800*dx, yy*32 + 800*dy, weapon));
@@ -230,7 +238,7 @@ public class Main extends Canvas implements Runnable{
 				level = loader.loadImage("room0.png");
 			}
 			else {
-				int roomNum = (int)(Math.random()*15) + 1;
+				int roomNum = (int)(Math.random()*24) + 1;
 				level = loader.loadImage("room" + roomNum + ".png");
 				System.out.println("room" + roomNum + " created");
 			}

@@ -68,7 +68,7 @@ public class Shooter extends Enemy{
 		float d = (float)Math.sqrt(Math.pow((sx-(int)xx),2) + Math.pow((sy-(int)yy),2));
 		if (d != 0){
 			float sVelX = ((sx - (int)xx)/d*5);
-			float sVelY = ((sy + ((int)(Math.random()*51)-25) - (int)yy)/d*5);
+			float sVelY = ((sy - (int)yy)/d*5);
 			float angle = (float)Math.atan(sVelY / sVelX);
 			EnemyShot shot = new EnemyShot((int)xx-width/4, (int)yy-width/4, "EnemyShot", angle, 10, 100, handler);
 			shot.setVelX(sVelX);
