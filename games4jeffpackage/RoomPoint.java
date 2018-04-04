@@ -22,6 +22,12 @@ public class RoomPoint
         }
         return false;
     }
+    public boolean isPoint(int x, int y){
+      if (this.x == x && this.y == y){
+        return true;
+      }
+      return false;
+    }
     public void complete(){
       complete = true;
     }

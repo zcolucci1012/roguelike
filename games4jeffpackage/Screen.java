@@ -105,10 +105,22 @@ public class Screen extends MouseAdapter{
 
 	public void tick(){
 		if (room != null && room.isPoint(new RoomPoint(0,0))){
-			visible.add(room);
+			boolean found = false;
+			for (RoomPoint point: visible){
+				if (point.isPoint(room)){
+					found = true;
+				}
+			}
+			if (!found) visible.add(room);
 			for (Vector vector: vectors){
-				if (vector.hasPoint(new RoomPoint(0, 0)) == 1 || vector.hasPoint(new RoomPoint(0, 0)) == 2){
-					visible.add(vector.getOther(new RoomPoint(0, 0)));
+				if (vector.hasPoint(0, 0) == 1 || vector.hasPoint(0, 0) == 2){
+					found = false;
+					for (RoomPoint point: visible){
+						if (point.isPoint(vector.getOther(0, 0))){
+							found = true;
+						}
+					}
+					if (!found) visible.add(vector.getOther(0, 0));
 				}
 			}
 		}
@@ -116,10 +128,22 @@ public class Screen extends MouseAdapter{
 		if (tempRoom != null && !room.isPoint(tempRoom)){
 			doorsUnlocked = false;
 			Vector pair = new Vector(tempRoom, room);
-			visible.add(room);
+			boolean found = false;
+			for (RoomPoint point: visible){
+				if (point.isPoint(room)){
+					found = true;
+				}
+			}
+			if (!found) visible.add(room);
 			for (Vector vector: vectors){
 				if (vector.hasPoint(room) == 1 || vector.hasPoint(room) == 2){
-					visible.add(vector.getOther(room));
+					found = false;
+					for (RoomPoint point: visible){
+						if (point.isPoint(vector.getOther(room))){
+							found = true;
+						}
+					}
+					if (!found) visible.add(vector.getOther(room));
 				}
 			}
 			dx = pair.getDX();
@@ -350,8 +374,9 @@ public class Screen extends MouseAdapter{
 		maxX *= mapSize;
 		maxY *= mapSize;
 		int i = 0;
+		System.out.println(visible.size());
 		for (RoomPoint point: visible){
-			if (point.isPoint(new RoomPoint(0,0))) g2d.setColor(Color.BLUE);
+			if (point.isPoint(0,0)) g2d.setColor(Color.BLUE);
 			else if (room != null && point.isPoint(room)) g2d.setColor(Color.WHITE);
 			else if (point.isComplete()) g2d.setColor(Color.GREEN);
 			else g2d.setColor(Color.GRAY);
