@@ -22,8 +22,8 @@ public class Vector
       return B.getY() - A.getY();
     }
     public int hasPoint(RoomPoint C){
-      if (A.getX() == C.getX() && A.getY() == C.getY()) return 1;
-      if (B.getX() == C.getX() && B.getY() == C.getY()) return 2;
+      if (A.isPoint(C)) return 1;
+      if (B.isPoint(C)) return 2;
       return -1;
     }
     public boolean isVector(Vector V){
@@ -31,6 +31,11 @@ public class Vector
         return true;
       }
       return false;
+    }
+    public RoomPoint getOther(RoomPoint C){
+      if (A.isPoint(C)) return B;
+      if (B.isPoint(C)) return A;
+      return new RoomPoint(0, 0);
     }
     public String toString(){
         return "(" + A + ", " + B + ")";

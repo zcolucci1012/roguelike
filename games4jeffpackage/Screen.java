@@ -64,6 +64,9 @@ public class Screen extends MouseAdapter{
 	private boolean movement = true;
 	private float dx;
 	private float dy;
+	private ArrayList <RoomPoint> points = new ArrayList <RoomPoint> ();
+	private ArrayList <Vector> vectors = new ArrayList <Vector> ();
+	private ArrayList <RoomPoint> visible = new ArrayList <RoomPoint> ();
 
 	public Screen (Handler handler, Main main, Camera cam){
 		this.handler = handler;
@@ -71,6 +74,8 @@ public class Screen extends MouseAdapter{
 		this.cam = cam;
 
 		loader = new BufferedImageLoader();
+		points = main.getPoints();
+		vectors = main.getVectors();
 	}
 
 	public void mousePressed(MouseEvent e){
@@ -99,10 +104,24 @@ public class Screen extends MouseAdapter{
 	}
 
 	public void tick(){
+		if (room != null && room.isPoint(new RoomPoint(0,0))){
+			visible.add(room);
+			for (Vector vector: vectors){
+				if (vector.hasPoint(new RoomPoint(0, 0)) == 1 || vector.hasPoint(new RoomPoint(0, 0)) == 2){
+					visible.add(vector.getOther(new RoomPoint(0, 0)));
+				}
+			}
+		}
 		room = new RoomPoint ((int)(-cam.getX()/800), (int)(cam.getY()/800));
 		if (tempRoom != null && !room.isPoint(tempRoom)){
 			doorsUnlocked = false;
 			Vector pair = new Vector(tempRoom, room);
+			visible.add(room);
+			for (Vector vector: vectors){
+				if (vector.hasPoint(room) == 1 || vector.hasPoint(room) == 2){
+					visible.add(vector.getOther(room));
+				}
+			}
 			dx = pair.getDX();
 			dy = pair.getDY();
 			for(int i = 0; i < handler.stuff.size(); i++){
@@ -127,6 +146,12 @@ public class Screen extends MouseAdapter{
 		}
 		if (!found  && !doorsUnlocked){
 			unlockDoors();
+			for (RoomPoint point: visible){
+				if (room.isPoint(point)){
+					point.complete();
+				}
+			}
+			room.complete();
 			doorsUnlocked = true;
 		}
 		if (doorTimer != 0){
@@ -318,20 +343,21 @@ public class Screen extends MouseAdapter{
 		int mapSize = 20;
 		int maxY = 0;
 		int maxX = 0;
-		for (RoomPoint point: main.getPoints()){
-			if (-point.getY() > maxY) maxY = -point.getY();
+		for (RoomPoint point: visible){
+			if (point.getY() > maxY) maxY = point.getY();
 			if (point.getX() > maxX) maxX = point.getX();
 		}
 		maxX *= mapSize;
 		maxY *= mapSize;
-		System.out.println(maxX + " " + maxY);
 		int i = 0;
-		for (RoomPoint point: main.getPoints()){
-			if (room != null && point.isPoint(room)) g2d.setColor(Color.WHITE);
+		for (RoomPoint point: visible){
+			if (point.isPoint(new RoomPoint(0,0))) g2d.setColor(Color.BLUE);
+			else if (room != null && point.isPoint(room)) g2d.setColor(Color.WHITE);
+			else if (point.isComplete()) g2d.setColor(Color.GREEN);
 			else g2d.setColor(Color.GRAY);
-			g2d.fillRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 100, mapSize, mapSize);
+			g2d.fillRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 45, mapSize, mapSize);
 			g2d.setColor(Color.BLACK);
-			g2d.drawRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 100, mapSize, mapSize);
+			g2d.drawRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 45, mapSize, mapSize);
 			i++;
 		}
 		g2d.dispose();

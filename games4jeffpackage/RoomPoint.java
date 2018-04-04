@@ -4,6 +4,7 @@ public class RoomPoint
 {
     private int x;
     private int y;
+    private boolean complete = false;
 
     public RoomPoint(int x, int y){
         this.x = x;
@@ -20,6 +21,12 @@ public class RoomPoint
           return true;
         }
         return false;
+    }
+    public void complete(){
+      complete = true;
+    }
+    public boolean isComplete(){
+      return complete;
     }
     public String toString(){
         return "[" + x + ", " + y + "]";

@@ -45,7 +45,7 @@ public class Main extends Canvas implements Runnable{
 		handler.addObject(player);
 		generateMap();
 		Sound s = new Sound();
-		Sound.loop("background2", 0.1);
+		Sound.loop("background", 0.1);
 	}
 
 	public synchronized void start(){
@@ -331,6 +331,10 @@ public class Main extends Canvas implements Runnable{
 
 	public ArrayList <RoomPoint> getPoints(){
 		return points;
+	}
+
+	public ArrayList <Vector> getVectors(){
+		return vectors;
 	}
 
 	public static Texture getInstance(){
