@@ -9,13 +9,15 @@ public class Door extends GameThing{
 
   private int type;
   private int openType;
+  private int doorType;
   private boolean open = false;
   private boolean unlocked = true;
 
-  public Door(float x, float y, String id, int type, int openType){
+  public Door(float x, float y, String id, int type, int openType, int doorType){
     super(x, y, id);
     this.type = type;
     this.openType = openType;
+    this.doorType = doorType;
 
     if (type == 1){
       this.width = 33;
@@ -42,7 +44,8 @@ public class Door extends GameThing{
   }
 
   public void render(Graphics g){
-    g.setColor(Color.ORANGE);
+    if (doorType == 1) g.setColor(Color.ORANGE);
+    if (doorType == 2) g.setColor(Color.GREEN);
     g.fillRect((int)x, (int)y, (int)width, (int)height);
   }
 

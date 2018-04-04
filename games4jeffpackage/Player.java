@@ -14,6 +14,7 @@ public class Player extends GameThing{
 	private int iFrames = 100;
 	private int iTimer = 0;
 	private boolean invincible = false;
+	private boolean restarted = false;
 
 	private Texture tex = Main.getInstance();
 
@@ -31,6 +32,7 @@ public class Player extends GameThing{
 	public void tick() {
 		x += velX;
 		y += velY;
+		//System.out.println("restarted: " + restarted);
 
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
@@ -101,6 +103,15 @@ public class Player extends GameThing{
 							y = thing.getY() - height;
 						}
 					}
+				}
+			}
+			if (thing.getId().equals("Trapdoor")){
+				if (thing.getBounds().intersects(getBounds()) && !restarted){
+					main.restart();
+					restarted = true;
+				}
+				else {
+					restarted = false;
 				}
 			}
 			if (hp <= 0){

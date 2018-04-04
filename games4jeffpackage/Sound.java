@@ -11,7 +11,10 @@ public class Sound {
 
   public Sound(){
     files.put("background", new File("background.wav"));
+    files.put("background2", new File("background2.wav"));
     files.put("shotgun", new File("shotgun.wav"));
+    files.put("sniper", new File ("sniper.wav"));
+    files.put("smg", new File ("smg.wav"));
   }
 
   public static void loop(String path, double volume){

@@ -33,6 +33,9 @@ public class Pickup extends GameThing{
 		if (name.equals("sniper")) return 2;
 		if (name.equals("assault rifle")) return 3;
 		if (name.equals("DMR")) return 4;
+		if (name.equals("slugshot")) return 5;
+		if (name.equals("minigun")) return 6;
+		if (name.equals("revolver")) return 7;
 		return 0;
 	}
 

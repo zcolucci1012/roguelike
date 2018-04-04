@@ -45,4 +45,15 @@ public class Handler {
 	public void removeObject(GameThing thing){
 		stuff.remove(thing);
 	}
+
+	public void clear(){
+		for (int i = 0; i < stuff.size(); i++){
+			GameThing thing = stuff.get(i);
+
+			if (!thing.getId().equals("Player")){
+				removeObject(thing);
+				i--;
+			}
+		}
+	}
 }

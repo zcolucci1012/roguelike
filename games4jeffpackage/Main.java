@@ -41,12 +41,11 @@ public class Main extends Canvas implements Runnable{
 		this.addKeyListener(new KeyInput(handler, screen));
 		this.addMouseListener(screen);
 
-		level = loader.loadImage("room1.png"); //load level
 		player = new Player(400,400,"Player", 0, handler, this, screen);
 		handler.addObject(player);
 		generateMap();
 		Sound s = new Sound();
-		Sound.loop("background", 0.1);
+		Sound.loop("background2", 0.1);
 	}
 
 	public synchronized void start(){
@@ -137,7 +136,7 @@ public class Main extends Canvas implements Runnable{
 		*/
 	}
 
-	private void LoadImageLevel(BufferedImage image, int dx, int dy, boolean [] doors){
+	private void LoadImageLevel(BufferedImage image, int dx, int dy, int [] doors){
 		int w = image.getWidth();
 		int h = image.getHeight();
 
@@ -145,29 +144,29 @@ public class Main extends Canvas implements Runnable{
 
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
-				if (xx==11 && yy==0 && doors[0]){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 1, 2));
+				if (xx==11 && yy==0 && doors[0] != 0){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 1, 2, doors[0]));
 				}
-				else if (xx==12 && yy==0 && doors[0]){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 1, 4));
+				else if (xx==12 && yy==0 && doors[0] != 0){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 1, 4, doors[0]));
 				}
-				else if (xx==23 && yy==11 && doors[1]){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 2, 3));
+				else if (xx==23 && yy==11 && doors[1] != 0){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 2, 3, doors[1]));
 				}
-				else if (xx==23 && yy==12 && doors[1]){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 2, 1));
+				else if (xx==23 && yy==12 && doors[1] != 0){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 2, 1, doors[1]));
 				}
-				else if (xx==11 && yy==23 && doors[2]){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 3, 2));
+				else if (xx==11 && yy==23 && doors[2] != 0){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 3, 2, doors[2]));
 				}
-				else if (xx==12 && yy==23 && doors[2]){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 3, 4));
+				else if (xx==12 && yy==23 && doors[2] != 0){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 3, 4, doors[2]));
 				}
-				else if (xx==0 && yy==11 && doors[3]){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 4, 3));
+				else if (xx==0 && yy==11 && doors[3] != 0){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 4, 3, doors[3]));
 				}
-				else if (xx==0 && yy==12 && doors[3]){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 4, 1));
+				else if (xx==0 && yy==12 && doors[3] != 0){
+					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 4, 1, doors[3]));
 				}
 			}
 		}
@@ -179,10 +178,10 @@ public class Main extends Canvas implements Runnable{
 				int green = (pixel >> 8) & 0xff;
 				int blue = (pixel) & 0xff;
 
-				if (!((xx==11 || xx==12) && yy==0 && doors[0]) &&
-						!(xx==23 && (yy==11 || yy==12) && doors[1]) &&
-						!((xx==11 || xx==12) && yy==23 && doors[2]) &&
-						!(xx==0 && (yy==11 || yy==12) && doors[3])){
+				if (!((xx==11 || xx==12) && yy==0 && doors[0] != 0) &&
+						!(xx==23 && (yy==11 || yy==12) && doors[1] != 0) &&
+						!((xx==11 || xx==12) && yy==23 && doors[2] != 0) &&
+						!(xx==0 && (yy==11 || yy==12) && doors[3] != 0)){
 					if (red == 0 && green == 0 && blue == 0){
 						int type = (int)(Math.random()*4);
 						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", type));
@@ -199,6 +198,9 @@ public class Main extends Canvas implements Runnable{
 					}
 					if (red == 255 && green == 2 && blue == 0){
 						handler.addObject(new Shooter(xx*33 + 800*dx, yy*32 + 800*dy, "Shooter", handler, screen));
+					}
+					if (red == 255 && green == 255 && blue == 0){
+						handler.addObject(new Trapdoor(xx*33 + 800*dx, yy*32 + 800*dy, "Trapdoor"));
 					}
 					if (red == 0 && green == 255 && blue == 0){
 						int choice = (int)(Math.random()*8);
@@ -223,6 +225,8 @@ public class Main extends Canvas implements Runnable{
 	}
 
 	private void generateMap(){
+		points.clear();
+		vectors.clear();
 		RoomPoint startRoom = new RoomPoint(0, 0);
 		points.add(startRoom);
 		while (points.size() < 8){
@@ -236,9 +240,19 @@ public class Main extends Canvas implements Runnable{
 		int i=0;
 		for (RoomPoint point: points){
 			i++;
-			boolean [] doors = getDoors(point);
+			int [] doors = getDoors(point);
 			if (i == 1){
 				level = loader.loadImage("room0.png");
+				System.out.println("Starting Room created");
+			}
+			else if (i == points.size()){
+				level = loader.loadImage("roomwin.png");
+				System.out.println("Winning Room created");
+			}
+			else if (i == points.size()-1){
+				int roomNum = (int)(Math.random()*35) + 1;
+				level = loader.loadImage("room" + roomNum + ".png");
+				System.out.println("room" + roomNum + " created (next to winning room)");
 			}
 			else {
 				int roomNum = (int)(Math.random()*35) + 1;
@@ -272,29 +286,51 @@ public class Main extends Canvas implements Runnable{
     }
 	}
 
-	private boolean [] getDoors(RoomPoint A){
-		boolean [] doors = {false, false, false, false};
+	private int [] getDoors(RoomPoint A){
+
+		int [] doors = {0, 0, 0, 0};
 		for (Vector vector: vectors){
+			int doorType = 1;
+			if (vector.isVector(new Vector(A, points.get(points.size()-1)))){
+				doorType = 2;
+			}
 			int dx = 0;
 			int dy = 0;
 			if (vector.hasPoint(A) == 1){
 				dx = vector.getDX();
 				dy = vector.getDY();
-				if (dy == 1) doors[0] = true;
-				if (dx == 1) doors[1] = true;
-				if (dy == -1) doors[2] = true;
-				if (dx == -1) doors[3] = true;
+				if (dy == 1) doors[0] = doorType;
+				if (dx == 1) doors[1] = doorType;
+				if (dy == -1) doors[2] = doorType;
+				if (dx == -1) doors[3] = doorType;
 			}
 			else if (vector.hasPoint(A) == 2){
 				dx = -vector.getDX();
 				dy = -vector.getDY();
-				if (dy == 1) doors[0] = true;
-				if (dx == 1) doors[1] = true;
-				if (dy == -1) doors[2] = true;
-				if (dx == -1) doors[3] = true;
+				if (dy == 1) doors[0] = doorType;
+				if (dx == 1) doors[1] = doorType;
+				if (dy == -1) doors[2] = doorType;
+				if (dx == -1) doors[3] = doorType;
 			}
 		}
 		return doors;
+	}
+
+	public void restart(){
+		handler.clear();
+		System.out.println("stuff: " + handler.stuff.size());
+		for (int i=0; i<handler.stuff.size(); i++){
+			GameThing thing = handler.stuff.get(i);
+			if (thing.getId().equals("Player")){
+				thing.setX(400);
+				thing.setY(400);
+			}
+		}
+		generateMap();
+	}
+
+	public ArrayList <RoomPoint> getPoints(){
+		return points;
 	}
 
 	public static Texture getInstance(){

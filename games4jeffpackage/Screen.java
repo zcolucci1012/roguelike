@@ -203,7 +203,9 @@ public class Screen extends MouseAdapter{
 	}
 
 	private void fire(){
-		Sound.play("shotgun", 1);
+		if (weapon.getName().equals("slugshot")) Sound.play("shotgun", 1);
+		if (weapon.getName().equals("sniper")) Sound.play("sniper", 1);
+		if (weapon.getName().equals("smg")) Sound.play("smg", 1);
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
@@ -313,6 +315,25 @@ public class Screen extends MouseAdapter{
 		if (reloading) g2d.drawString("Reloading " + weapon.getName() + "...", 25, 75);
 		if (pickupAlertFlag) g2d.drawString("Picked up " + lastAddedWeapon + "!", 650, 50);
 		renderHP(g2d);
+		int mapSize = 20;
+		int maxY = 0;
+		int maxX = 0;
+		for (RoomPoint point: main.getPoints()){
+			if (-point.getY() > maxY) maxY = -point.getY();
+			if (point.getX() > maxX) maxX = point.getX();
+		}
+		maxX *= mapSize;
+		maxY *= mapSize;
+		System.out.println(maxX + " " + maxY);
+		int i = 0;
+		for (RoomPoint point: main.getPoints()){
+			if (room != null && point.isPoint(room)) g2d.setColor(Color.WHITE);
+			else g2d.setColor(Color.GRAY);
+			g2d.fillRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 100, mapSize, mapSize);
+			g2d.setColor(Color.BLACK);
+			g2d.drawRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 100, mapSize, mapSize);
+			i++;
+		}
 		g2d.dispose();
 	}
 
@@ -330,8 +351,8 @@ public class Screen extends MouseAdapter{
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(25, 25, 100, 25);
 		if (hp >= 0){
-			g2d.setColor(new Color((int)(255-hp*(255.0/100.0)), (int)(hp*(255.0/100.0)), 0));
-			g2d.fillRect(25, 25, hp, 25);
+			g2d.setColor(new Color((int)(255-hp*(255.0/50.0)), (int)(hp*(255.0/50.0)), 0));
+			g2d.fillRect(25, 25, hp*2, 25);
 		}
 	}
 
