@@ -6,20 +6,22 @@ import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.util.Random;
 
-public class Chaser extends Enemy{
+public class Pouncer extends Enemy{
 
   private Handler handler;
   private Screen screen;
   private int hp = 20;
 	private int randTimer = 0;
 	private int [] imperfections = new int [2];
+  private int timer = 0;
 
 	private Texture tex = Main.getInstance();
 
-  public Chaser(float x, float y, String id, Handler handler, Screen screen) {
+  public Pouncer(float x, float y, String id, Handler handler, Screen screen) {
     super(x, y, id);
     this.handler = handler;
     this.screen = screen;
+    timer = (int)(Math.random()*11) + 1;
 
     width = 28;
     height = 28;
@@ -28,6 +30,8 @@ public class Chaser extends Enemy{
   public void tick() {
     x+=velX;
     y+=velY;
+    double max = 5.0;
+    float speed = (float)Math.pow((-(Math.pow(max, 1.0/10.0)/2.0*Math.cos(Math.PI*timer/25.0)) + Math.pow(max, 1.0/10.0)/2.0), 10.0) + 1;
 		if (randTimer == 50){
 			imperfections[0] = (int)(Math.random() * 51)-25;
 			imperfections[1] = (int)(Math.random() * 51)-25;
@@ -45,8 +49,8 @@ public class Chaser extends Enemy{
 					d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));
 				}
         if (d != 0){
-          velX = -(x - (int)pX)/d*3;
-          velY = -(y - (int)pY)/d*3;
+          velX = -(x - (int)pX)/d*speed;
+          velY = -(y - (int)pY)/d*speed;
         }
       }
       if (thing.getId() == "Shot"){
@@ -74,6 +78,7 @@ public class Chaser extends Enemy{
       }
     }
 		randTimer++;
+    timer++;
   }
 
   public void render(Graphics g) {
@@ -84,8 +89,10 @@ public class Chaser extends Enemy{
 
 		g.setColor(Color.BLACK);
 		g.drawString(hp+"", (int)x, (int)y-10);
-		if (velX > 0) g.drawImage(tex.enemy[0], (int)x, (int)y, null);
-		else g.drawImage(tex.enemy[1], (int)x, (int)y, null);
+    g.setColor(Color.GRAY);
+    g.fillRect((int)x, (int)y, (int)width, (int)height);
+		//if (velX > 0) g.drawImage(tex.enemy[0], (int)x, (int)y, null);
+		//else g.drawImage(tex.enemy[1], (int)x, (int)y, null);
 		/*
 		g.setColor(Color.BLUE);
 	  Graphics2D g2d = (Graphics2D)g;

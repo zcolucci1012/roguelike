@@ -13,8 +13,9 @@ public class Weapon extends Pickup {
   private int reloadTime;
   private int ammo;
   private int inaccuracy;
-  private boolean auto;
+  private String fireType;
   private int range;
+  private int shotsFired = 1;
   private String name;
 
   public Weapon (float x, float y, String id){
@@ -79,12 +80,20 @@ public class Weapon extends Pickup {
     this.inaccuracy = inaccuracy;
   }
 
-  public boolean getAuto(){
-    return auto;
+  public String getFireType(){
+    return fireType;
   }
 
-  public void toggleAuto(){
-    this.auto = !auto;
+  public void setFireType(String fireType){
+    this.fireType = fireType;
+  }
+
+  public int getShotsFired(){
+    return shotsFired;
+  }
+
+  public void setShotsFired(int shotsFired){
+    this.shotsFired = shotsFired;
   }
 
   public int getRange(){
@@ -103,7 +112,7 @@ public class Weapon extends Pickup {
       magazine = 8;
       reloadTime = 100;
       inaccuracy = 50;
-      auto = false;
+      fireType = "semiauto";
       range = 50;
     }
     if (name.equals("smg")){
@@ -113,7 +122,7 @@ public class Weapon extends Pickup {
       magazine = 30;
       reloadTime = 200;
       inaccuracy = 100;
-      auto = true;
+      fireType = "auto";
       range = 30;
     }
     if (name.equals("sniper")){
@@ -123,7 +132,7 @@ public class Weapon extends Pickup {
       magazine = 5;
       reloadTime = 250;
       inaccuracy = 5;
-      auto = false;
+      fireType = "semiauto";
       range = 100;
     }
     if (name.equals("assault rifle")){
@@ -133,7 +142,7 @@ public class Weapon extends Pickup {
       magazine = 24;
       reloadTime = 150;
       inaccuracy = 50;
-      auto = true;
+      fireType = "auto";
       range = 60;
     }
     if (name.equals("DMR")){
@@ -143,7 +152,7 @@ public class Weapon extends Pickup {
       magazine = 10;
       reloadTime = 200;
       inaccuracy = 20;
-      auto = false;
+      fireType = "semiauto";
       range = 80;
     }
     if (name.equals("slugshot")){
@@ -153,7 +162,7 @@ public class Weapon extends Pickup {
       magazine = 6;
       reloadTime = 130;
       inaccuracy = 5;
-      auto = false;
+      fireType = "semiauto";
       range = 15;
     }
     if (name.equals("minigun")){
@@ -163,7 +172,7 @@ public class Weapon extends Pickup {
       magazine = 200;
       reloadTime = 600;
       inaccuracy = 85;
-      auto = true;
+      fireType = "auto";
       range = 80;
     }
     if (name.equals("revolver")){
@@ -173,8 +182,41 @@ public class Weapon extends Pickup {
       magazine = 6;
       reloadTime = 120;
       inaccuracy = 10;
-      auto = false;
+      fireType = "semiauto";
       range = 100;
+    }
+    if (name.equals("pump shotgun")){
+      fireDelay = 75;
+      shotSpeed = 15;
+      damage = 3;
+      magazine = 8;
+      reloadTime = 200;
+      inaccuracy = 100;
+      fireType = "semiauto";
+      shotsFired = 8;
+      range = 15;
+    }
+    if (name.equals("tac shotgun")){
+      fireDelay = 35;
+      shotSpeed = 15;
+      damage = 2;
+      magazine = 10;
+      reloadTime = 150;
+      inaccuracy = 150;
+      fireType = "auto";
+      shotsFired = 10;
+      range = 10;
+    }
+    if (name.equals("mauler")){
+      fireDelay = 10;
+      shotSpeed = 20;
+      damage = 1;
+      magazine = 15;
+      reloadTime = 100;
+      inaccuracy = 200;
+      fireType = "auto";
+      shotsFired = 10;
+      range = 10;
     }
     ammo = magazine;
   }

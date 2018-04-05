@@ -140,7 +140,7 @@ public class Main extends Canvas implements Runnable{
 		int w = image.getWidth();
 		int h = image.getHeight();
 
-		int enemyChoice = (int)(Math.random()*2);
+		int enemyChoice = (int)(Math.random()*3);
 
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
@@ -191,6 +191,7 @@ public class Main extends Canvas implements Runnable{
 					}
 					if (red == 255 && green == 0 && blue == 0){
 						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + 800*dx, yy*32 + 800*dy, "Chaser", handler, screen));
+						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + 800*dx, yy*32 + 800*dy, "Pouncer", handler, screen));
 						else handler.addObject(new Shooter(xx*33 + 800*dx, yy*32 + 800*dy, "Shooter", handler, screen));
 					}
 					if (red == 255 && green == 1 && blue == 0){
@@ -203,7 +204,7 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new Trapdoor(xx*33 + 800*dx, yy*32 + 800*dy, "Trapdoor"));
 					}
 					if (red == 0 && green == 255 && blue == 0){
-						int choice = (int)(Math.random()*8);
+						int choice = (int)(Math.random()*10);
 						String weapon = "";
 						if (choice == 0) weapon = "smg";
 						else if (choice == 1) weapon = "sniper";
@@ -212,7 +213,11 @@ public class Main extends Canvas implements Runnable{
 						else if (choice == 4) weapon = "slugshot";
 						else if (choice == 5) weapon = "minigun";
 						else if (choice == 6) weapon = "revolver";
+						else if (choice == 7) weapon = "pump shotgun";
+						else if (choice == 8) weapon = "tac shotgun";
+						else if (choice == 9) weapon = "mauler";
 						else weapon = "pistol";
+						weapon = "mauler";
 
 						handler.addObject(new Weapon(xx*33 + 800*dx, yy*32 + 800*dy, weapon));
 					}

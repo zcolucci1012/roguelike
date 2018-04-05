@@ -33,7 +33,8 @@ public class Screen extends MouseAdapter{
 	private int bullets = 0;
 	private int reloadTime = 100;
 	private int inaccuracy = 50;
-	private boolean auto = false;
+	private String fireType = "semiauto";
+	private int shotsFired = 1;
 	private int range = 50;
 
 	//timers
@@ -220,7 +221,7 @@ public class Screen extends MouseAdapter{
 				if (time == fireDelay){
 					if (firing){
 						fire();
-						if (!auto) firing = false;
+						if (fireType.equals("semiauto")) firing = false;
 						time = 0;
 					}
 				}
@@ -261,20 +262,24 @@ public class Screen extends MouseAdapter{
 				float x = thing.getX() + thing.getWidth()/2 ;
 				float y = thing.getY() + thing.getHeight()/2;
 				float d = (float)Math.sqrt(Math.pow((sx-(int)x),2) + Math.pow((sy-(int)y),2));
-				int randX = (int)(d*((int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2))/250.0);
-				int randY = (int)(d*((int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2))/250.0);
-				d = (float)Math.sqrt(Math.pow((sx+randX-(int)x),2) + Math.pow((sy+randY-(int)y),2));
-				if (d != 0){
-					float sVelX = ((sx+randX - (int)x)/d*shotSpeed);
-					float sVelY = ((sy+randY - (int)y)/d*shotSpeed);
-					float angle = (float)Math.atan(sVelY / sVelX);
-					Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", angle, damage, (10*range)/shotSpeed, handler);
-					shot.setVelX(sVelX);
-					shot.setVelY(sVelY);
-					handler.addObject(shot);
-					bullets--;
-					weapon.setAmmo(bullets);
+				int tempShots = shotsFired;
+				while (tempShots != 0){
+					int randX = (int)(d*((int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2))/250.0);
+					int randY = (int)(d*((int)(Math.random()*(inaccuracy + 1))-(inaccuracy/2))/250.0);
+					d = (float)Math.sqrt(Math.pow((sx+randX-(int)x),2) + Math.pow((sy+randY-(int)y),2));
+					if (d != 0){
+						float sVelX = ((sx+randX - (int)x)/d*shotSpeed);
+						float sVelY = ((sy+randY - (int)y)/d*shotSpeed);
+						float angle = (float)Math.atan(sVelY / sVelX);
+						Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", angle, damage, (10*range)/shotSpeed, handler);
+						shot.setVelX(sVelX);
+						shot.setVelY(sVelY);
+						handler.addObject(shot);
+					}
+					tempShots--;
 				}
+				bullets--;
+				weapon.setAmmo(bullets);
 				break;
 			}
 		}
@@ -307,7 +312,8 @@ public class Screen extends MouseAdapter{
 		reloadTime = weapon.getReloadTime();
 		bullets = weapon.getAmmo();
 		inaccuracy = weapon.getInaccuracy();
-		auto = weapon.getAuto();
+		fireType = weapon.getFireType();
+		shotsFired = weapon.getShotsFired();
 		range = weapon.getRange();
 		time = weapon.getFireDelay();
 	}
@@ -374,7 +380,6 @@ public class Screen extends MouseAdapter{
 		maxX *= mapSize;
 		maxY *= mapSize;
 		int i = 0;
-		System.out.println(visible.size());
 		for (RoomPoint point: visible){
 			if (point.isPoint(0,0)) g2d.setColor(Color.BLUE);
 			else if (room != null && point.isPoint(room)) g2d.setColor(Color.WHITE);
@@ -444,5 +449,9 @@ public class Screen extends MouseAdapter{
 
 	public void toggleMovement(){
 		this.movement = !movement;
+	}
+
+	public void restart(){
+		visible.clear();
 	}
 }

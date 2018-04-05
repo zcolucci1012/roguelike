@@ -12,7 +12,7 @@ public class Texture {
   public BufferedImage[] player = new BufferedImage[3];
   public BufferedImage[] block = new BufferedImage[4];
   public BufferedImage[] enemy = new BufferedImage[2];
-  public BufferedImage[] weapon = new BufferedImage[8];
+  public BufferedImage[] weapon = new BufferedImage[11];
 
   public Texture(){
     BufferedImageLoader loader = new BufferedImageLoader();
@@ -53,5 +53,8 @@ public class Texture {
     weapon[5] = ws.grabImage(1, 2, 24, 24); //slugshot
     weapon[6] = ws.grabImage(2, 2, 24, 24); //minigun
     weapon[7] = ws.grabImage(3, 2, 24, 24); //revolver
+    weapon[8] = ws.grabImage(4, 2, 24, 24); //pump shotgun
+    weapon[9] = ws.grabImage(5, 2, 24, 24); //tac shotgun
+    weapon[10] = ws.grabImage(1, 3, 24, 24); //mauler
   }
 }

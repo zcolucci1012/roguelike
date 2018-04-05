@@ -108,6 +108,7 @@ public class Player extends GameThing{
 			if (thing.getId().equals("Trapdoor")){
 				if (thing.getBounds().intersects(getBounds()) && !restarted){
 					main.restart();
+					screen.restart();
 					restarted = true;
 				}
 				else {
