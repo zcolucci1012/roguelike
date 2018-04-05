@@ -213,7 +213,7 @@ public class Weapon extends Pickup {
       damage = 1;
       magazine = 15;
       reloadTime = 100;
-      inaccuracy = 200;
+      inaccuracy = 150;
       fireType = "auto";
       shotsFired = 10;
       range = 10;

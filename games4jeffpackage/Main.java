@@ -27,6 +27,7 @@ public class Main extends Canvas implements Runnable{
 	public static Texture tex;
 	private Graphics g;
 	private Graphics2D g2d;
+	private String state = "menu";
 
 	public Main(){
 		tex = new Texture();
@@ -43,9 +44,11 @@ public class Main extends Canvas implements Runnable{
 
 		player = new Player(400,400,"Player", 0, handler, this, screen);
 		handler.addObject(player);
-		generateMap();
+
 		Sound s = new Sound();
 		Sound.loop("background", 0.1);
+
+		generateMap();
 	}
 
 	public synchronized void start(){
@@ -92,17 +95,18 @@ public class Main extends Canvas implements Runnable{
 	}
 
 	public void tick(){
-		if (cam != null){
-			handler.tick(cam);
-		}
-		screen.tick();
-		for (int i=0; i<handler.stuff.size(); i++){
-			GameThing thing = handler.stuff.get(i);
-			if (thing.getId().equals("Player")){
-				cam.tick(thing);
+		if (!state.equals("menu")) {
+			if (cam != null){
+				handler.tick(cam);
+			}
+			for (int i=0; i<handler.stuff.size(); i++){
+				GameThing thing = handler.stuff.get(i);
+				if (thing.getId().equals("Player")){
+					cam.tick(thing);
+				}
 			}
 		}
-
+		screen.tick();
 	}
 
 	public void render(){
@@ -114,21 +118,21 @@ public class Main extends Canvas implements Runnable{
 		g = bs.getDrawGraphics();
 		g2d = (Graphics2D)g;
 
-		g.setColor(new Color(36,123,160));
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		if (!state.equals("menu")) {
+			g.setColor(new Color(239, 172, 117));
+			g.fillRect(0, 0, WIDTH, HEIGHT);
 
-		g2d.translate(cam.getX(), cam.getY()); //begin of cam
+			g2d.translate(cam.getX(), cam.getY()); //begin of cam
 
-		handler.render(g, cam);
+			handler.render(g, cam);
 
-		g2d.translate(-cam.getX(), -cam.getY()); //end of cam
-
+			g2d.translate(-cam.getX(), -cam.getY()); //end of cam
+		}
 		screen.render(g);
 
 		g.dispose();
 
-	 	bs.show();
-
+		bs.show();
 
 		/*
 		g.dispose();
@@ -204,7 +208,7 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new Trapdoor(xx*33 + 800*dx, yy*32 + 800*dy, "Trapdoor"));
 					}
 					if (red == 0 && green == 255 && blue == 0){
-						int choice = (int)(Math.random()*10);
+						int choice = (int)(Math.random()*11);
 						String weapon = "";
 						if (choice == 0) weapon = "smg";
 						else if (choice == 1) weapon = "sniper";
@@ -217,7 +221,6 @@ public class Main extends Canvas implements Runnable{
 						else if (choice == 8) weapon = "tac shotgun";
 						else if (choice == 9) weapon = "mauler";
 						else weapon = "pistol";
-						weapon = "mauler";
 
 						handler.addObject(new Weapon(xx*33 + 800*dx, yy*32 + 800*dy, weapon));
 					}
@@ -340,6 +343,14 @@ public class Main extends Canvas implements Runnable{
 
 	public ArrayList <Vector> getVectors(){
 		return vectors;
+	}
+
+	public String getState(){
+		return state;
+	}
+
+	public void setState(String state){
+		this.state = state;
 	}
 
 	public static Texture getInstance(){

@@ -10,6 +10,8 @@ import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.AlphaComposite;
+import java.awt.FontMetrics;
+import java.awt.Rectangle;
 
 public class Screen extends MouseAdapter{
 
@@ -42,6 +44,7 @@ public class Screen extends MouseAdapter{
 	private int time2 = 0;
 	private int pickupAlertTimer = 0;
 	private int doorTimer = 0;
+	private int introTimer = 0;
 
 	//lists
 	private ArrayList <Weapon> weapons = new ArrayList <Weapon> ();
@@ -68,6 +71,7 @@ public class Screen extends MouseAdapter{
 	private ArrayList <RoomPoint> points = new ArrayList <RoomPoint> ();
 	private ArrayList <Vector> vectors = new ArrayList <Vector> ();
 	private ArrayList <RoomPoint> visible = new ArrayList <RoomPoint> ();
+	private int level = 1;
 
 	public Screen (Handler handler, Main main, Camera cam){
 		this.handler = handler;
@@ -83,7 +87,12 @@ public class Screen extends MouseAdapter{
 		mx = e.getX();
 		my = e.getY();
 
-		firing = true;
+		if (main.getState().equals("menu")){
+			if (mouseOver(mx, my, 305, 340, 505, 440)){
+				main.setState("1");
+			}
+		}
+		else firing = true;
 	}
 
 	public void mouseReleased(MouseEvent e){
@@ -105,6 +114,10 @@ public class Screen extends MouseAdapter{
 	}
 
 	public void tick(){
+		if (main.getState().equals("menu")){
+			return;
+		}
+
 		if (room != null && room.isPoint(new RoomPoint(0,0))){
 			boolean found = false;
 			for (RoomPoint point: visible){
@@ -125,6 +138,7 @@ public class Screen extends MouseAdapter{
 				}
 			}
 		}
+
 		room = new RoomPoint ((int)(-cam.getX()/800), (int)(cam.getY()/800));
 		if (tempRoom != null && !room.isPoint(tempRoom)){
 			doorsUnlocked = false;
@@ -179,6 +193,7 @@ public class Screen extends MouseAdapter{
 			room.complete();
 			doorsUnlocked = true;
 		}
+
 		if (doorTimer != 0){
 			closeDoors();
 			doorTimer--;
@@ -198,6 +213,7 @@ public class Screen extends MouseAdapter{
 				}
 			}
 		}
+
 		Point a = MouseInfo.getPointerInfo().getLocation();
 		Point b = main.getLocationOnScreen();
 		mx = (int) a.getX() - (int)b.getX();
@@ -216,6 +232,7 @@ public class Screen extends MouseAdapter{
 				break;
 			}
 		}
+
 		if (weapon != null){
 			if (time2 == 0){
 				if (time == fireDelay){
@@ -249,6 +266,11 @@ public class Screen extends MouseAdapter{
 				}
 			}
 		}
+
+		if (introTimer != 400){
+			introTimer++;
+		}
+
 		tempRoom = room;
 	}
 
@@ -344,9 +366,21 @@ public class Screen extends MouseAdapter{
 	}
 
 	public void render(Graphics g){
+		if (main.getState().equals("menu")){
+			g.setColor(new Color(36,123,160));
+			g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.drawImage(loader.loadImage("start_button.png"), 305, 340, null);
+			return;
+		}
 		Graphics2D g2d = (Graphics2D) g.create();
 		float alpha = 0.5f;
+		float alpha2 = (float)(-Math.pow((-introTimer/200.0 + 1), 2) + 1);
 		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+		AlphaComposite ac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha2);
+		g2d.setComposite(ac2);
+		g2d.setColor(Color.BLACK);
+		drawCenteredString(g2d, "Chapter " + level + ": Industrial Zone", new Rectangle(0, 0, Main.WIDTH, Main.HEIGHT), new Font("Trebuchet MS", Font.BOLD, 36));
 		g2d.setComposite(ac);
 		g2d.drawImage(loader.loadImage("weaponGUI.png"), 600, 650, 180, 108, null);
 		if (weapon != null){
@@ -453,5 +487,16 @@ public class Screen extends MouseAdapter{
 
 	public void restart(){
 		visible.clear();
+		level++;
+		introTimer = 0;
 	}
+
+	public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
+    FontMetrics metrics = g.getFontMetrics(font);
+    int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
+    int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
+    g.setFont(font);
+    g.drawString(text, x, y);
+}
+
 }
