@@ -10,7 +10,8 @@ public class Player extends GameThing{
 	private Handler handler;
 	private Main main;
 	private Screen screen;
-	private int hp = 50;
+	private int hp = 100;
+	private int totalHp = hp;
 	private int iFrames = 100;
 	private int iTimer = 0;
 	private boolean invincible = false;
@@ -42,7 +43,7 @@ public class Player extends GameThing{
 					handler.removeObject(thing);
 				}
 			}
-			if (thing.getId().equals("Enemy.Chaser")){
+			if (thing.getId().equals("Enemy.Chaser") || thing.getId().equals("Enemy.Pouncer")){
 				if (getBounds().intersects(thing.getBounds())){
 					if (iTimer == 0) {
 						hp-=10;
@@ -107,8 +108,8 @@ public class Player extends GameThing{
 			}
 			if (thing.getId().equals("Trapdoor")){
 				if (thing.getBounds().intersects(getBounds()) && !restarted){
-					main.restart();
 					screen.restart();
+					main.restart();
 					restarted = true;
 				}
 				else {
@@ -169,6 +170,9 @@ public class Player extends GameThing{
 
 	public int getHp(){
 		return hp;
+	}
+	public int getTotalHp(){
+		return totalHp;
 	}
 
 	public int getType(){

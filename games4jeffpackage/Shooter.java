@@ -8,13 +8,12 @@ public class Shooter extends Enemy{
 
   private Handler handler;
   private Screen screen;
-  private int hp = 40;
   private float sx;
   private float sy;
-  private int timer = 150;
+  private int timer = 100;
 
   public Shooter (float x, float y, String id, Handler handler, Screen screen){
-    super(x, y, id);
+    super(x, y, id, 40);
     this.handler = handler;
     this.screen = screen;
     timer = (int)(Math.random()*151) + 1;
@@ -40,14 +39,13 @@ public class Shooter extends Enemy{
       timer--;
       if (timer == 0){
         fire();
-        timer = 150;
+        timer = 100;
       }
     }
   }
 
   public void render(Graphics g){
-    g.setColor(Color.BLACK);
-		g.drawString(hp+"", (int)x, (int)y-10);
+    super.render(g);
     g.setColor(Color.CYAN);
     g.fillRect((int)x, (int)y, (int)width, (int)height);
   }
@@ -60,8 +58,8 @@ public class Shooter extends Enemy{
     for(int i = 0; i < handler.stuff.size(); i++){
       GameThing thing = handler.stuff.get(i);
       if (thing.getId() == "Player"){
-        sx = thing.getX();
-        sy = thing.getY();
+        sx = thing.getX() + thing.getWidth()/2;
+        sy = thing.getY() + thing.getHeight()/2;
       }
     }
 		float xx = x + width/2 ;

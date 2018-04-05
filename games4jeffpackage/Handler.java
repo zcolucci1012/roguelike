@@ -2,16 +2,17 @@ package games4jeffpackage;
 
 import java.awt.Graphics;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Handler {
-	LinkedList <GameThing> stuff = new LinkedList <GameThing> ();
+	ArrayList <GameThing> stuff = new ArrayList <GameThing> ();
 
 	public void tick(Camera cam){
 		float camX = -cam.getX();
 		float camY = -cam.getY();
 		for (int i = 0; i < stuff.size(); i++){
 			GameThing thing = stuff.get(i);
-			if (thing.getId().equals("Player")){
+			if (!(thing.getId().length() >= 6 && thing.getId().substring(0, 6).equals("Enemy."))){
 				thing.tick();
 			}
 			else if (thing.getX() >= camX && thing.getX() <= camX+Main.WIDTH){

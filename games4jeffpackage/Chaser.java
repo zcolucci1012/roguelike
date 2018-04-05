@@ -10,14 +10,13 @@ public class Chaser extends Enemy{
 
   private Handler handler;
   private Screen screen;
-  private int hp = 20;
 	private int randTimer = 0;
 	private int [] imperfections = new int [2];
 
 	private Texture tex = Main.getInstance();
 
   public Chaser(float x, float y, String id, Handler handler, Screen screen) {
-    super(x, y, id);
+    super(x, y, id, 20);
     this.handler = handler;
     this.screen = screen;
 
@@ -45,8 +44,8 @@ public class Chaser extends Enemy{
 					d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));
 				}
         if (d != 0){
-          velX = -(x - (int)pX)/d*3;
-          velY = -(y - (int)pY)/d*3;
+          velX = -(x - (int)pX)/d*2;
+          velY = -(y - (int)pY)/d*2;
         }
       }
       if (thing.getId() == "Shot"){
@@ -77,24 +76,9 @@ public class Chaser extends Enemy{
   }
 
   public void render(Graphics g) {
-		/*
-	    g.setColor(new Color(255,22,84));
-	    g.fillRect((int)x, (int)y, (int)width, (int)height);
-		*/
-
-		g.setColor(Color.BLACK);
-		g.drawString(hp+"", (int)x, (int)y-10);
+		super.render(g);
 		if (velX > 0) g.drawImage(tex.enemy[0], (int)x, (int)y, null);
 		else g.drawImage(tex.enemy[1], (int)x, (int)y, null);
-		/*
-		g.setColor(Color.BLUE);
-	  Graphics2D g2d = (Graphics2D)g;
-		g2d.draw(getBounds());
-    g2d.draw(getBoundsLeft());
-    g2d.draw(getBoundsRight());
-    g2d.draw(getBoundsTop());
-    g2d.draw(getBoundsBottom());
-		*/
   }
 
   public Rectangle getBounds() {

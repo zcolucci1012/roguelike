@@ -57,7 +57,7 @@ public class Screen extends MouseAdapter{
 	private boolean doorFlag = false;
 	private boolean doorsUnlocked = false;
 
-	//textures
+	//texturessss
 	private Texture tex = Main.getInstance();
 
 	//etc.
@@ -72,6 +72,7 @@ public class Screen extends MouseAdapter{
 	private ArrayList <Vector> vectors = new ArrayList <Vector> ();
 	private ArrayList <RoomPoint> visible = new ArrayList <RoomPoint> ();
 	private int level = 1;
+	private String levelDescription = "Industrial Zone";
 
 	public Screen (Handler handler, Main main, Camera cam){
 		this.handler = handler;
@@ -275,9 +276,16 @@ public class Screen extends MouseAdapter{
 	}
 
 	private void fire(){
-		if (weapon.getName().equals("slugshot")) Sound.play("shotgun", 1);
+		if (weapon.getName().equals("slugshot") || weapon.getName().equals("pump shotgun")) Sound.play("shotgun", 1);
+		if (weapon.getName().equals("tac shotgun") || weapon.getName().equals("mauler")) Sound.play("shotgun2", 1);
 		if (weapon.getName().equals("sniper")) Sound.play("sniper", 1);
 		if (weapon.getName().equals("smg")) Sound.play("smg", 1);
+		if (weapon.getName().equals("DMR")) Sound.play("dmr", 1);
+		if (weapon.getName().equals("assault rifle")) Sound.play("assault rifle", 1);
+		if (weapon.getName().equals("pistol")) Sound.play("pistol", 1);
+		if (weapon.getName().equals("revolver")) Sound.play("revolver", 1);
+		if (weapon.getName().equals("minigun")) Sound.play("minigun", 1);
+
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
@@ -379,8 +387,10 @@ public class Screen extends MouseAdapter{
 		AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
 		AlphaComposite ac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha2);
 		g2d.setComposite(ac2);
+		g2d.setColor(Color.WHITE);
+		drawCenteredString(g2d, "Chapter " + level + ": " + levelDescription, new Rectangle(-1, 1, Main.WIDTH-1, Main.HEIGHT+1), new Font("Trebuchet MS", Font.BOLD, 36));
 		g2d.setColor(Color.BLACK);
-		drawCenteredString(g2d, "Chapter " + level + ": Industrial Zone", new Rectangle(0, 0, Main.WIDTH, Main.HEIGHT), new Font("Trebuchet MS", Font.BOLD, 36));
+		drawCenteredString(g2d, "Chapter " + level + ": " + levelDescription, new Rectangle(0, 0, Main.WIDTH, Main.HEIGHT), new Font("Trebuchet MS", Font.BOLD, 36));
 		g2d.setComposite(ac);
 		g2d.drawImage(loader.loadImage("weaponGUI.png"), 600, 650, 180, 108, null);
 		if (weapon != null){
@@ -401,8 +411,10 @@ public class Screen extends MouseAdapter{
 		g2d.drawString("Bullets:", 690, 710);
 		g2d.drawString(bullets + "/" + magazine, 690, 724);
 		g2d.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-		if (reloading) g2d.drawString("Reloading " + weapon.getName() + "...", 25, 75);
-		if (pickupAlertFlag) g2d.drawString("Picked up " + lastAddedWeapon + "!", 650, 50);
+		if (reloading) renderReload(g2d);
+		g2d.setColor(Color.BLACK);
+		if (pickupAlertFlag && reloading) g2d.drawString("Picked up " + lastAddedWeapon + "!", 600, 625);
+		else if (pickupAlertFlag) g2d.drawString("Picked up " + lastAddedWeapon + "!", 600, 640);
 		renderHP(g2d);
 		int mapSize = 20;
 		int maxY = 0;
@@ -429,11 +441,13 @@ public class Screen extends MouseAdapter{
 
 	private void renderHP(Graphics2D g2d){
 		int hp = 0;
+		int totalHp = 0;
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
 				Player player = (Player)thing;
 				hp = player.getHp();
+				totalHp = player.getTotalHp();
 			}
 		}
 		g2d.setColor(Color.BLACK);
@@ -441,8 +455,19 @@ public class Screen extends MouseAdapter{
 		g2d.setColor(Color.GRAY);
 		g2d.fillRect(25, 25, 100, 25);
 		if (hp >= 0){
-			g2d.setColor(new Color((int)(255-hp*(255.0/50.0)), (int)(hp*(255.0/50.0)), 0));
-			g2d.fillRect(25, 25, hp*2, 25);
+			g2d.setColor(new Color((int)(255-hp*(255.0/totalHp)), (int)(hp*(255.0/totalHp)), 0));
+			g2d.fillRect(25, 25, (int)(hp*(100.0/totalHp)), 25);
+		}
+	}
+
+	public void renderReload(Graphics2D g2d){
+		g2d.setColor(Color.BLACK);
+		g2d.drawRect(600, 630, 180, 10);
+		if (time2 > 0){
+			g2d.setColor(Color.WHITE);
+			g2d.fillRect(600, 630, (int)(time2*(180.0/reloadTime)), 10);
+			g2d.setColor(Color.BLACK);
+			g2d.drawRect(600, 630, (int)(time2*(180.0/reloadTime)), 10);
 		}
 	}
 
@@ -488,7 +513,12 @@ public class Screen extends MouseAdapter{
 	public void restart(){
 		visible.clear();
 		level++;
+		changeLevelDescription();
 		introTimer = 0;
+	}
+
+	public int getLevel(){
+		return level;
 	}
 
 	public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
@@ -497,6 +527,11 @@ public class Screen extends MouseAdapter{
     int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
     g.setFont(font);
     g.drawString(text, x, y);
-}
+	}
+
+	public void changeLevelDescription(){
+		if (level == 1) levelDescription = "Industrial Zone";
+		if (level == 2) levelDescription = "Cavernous Confine";
+	}
 
 }

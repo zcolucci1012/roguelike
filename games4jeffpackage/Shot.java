@@ -38,9 +38,11 @@ public class Shot extends GameThing{
 
 	public void render(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g.create();
-		g2d.setColor(Color.BLACK);
 		g2d.rotate(angle, x + width/2, y + height/2);
+		g2d.setColor(Color.BLACK);
 		g2d.fill(getBounds());
+		g2d.setColor(Color.WHITE);
+		g2d.draw(getBounds());
 		g2d.dispose();
 	}
 

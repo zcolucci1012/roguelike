@@ -10,7 +10,6 @@ public class Pouncer extends Enemy{
 
   private Handler handler;
   private Screen screen;
-  private int hp = 20;
 	private int randTimer = 0;
 	private int [] imperfections = new int [2];
   private int timer = 0;
@@ -18,7 +17,7 @@ public class Pouncer extends Enemy{
 	private Texture tex = Main.getInstance();
 
   public Pouncer(float x, float y, String id, Handler handler, Screen screen) {
-    super(x, y, id);
+    super(x, y, id, 15);
     this.handler = handler;
     this.screen = screen;
     timer = (int)(Math.random()*11) + 1;
@@ -30,7 +29,7 @@ public class Pouncer extends Enemy{
   public void tick() {
     x+=velX;
     y+=velY;
-    double max = 5.0;
+    double max = 7.0;
     float speed = (float)Math.pow((-(Math.pow(max, 1.0/10.0)/2.0*Math.cos(Math.PI*timer/25.0)) + Math.pow(max, 1.0/10.0)/2.0), 10.0) + 1;
 		if (randTimer == 50){
 			imperfections[0] = (int)(Math.random() * 51)-25;
@@ -82,26 +81,9 @@ public class Pouncer extends Enemy{
   }
 
   public void render(Graphics g) {
-		/*
-	    g.setColor(new Color(255,22,84));
-	    g.fillRect((int)x, (int)y, (int)width, (int)height);
-		*/
-
-		g.setColor(Color.BLACK);
-		g.drawString(hp+"", (int)x, (int)y-10);
+		super.render(g);
     g.setColor(Color.GRAY);
     g.fillRect((int)x, (int)y, (int)width, (int)height);
-		//if (velX > 0) g.drawImage(tex.enemy[0], (int)x, (int)y, null);
-		//else g.drawImage(tex.enemy[1], (int)x, (int)y, null);
-		/*
-		g.setColor(Color.BLUE);
-	  Graphics2D g2d = (Graphics2D)g;
-		g2d.draw(getBounds());
-    g2d.draw(getBoundsLeft());
-    g2d.draw(getBoundsRight());
-    g2d.draw(getBoundsTop());
-    g2d.draw(getBoundsBottom());
-		*/
   }
 
   public Rectangle getBounds() {

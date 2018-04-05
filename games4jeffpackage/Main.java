@@ -118,16 +118,18 @@ public class Main extends Canvas implements Runnable{
 		g = bs.getDrawGraphics();
 		g2d = (Graphics2D)g;
 
-		if (!state.equals("menu")) {
-			g.setColor(new Color(239, 172, 117));
-			g.fillRect(0, 0, WIDTH, HEIGHT);
+		if (state.equals("1")) g.setColor(new Color(239, 172, 117));
+		if (state.equals("2")) g.setColor(new Color(61, 61, 61));
+		g.fillRect(0, 0, WIDTH, HEIGHT);
 
+		if (!state.equals("menu")) {
 			g2d.translate(cam.getX(), cam.getY()); //begin of cam
 
 			handler.render(g, cam);
 
 			g2d.translate(-cam.getX(), -cam.getY()); //end of cam
 		}
+
 		screen.render(g);
 
 		g.dispose();
@@ -145,6 +147,13 @@ public class Main extends Canvas implements Runnable{
 		int h = image.getHeight();
 
 		int enemyChoice = (int)(Math.random()*3);
+		int currentLevel;
+		try {
+			currentLevel = Integer.parseInt(state);
+		} catch (Exception e){
+			currentLevel = 1;
+		}
+
 
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
@@ -188,7 +197,7 @@ public class Main extends Canvas implements Runnable{
 						!(xx==0 && (yy==11 || yy==12) && doors[3] != 0)){
 					if (red == 0 && green == 0 && blue == 0){
 						int type = (int)(Math.random()*4);
-						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", type));
+						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", type, currentLevel));
 					}
 					if (red == 0 && green == 0 && blue == 255){
 						handler.addObject(new Player(xx*33 + 800*dx, yy*32 + 800*dy, "Player", 0, handler, this, screen));
@@ -228,8 +237,8 @@ public class Main extends Canvas implements Runnable{
 			}
 		}
 
-		handler.addObject(new Block(10*33 + 800*dx, -1*32 + 800*dy, "Block", 0));
-		handler.addObject(new Block(13*33 + 800*dx, -1*32 + 800*dy, "Block", 0));
+		handler.addObject(new Block(10*33 + 800*dx, -1*32 + 800*dy, "Block", 0, currentLevel));
+		handler.addObject(new Block(13*33 + 800*dx, -1*32 + 800*dy, "Block", 0, currentLevel));
 	}
 
 	private void generateMap(){
@@ -326,7 +335,6 @@ public class Main extends Canvas implements Runnable{
 
 	public void restart(){
 		handler.clear();
-		System.out.println("stuff: " + handler.stuff.size());
 		for (int i=0; i<handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId().equals("Player")){
@@ -334,6 +342,8 @@ public class Main extends Canvas implements Runnable{
 				thing.setY(400);
 			}
 		}
+		changeMusic(screen.getLevel());
+		state = screen.getLevel() + "";
 		generateMap();
 	}
 
@@ -355,6 +365,13 @@ public class Main extends Canvas implements Runnable{
 
 	public static Texture getInstance(){
 		return tex;
+	}
+
+	public void changeMusic(int level){
+		if (level == 2){
+			Sound.loop("background2", 0.1);
+		}
+		else Sound.loop("background", 0.1);
 	}
 
 	public static void main(String [] args){

@@ -10,7 +10,7 @@ public class Texture {
   private BufferedImage weapon_sheet = null;
 
   public BufferedImage[] player = new BufferedImage[3];
-  public BufferedImage[] block = new BufferedImage[4];
+  public BufferedImage[] block = new BufferedImage[8];
   public BufferedImage[] enemy = new BufferedImage[2];
   public BufferedImage[] weapon = new BufferedImage[11];
 
@@ -41,6 +41,10 @@ public class Texture {
     block[1] = bs.grabImage(2, 1, 33, 32); //brown 2
     block[2] = bs.grabImage(3, 1, 33, 32); //brown 3
     block[3] = bs.grabImage(4, 1, 33, 32); //brown 4
+    block[4] = bs.grabImage(1, 2, 33, 32); //grey 1
+    block[5] = bs.grabImage(2, 2, 33, 32); //grey 2
+    block[6] = bs.grabImage(3, 2, 33, 32); //grey 3
+    block[7] = bs.grabImage(4, 2, 33, 32); //grey 4
 
     enemy[0] = es.grabImage(1, 1, 28, 28); //look right
     enemy[1] = es.grabImage(2, 1, 28, 28); //look left

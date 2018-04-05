@@ -106,7 +106,7 @@ public class Weapon extends Pickup {
 
   private void makeWeapons(){
     if (name.equals("pistol")){
-      fireDelay = 25;
+      fireDelay = 15;
       shotSpeed = 5;
       damage = 5;
       magazine = 8;
@@ -176,7 +176,7 @@ public class Weapon extends Pickup {
       range = 80;
     }
     if (name.equals("revolver")){
-      fireDelay = 80;
+      fireDelay = 60;
       shotSpeed = 10;
       damage = 13;
       magazine = 6;

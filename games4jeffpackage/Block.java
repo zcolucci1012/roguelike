@@ -9,10 +9,12 @@ public class Block extends GameThing {
 
   private Texture tex = Main.getInstance();
   private int type;
+  private int level;
 
-  public Block (float x, float y, String id, int type){
+  public Block (float x, float y, String id, int type, int level){
     super(x, y, id);
     this.type = type;
+    this.level = level;
 
     width = 33;
     height = 32;
@@ -29,7 +31,8 @@ public class Block extends GameThing {
     g.setColor(new Color(0,0,0));
     g.drawRect((int)x, (int)y, (int)width, (int)height);
     */
-    g.drawImage(tex.block[type], (int)x, (int)y, null);
+    if (level == 1) g.drawImage(tex.block[type], (int)x, (int)y, null);
+    else if (level == 2) g.drawImage(tex.block[type+4], (int)x, (int)y, null);
   }
 
   public Rectangle getBounds(){
