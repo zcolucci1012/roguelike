@@ -2,26 +2,36 @@ package games4jeffpackage;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.JFrame;
 
 public class Window extends Canvas{
 
 	private static final long serialVersionUID = -610221877235495921L;
+	private BufferedImageLoader loader = new BufferedImageLoader();
+	private String state = "menu";
+	private JFrame frame;
+	private Main main;
 
 	public Window(int width, int height, String title, Main main){
-		JFrame frame = new JFrame(title);
+		frame = new JFrame(title);
+		this.main = main;
 
 		frame.setPreferredSize(new Dimension(width, height));
 		frame.setMaximumSize(new Dimension(width, height));
 		frame.setMinimumSize(new Dimension(width, height));
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.add(main);
 		frame.setVisible(true);
 		main.start();
 
+	}
+
+	public void tick(){
+		state = main.getState();
+		if (!state.equals("menu"))frame.setCursor(frame.getToolkit().createCustomCursor(loader.loadImage("blank.png"), new Point(), null));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

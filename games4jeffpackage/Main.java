@@ -35,6 +35,7 @@ public class Main extends Canvas implements Runnable{
 	private int h;
 	private int currentLevel;
 	private int itemRoomIndex = 0;
+	private Window window;
 
 	public Main(){
 		tex = new Texture();
@@ -43,7 +44,7 @@ public class Main extends Canvas implements Runnable{
 
 		cam = new Camera(0, 0);
 
-		new Window(WIDTH,HEIGHT,"jeff",this);
+		window = new Window(WIDTH,HEIGHT,"jeff",this);
 
 		screen = new Screen(handler, this, cam);
 		this.addKeyListener(new KeyInput(handler, screen));
@@ -114,6 +115,7 @@ public class Main extends Canvas implements Runnable{
 			}
 		}
 		screen.tick();
+		window.tick();
 	}
 
 	public void render(){
@@ -180,7 +182,7 @@ public class Main extends Canvas implements Runnable{
 					if (red == 0 && green == 0 && blue == 255){
 						handler.addObject(new Player(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Player", 0, handler, this, screen));
 					}
-					if (red == 255 && green == 0 && blue == 0){}
+					if (red == 255 && green == 0 && blue == 0){
 						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
 						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Pouncer", handler, screen));
 						else if (enemyChoice == 3) handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
@@ -365,7 +367,7 @@ public class Main extends Canvas implements Runnable{
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getX() >= dx * WIDTH && thing.getX() < dx * WIDTH + WIDTH){
-				if (thing.getY() < -dy * HEIGHT + HEIGHT && thing.getY() >= -dy * HEIGHT){
+				if (thing.getY() < -dy * HEIGHT + HEIGHT - 32 && thing.getY() > -dy * HEIGHT){
 					handler.removeObject(thing);
 					i--;
 				}

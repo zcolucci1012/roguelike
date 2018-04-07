@@ -197,7 +197,8 @@ public class Player extends GameThing{
 	}
 
 	public void setHp(int hp){
-		if (hp <= totalHp) this.hp = hp;
+		this.hp = hp;
+		if (hp > totalHp) this.hp = totalHp;
 	}
 
 	public int getTotalHp(){

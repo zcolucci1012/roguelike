@@ -66,7 +66,7 @@ public class TrackingShot extends GameThing{
 
 	public void render(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g.create();
-		g2d.setColor(Color.RED);
+		g2d.setColor(new Color(254, 65, 83));
 		g2d.rotate(angle, x + width/2, y + height/2);
 		g2d.fill(getBounds());
 		g2d.dispose();

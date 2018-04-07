@@ -393,6 +393,7 @@ public class Screen extends MouseAdapter{
 			g2d.drawImage(loader.loadImage("start_button.png"), 305, 340, null);
 			return;
 		}
+		g.drawImage(loader.loadImage("cursor.png"), mx, my, null);
 		Graphics2D g2d = (Graphics2D) g.create();
 		float alpha = 0.5f;
 		float alpha2 = (float)(-Math.pow((-introTimer/200.0 + 1), 2) + 1);
