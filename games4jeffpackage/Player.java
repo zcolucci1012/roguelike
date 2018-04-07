@@ -75,6 +75,12 @@ public class Player extends GameThing{
 					handler.removeObject(thing);
 				}
 			}
+			if (thing.getId().equals("TrackingShot")){
+				if (getBounds().intersects(thing.getBounds())){
+					hp -= ((TrackingShot)thing).getDamage();
+					handler.removeObject(thing);
+				}
+			}
 			if (thing.getId().equals("MoveBlock")){
 				if (thing.getBounds().intersects(getBoundsRight())){
 					thing.setX(x+width);

@@ -153,7 +153,7 @@ public class Main extends Canvas implements Runnable{
 		w = image.getWidth();
 		h = image.getHeight();
 
-		int enemyChoice = (int)(Math.random()*3);
+		int enemyChoice = (int)(Math.random()*4);
 		try {
 			currentLevel = Integer.parseInt(state);
 		} catch (Exception e){
@@ -180,10 +180,11 @@ public class Main extends Canvas implements Runnable{
 					if (red == 0 && green == 0 && blue == 255){
 						handler.addObject(new Player(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Player", 0, handler, this, screen));
 					}
-					if (red == 255 && green == 0 && blue == 0){
-						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + Main.WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
-						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + Main.WIDTH*dx, yy*32 + HEIGHT*dy, "Pouncer", handler, screen));
-						else handler.addObject(new Shooter(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Shooter", handler, screen));
+					if (red == 255 && green == 0 && blue == 0){}
+						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
+						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Pouncer", handler, screen));
+						else if (enemyChoice == 3) handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
+						else handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
 					}
 					if (red == 255 && green == 1 && blue == 0){
 						handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
@@ -298,6 +299,7 @@ public class Main extends Canvas implements Runnable{
 				}
 			}
 		}
+
 		int i=0;
 		for (RoomPoint point: points){
 			i++;
@@ -347,7 +349,7 @@ public class Main extends Canvas implements Runnable{
 						temp = vector.getOther(point);
 						int [] tempDoors = getDoors(temp);
 						int tempIndex = index + 2;
-						if (tempIndex > 3) tempIndex -=4;
+						if (tempIndex > 3) tempIndex -= 4;
 						tempDoors[tempIndex] = 3;
 						addDoors(temp.getX(), -temp.getY(), tempDoors);
 					}

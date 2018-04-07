@@ -119,7 +119,7 @@ public class Weapon extends Pickup {
       fireDelay = 7;
       shotSpeed = 5;
       damage = 3;
-      magazine = 30;
+      magazine = 44;
       reloadTime = 200;
       inaccuracy = 100;
       fireType = "auto";
