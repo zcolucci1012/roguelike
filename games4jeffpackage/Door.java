@@ -45,7 +45,8 @@ public class Door extends GameThing{
 
   public void render(Graphics g){
     if (doorType == 1) g.setColor(Color.ORANGE);
-    if (doorType == 2) g.setColor(Color.GREEN);
+    if (doorType == 2) g.setColor(Color.RED);
+    if (doorType == 3) g.setColor(Color.GREEN);
     g.fillRect((int)x, (int)y, (int)width, (int)height);
   }
 
@@ -97,10 +98,10 @@ public class Door extends GameThing{
   public RoomPoint getRoom(){
     int roomX;
 		int roomY;
-		if (x < 0) roomX = ((int)x-800)/800;
-		else roomX = (int)x/800;
-		if (y < 0) roomY = ((int)y-800)/800;
-		else roomY = (int)y/800;
+		if (x < 0) roomX = ((int)x-Main.WIDTH)/Main.WIDTH;
+		else roomX = (int)x/Main.WIDTH;
+		if (y < 0) roomY = ((int)y-Main.HEIGHT)/Main.HEIGHT;
+		else roomY = (int)y/Main.HEIGHT;
 		return new RoomPoint (roomX, -roomY);
   }
 

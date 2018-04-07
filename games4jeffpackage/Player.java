@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 public class Player extends GameThing{
 	private int type;
@@ -33,14 +34,31 @@ public class Player extends GameThing{
 	public void tick() {
 		x += velX;
 		y += velY;
-		//System.out.println("restarted: " + restarted);
 
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Pickup")){
 				if (getBounds().intersects(thing.getBounds())){
-					screen.addWeapon((Weapon)thing);
-					handler.removeObject(thing);
+					try {
+						screen.addWeapon((Weapon)thing);
+						handler.removeObject(thing);
+					} catch (Exception e) {
+						try {
+							if (((Powerup)thing).getItemType().equals("single use")){
+								((Powerup)thing).action();
+							}
+							if (((Powerup)thing).getItemType().equals("passive")){
+
+							}
+							if (((Powerup)thing).getItemType().equals("active")){
+
+							}
+							handler.removeObject(thing);
+						} catch (Exception e2){
+							System.out.println("oops something happened");
+							e2.printStackTrace();
+						}
+					}
 				}
 			}
 			if (thing.getId().equals("Enemy.Chaser") || thing.getId().equals("Enemy.Pouncer")){
@@ -130,22 +148,22 @@ public class Player extends GameThing{
 	}
 
 	public void render(Graphics g) {
-		/*
-		g.setColor(new Color(178,219,191));
-		if (invincible){
-			g.setColor(new Color(208,249,221,75));
-		}
-		g.fillRect((int)x, (int)y, (int)width, (int)height);
-		g.setColor(Color.BLUE);
-
-    Graphics2D g2d = (Graphics2D)g;
-
-    g2d.draw(getBoundsLeft());
-    g2d.draw(getBoundsRight());
-    g2d.draw(getBoundsTop());
-    g2d.draw(getBoundsBottom());
-		*/
+		Graphics2D g2d = (Graphics2D) g.create();
 		g.drawImage(tex.player[type], (int)x, (int)y, null);
+		if (screen.getWeapon() != null) {
+			BufferedImage weaponImage = tex.blank_weapon[screen.getWeapon().getType()];
+			float angle = screen.getAngle();
+			g2d.rotate(angle, x + width/2, y + height/2 + 10);
+			if (angle > Math.PI/2 && angle < 3*Math.PI/2){
+				g2d.drawImage(weaponImage, (int)x+10, (int)y+ weaponImage.getHeight()+20, weaponImage.getWidth(), -weaponImage.getHeight(), null);
+			}
+			else {
+				g2d.drawImage(weaponImage, (int)x+10, (int)y+10, null);
+			}
+			if (type == 3){
+				g.drawImage(tex.player[type], (int)x, (int)y, null);
+			}
+		}
 	}
 
 	public Rectangle getBounds() {
@@ -171,6 +189,11 @@ public class Player extends GameThing{
 	public int getHp(){
 		return hp;
 	}
+
+	public void setHp(int hp){
+		if (hp <= totalHp) this.hp = hp;
+	}
+
 	public int getTotalHp(){
 		return totalHp;
 	}

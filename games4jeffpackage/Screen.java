@@ -73,6 +73,8 @@ public class Screen extends MouseAdapter{
 	private ArrayList <RoomPoint> visible = new ArrayList <RoomPoint> ();
 	private int level = 1;
 	private String levelDescription = "Industrial Zone";
+	private float angle;
+	private int itemRoomIndex = 0;
 
 	public Screen (Handler handler, Main main, Camera cam){
 		this.handler = handler;
@@ -82,6 +84,8 @@ public class Screen extends MouseAdapter{
 		loader = new BufferedImageLoader();
 		points = main.getPoints();
 		vectors = main.getVectors();
+
+		addWeapon(new Weapon(0, 0, "pistol"));
 	}
 
 	public void mousePressed(MouseEvent e){
@@ -119,6 +123,8 @@ public class Screen extends MouseAdapter{
 			return;
 		}
 
+		itemRoomIndex = main.getItemRoomIndex();
+
 		if (room != null && room.isPoint(new RoomPoint(0,0))){
 			boolean found = false;
 			for (RoomPoint point: visible){
@@ -140,7 +146,7 @@ public class Screen extends MouseAdapter{
 			}
 		}
 
-		room = new RoomPoint ((int)(-cam.getX()/800), (int)(cam.getY()/800));
+		room = new RoomPoint ((int)(-cam.getX()/Main.WIDTH), (int)(cam.getY()/Main.HEIGHT));
 		if (tempRoom != null && !room.isPoint(tempRoom)){
 			doorsUnlocked = false;
 			Vector pair = new Vector(tempRoom, room);
@@ -221,15 +227,20 @@ public class Screen extends MouseAdapter{
 		my = (int) a.getY() - (int)b.getY();
 		sx = mx - cam.getX();
 		sy = my - cam.getY();
+
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
 				float x = thing.getX() + thing.getWidth()/2 ;
 				float y = thing.getY() + thing.getHeight()/2;
+				angle = (float)Math.atan((sy-y)/(sx-x));
+				if ((sx-x) < 0){
+					angle += Math.PI;
+				}
 				if (Math.abs(sy-y) < Math.abs(sx-x) && sx > thing.getX()) ((Player)thing).setType(0);
 				if (Math.abs(sy-y) > Math.abs(sx-x) && sy > thing.getY()) ((Player)thing).setType(1);
 				if (Math.abs(sy-y) < Math.abs(sx-x) && sx < thing.getX()) ((Player)thing).setType(2);
-				if (Math.abs(sy-y) > Math.abs(sx-x) && sy < thing.getY()) ((Player)thing).setType(0);
+				if (Math.abs(sy-y) > Math.abs(sx-x) && sy < thing.getY()) ((Player)thing).setType(3);
 				break;
 			}
 		}
@@ -300,8 +311,9 @@ public class Screen extends MouseAdapter{
 					if (d != 0){
 						float sVelX = ((sx+randX - (int)x)/d*shotSpeed);
 						float sVelY = ((sy+randY - (int)y)/d*shotSpeed);
-						float angle = (float)Math.atan(sVelY / sVelX);
-						Shot shot = new Shot((int)x-thing.getWidth()/4, (int)y-thing.getHeight()/4, "Shot", angle, damage, (10*range)/shotSpeed, handler);
+						float dx = (20 * (sx+randX-(int)x))/d;
+						float dy = (20 * (sy+randY-(int)y))/d;
+						Shot shot = new Shot((int)x - thing.getWidth()/8 + dx, (int)y - thing.getHeight()/8 + dy+10, "Shot", angle, damage, (10*range)/shotSpeed, handler);
 						shot.setVelX(sVelX);
 						shot.setVelY(sVelY);
 						handler.addObject(shot);
@@ -428,10 +440,15 @@ public class Screen extends MouseAdapter{
 		int i = 0;
 		for (RoomPoint point: visible){
 			if (point.isPoint(0,0)) g2d.setColor(Color.BLUE);
-			else if (room != null && point.isPoint(room)) g2d.setColor(Color.WHITE);
-			else if (point.isComplete()) g2d.setColor(Color.GREEN);
-			else g2d.setColor(Color.GRAY);
+			else if (point.isPoint(points.get(points.size()-1))) g2d.setColor(Color.RED);
+			else if (point.isPoint(points.get(itemRoomIndex))) g2d.setColor(Color.YELLOW);
+			else if (point.isComplete()) g2d.setColor(new Color(150, 255, 150));
+			else g2d.setColor(new Color(100, 100, 100));
 			g2d.fillRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 45, mapSize, mapSize);
+			if (room != null && point.isPoint(room)){
+				g2d.setColor(Color.WHITE);
+				g2d.fillRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 45, mapSize, mapSize);
+			}
 			g2d.setColor(Color.BLACK);
 			g2d.drawRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 45, mapSize, mapSize);
 			i++;
@@ -532,6 +549,10 @@ public class Screen extends MouseAdapter{
 	public void changeLevelDescription(){
 		if (level == 1) levelDescription = "Industrial Zone";
 		if (level == 2) levelDescription = "Cavernous Confine";
+	}
+
+	public float getAngle(){
+		return angle;
 	}
 
 }

@@ -1,7 +1,7 @@
 package games4jeffpackage;
 
 import java.awt.Graphics;
-import java.util.LinkedList;
+import java.util.LinkedList; // <--- never use this they stink
 import java.util.ArrayList;
 
 public class Handler {
@@ -35,6 +35,13 @@ public class Handler {
 				if (thing.getY() >= camY && thing.getY() <= camY+Main.HEIGHT){
 					thing.render(g);
 				}
+			}
+		}
+		for (int i = 0; i < stuff.size(); i++){
+			GameThing thing = stuff.get(i);
+			if (thing.getId().equals("Player")){
+				thing.render(g);
+				break;
 			}
 		}
 	}

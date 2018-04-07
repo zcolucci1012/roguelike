@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-public class Pickup extends GameThing{
+public abstract class Pickup extends GameThing{
 
-	private Texture tex = Main.getInstance();
+	protected Texture tex = Main.getInstance();
 	private String name;
 
 	public Pickup(float x, float y, String id) {
@@ -23,9 +23,7 @@ public class Pickup extends GameThing{
 
 	}
 
-	public void render(Graphics g) {
-		g.drawImage(tex.weapon[getType()], (int)x, (int)y, null);
-	}
+	public abstract void render(Graphics g);
 
 	public int getType(){
 		if (name.equals("pistol")) return 0;
@@ -39,6 +37,8 @@ public class Pickup extends GameThing{
 		if (name.equals("pump shotgun")) return 8;
 		if (name.equals("tac shotgun")) return 9;
 		if (name.equals("mauler")) return 10;
+
+		if (name.equals("health pack")) return 0;
 		return 0;
 	}
 

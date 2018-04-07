@@ -224,4 +224,8 @@ public class Weapon extends Pickup {
   public String getName(){
     return name;
   }
+
+  public void render(Graphics g){
+    g.drawImage(tex.weapon[getType()], (int)x, (int)y, null);
+  }
 }

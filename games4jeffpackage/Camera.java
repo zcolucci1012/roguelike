@@ -11,10 +11,10 @@ public class Camera {
   public void tick(GameThing player){
     int posX = (int)(player.getX() + player.getWidth()/2);
     int posY = (int)(player.getY() + player.getHeight());
-    if (posX > 0) x = -(posX/800)*800;
-    else x = -((posX-800)/800)*800;
-    if (posY > 0) y = -(posY/800)*800;
-    else y = -((posY-800)/800)*800;
+    if (posX > 0) x = -(posX/Main.WIDTH)*Main.WIDTH;
+    else x = -((posX-Main.WIDTH)/Main.WIDTH)*Main.WIDTH;
+    if (posY > 0) y = -(posY/Main.HEIGHT)*Main.HEIGHT;
+    else y = -((posY-Main.HEIGHT)/Main.HEIGHT)*Main.HEIGHT;
   }
 
   public void setX(float x){

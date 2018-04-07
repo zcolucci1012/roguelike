@@ -28,6 +28,13 @@ public class Main extends Canvas implements Runnable{
 	private Graphics g;
 	private Graphics2D g2d;
 	private String state = "menu";
+	private int numWeapons = 10;
+	private int numPowerups = 1;
+	private boolean levelCleared = false;
+	private int w;
+	private int h;
+	private int currentLevel;
+	private int itemRoomIndex = 0;
 
 	public Main(){
 		tex = new Texture();
@@ -143,46 +150,17 @@ public class Main extends Canvas implements Runnable{
 	}
 
 	private void LoadImageLevel(BufferedImage image, int dx, int dy, int [] doors){
-		int w = image.getWidth();
-		int h = image.getHeight();
+		w = image.getWidth();
+		h = image.getHeight();
 
 		int enemyChoice = (int)(Math.random()*3);
-		int currentLevel;
 		try {
 			currentLevel = Integer.parseInt(state);
 		} catch (Exception e){
 			currentLevel = 1;
 		}
 
-
-		for (int xx = 0; xx < w; xx++){
-			for (int yy = 0; yy < h; yy++){
-				if (xx==11 && yy==0 && doors[0] != 0){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 1, 2, doors[0]));
-				}
-				else if (xx==12 && yy==0 && doors[0] != 0){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 1, 4, doors[0]));
-				}
-				else if (xx==23 && yy==11 && doors[1] != 0){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 2, 3, doors[1]));
-				}
-				else if (xx==23 && yy==12 && doors[1] != 0){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 2, 1, doors[1]));
-				}
-				else if (xx==11 && yy==23 && doors[2] != 0){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 3, 2, doors[2]));
-				}
-				else if (xx==12 && yy==23 && doors[2] != 0){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 3, 4, doors[2]));
-				}
-				else if (xx==0 && yy==11 && doors[3] != 0){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 4, 3, doors[3]));
-				}
-				else if (xx==0 && yy==12 && doors[3] != 0){
-					handler.addObject(new Door(xx*33 + 800*dx, yy*32 + 800*dy, "Door", 4, 1, doors[3]));
-				}
-			}
-		}
+		addDoors(dx, dy, doors);
 
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
@@ -197,48 +175,114 @@ public class Main extends Canvas implements Runnable{
 						!(xx==0 && (yy==11 || yy==12) && doors[3] != 0)){
 					if (red == 0 && green == 0 && blue == 0){
 						int type = (int)(Math.random()*4);
-						handler.addObject(new Block(xx*33 + 800*dx, yy*32 + 800*dy, "Block", type, currentLevel));
+						handler.addObject(new Block(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Block", type, currentLevel));
 					}
 					if (red == 0 && green == 0 && blue == 255){
-						handler.addObject(new Player(xx*33 + 800*dx, yy*32 + 800*dy, "Player", 0, handler, this, screen));
+						handler.addObject(new Player(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Player", 0, handler, this, screen));
 					}
 					if (red == 255 && green == 0 && blue == 0){
-						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + 800*dx, yy*32 + 800*dy, "Chaser", handler, screen));
-						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + 800*dx, yy*32 + 800*dy, "Pouncer", handler, screen));
-						else handler.addObject(new Shooter(xx*33 + 800*dx, yy*32 + 800*dy, "Shooter", handler, screen));
+						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + Main.WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
+						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + Main.WIDTH*dx, yy*32 + HEIGHT*dy, "Pouncer", handler, screen));
+						else handler.addObject(new Shooter(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Shooter", handler, screen));
 					}
 					if (red == 255 && green == 1 && blue == 0){
-						handler.addObject(new Chaser(xx*33 + 800*dx, yy*32 + 800*dy, "Chaser", handler, screen));
+						handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
 					}
 					if (red == 255 && green == 2 && blue == 0){
-						handler.addObject(new Shooter(xx*33 + 800*dx, yy*32 + 800*dy, "Shooter", handler, screen));
+						handler.addObject(new Shooter(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Shooter", handler, screen));
 					}
 					if (red == 255 && green == 255 && blue == 0){
-						handler.addObject(new Trapdoor(xx*33 + 800*dx, yy*32 + 800*dy, "Trapdoor"));
+						handler.addObject(new Trapdoor(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Trapdoor"));
 					}
 					if (red == 0 && green == 255 && blue == 0){
-						int choice = (int)(Math.random()*11);
-						String weapon = "";
-						if (choice == 0) weapon = "smg";
-						else if (choice == 1) weapon = "sniper";
-						else if (choice == 2) weapon = "assault rifle";
-						else if (choice == 3) weapon = "DMR";
-						else if (choice == 4) weapon = "slugshot";
-						else if (choice == 5) weapon = "minigun";
-						else if (choice == 6) weapon = "revolver";
-						else if (choice == 7) weapon = "pump shotgun";
-						else if (choice == 8) weapon = "tac shotgun";
-						else if (choice == 9) weapon = "mauler";
-						else weapon = "pistol";
-
-						handler.addObject(new Weapon(xx*33 + 800*dx, yy*32 + 800*dy, weapon));
+						String weapon = chooseWeapon();
+						String powerup = choosePowerup();
+						int choice = (int)(Math.random()*(numWeapons + numPowerups));
+						if (choice < numWeapons) handler.addObject(new Weapon(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, weapon));
+						else handler.addObject(new Powerup(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, powerup, handler));
+					}
+					if (red == 0 && green == 255 && blue == 1){
+						System.out.println("YES!");
+						String weapon = chooseWeapon();
+						handler.addObject(new Weapon(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, weapon));
+					}
+					if (red == 0 && green == 255 && blue == 2){
+						String powerup = choosePowerup();
+						handler.addObject(new Powerup(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, powerup, handler));
+					}
+					if (red == 0 && green == 255 && blue == 3){
+						handler.addObject(new Weapon(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "pistol"));
 					}
 				}
 			}
 		}
 
-		handler.addObject(new Block(10*33 + 800*dx, -1*32 + 800*dy, "Block", 0, currentLevel));
-		handler.addObject(new Block(13*33 + 800*dx, -1*32 + 800*dy, "Block", 0, currentLevel));
+		handler.addObject(new Block(10*33 + WIDTH*dx, -1*32 + HEIGHT*dy, "Block", 0, currentLevel));
+		handler.addObject(new Block(13*33 + WIDTH*dx, -1*32 + HEIGHT*dy, "Block", 0, currentLevel));
+	}
+
+	private void addDoors(int dx, int dy, int [] doors){
+		for (int xx = 0; xx < w; xx++){
+			for (int yy = 0; yy < h; yy++){
+				if (xx==11 && yy==0 && doors[0] != 0){
+					handler.addObject(new Door(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Door", 1, 2, doors[0]));
+				}
+				else if (xx==12 && yy==0 && doors[0] != 0){
+					handler.addObject(new Door(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Door", 1, 4, doors[0]));
+				}
+				else if (xx==23 && yy==11 && doors[1] != 0){
+					handler.addObject(new Door(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Door", 2, 3, doors[1]));
+				}
+				else if (xx==23 && yy==12 && doors[1] != 0){
+					handler.addObject(new Door(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Door", 2, 1, doors[1]));
+				}
+				else if (xx==11 && yy==23 && doors[2] != 0){
+					handler.addObject(new Door(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Door", 3, 2, doors[2]));
+				}
+				else if (xx==12 && yy==23 && doors[2] != 0){
+					handler.addObject(new Door(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Door", 3, 4, doors[2]));
+				}
+				else if (xx==0 && yy==11 && doors[3] != 0){
+					handler.addObject(new Door(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Door", 4, 3, doors[3]));
+				}
+				else if (xx==0 && yy==12 && doors[3] != 0){
+					handler.addObject(new Door(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Door", 4, 1, doors[3]));
+				}
+			}
+		}
+		for (int xx = 0; xx < w; xx++){
+			for (int yy = 0; yy < h; yy++){
+				if (((xx==10 || xx==13) && (yy==0 || yy==23)) ||
+						((xx==0 || xx==23) && (yy==10 || yy==13))){
+					int type = (int)(Math.random()*4);
+					handler.addObject(new Block(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Block", type, currentLevel));
+				}
+			}
+		}
+	}
+
+
+	private String chooseWeapon(){
+		int weaponChoice = (int)(Math.random()*numWeapons);
+		System.out.println(weaponChoice);
+		String weapon = "";
+		if (weaponChoice == 0) weapon = "smg";
+		else if (weaponChoice == 1) weapon = "sniper";
+		else if (weaponChoice == 2) weapon = "assault rifle";
+		else if (weaponChoice == 3) weapon = "DMR";
+		else if (weaponChoice == 4) weapon = "slugshot";
+		else if (weaponChoice == 5) weapon = "minigun";
+		else if (weaponChoice == 6) weapon = "revolver";
+		else if (weaponChoice == 7) weapon = "pump shotgun";
+		else if (weaponChoice == 8) weapon = "tac shotgun";
+		else if (weaponChoice == 9) weapon = "mauler";
+		return weapon;
+	}
+	private String choosePowerup(){
+		int powerupChoice = (int)(Math.random()*numPowerups);
+		String powerup = "";
+		if (powerupChoice == 0) powerup = "health pack";
+		return powerup;
 	}
 
 	private void generateMap(){
@@ -249,7 +293,7 @@ public class Main extends Canvas implements Runnable{
 		while (points.size() < 8){
 			for (int i=0; i<points.size(); i++){
 				randVectors(points.get(i));
-				if (points.size() > 10){
+				if (points.size() > 12){
 					break;
 				}
 			}
@@ -278,13 +322,61 @@ public class Main extends Canvas implements Runnable{
 			}
 			LoadImageLevel(level, point.getX(), -point.getY(), doors);
 		}
+
+		int k=0;
+		for (RoomPoint point: points){
+			int j = 0;
+			int numDoors = 0;
+			int index = 0;
+			int [] doors = getDoors(point);
+			for (int num: doors){
+				if (num != 0) {
+					numDoors++;
+					index = j;
+				}
+				j++;
+			}
+			if (numDoors == 1 && !levelCleared && !point.isPoint(0,0) && !point.isPoint(points.get(points.size()-1))){
+				clearLevel(point.getX(), point.getY());
+				levelCleared = true;
+				level = loader.loadImage("roomItem" + (index+1) + ".png");
+				doors[index] = 3;
+				RoomPoint temp;
+				for (Vector vector: vectors){
+					if (vector.hasPoint(point) == 1 || vector.hasPoint(point) == 2){
+						temp = vector.getOther(point);
+						int [] tempDoors = getDoors(temp);
+						int tempIndex = index + 2;
+						if (tempIndex > 3) tempIndex -=4;
+						tempDoors[tempIndex] = 3;
+						addDoors(temp.getX(), -temp.getY(), tempDoors);
+					}
+				}
+				LoadImageLevel(level, point.getX(), -point.getY(), doors);
+				itemRoomIndex = k;
+			}
+			k++;
+		}
+	}
+
+	private void clearLevel(int dx, int dy){
+		for(int i = 0; i < handler.stuff.size(); i++){
+			GameThing thing = handler.stuff.get(i);
+			if (thing.getX() >= dx * WIDTH && thing.getX() < dx * WIDTH + WIDTH){
+				if (thing.getY() < -dy * HEIGHT + HEIGHT && thing.getY() >= -dy * HEIGHT){
+					handler.removeObject(thing);
+					i--;
+				}
+			}
+		}
+		System.out.println("Level cleared at " + dx + ", " + dy);
 	}
 
 	private void randVectors(RoomPoint A){
-		if (points.size() < 10) randVector(1, 0, A);
-    if (points.size() < 10) randVector(-1, 0, A);
-    if (points.size() < 10) randVector(0, 1, A);
-    if (points.size() < 10) randVector(0, -1, A);
+		if (points.size() < 12) randVector(1, 0, A);
+    if (points.size() < 12) randVector(-1, 0, A);
+    if (points.size() < 12) randVector(0, 1, A);
+    if (points.size() < 12) randVector(0, -1, A);
 	}
 
 	private void randVector(int dx, int dy, RoomPoint A){
@@ -344,6 +436,8 @@ public class Main extends Canvas implements Runnable{
 		}
 		changeMusic(screen.getLevel());
 		state = screen.getLevel() + "";
+		levelCleared = false;
+		itemRoomIndex = 0;
 		generateMap();
 	}
 
@@ -372,6 +466,10 @@ public class Main extends Canvas implements Runnable{
 			Sound.loop("background2", 0.1);
 		}
 		else Sound.loop("background", 0.1);
+	}
+
+	public int getItemRoomIndex(){
+		return itemRoomIndex;
 	}
 
 	public static void main(String [] args){
