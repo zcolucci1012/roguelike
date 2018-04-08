@@ -194,6 +194,12 @@ public class Main extends Canvas implements Runnable{
 					if (red == 255 && green == 2 && blue == 0){
 						handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
 					}
+					if (red == 255 && green == 3 && blue == 0){
+						handler.addObject(new Pouncer(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Pouncer", handler, screen));
+					}
+					if (red == 255 && green == 4 && blue == 0){
+						handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
+					}
 					if (red == 255 && green == 255 && blue == 0){
 						handler.addObject(new Trapdoor(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Trapdoor"));
 					}
@@ -315,12 +321,12 @@ public class Main extends Canvas implements Runnable{
 				System.out.println("Winning Room created");
 			}
 			else if (i == points.size()-1){
-				int roomNum = (int)(Math.random()*35) + 1;
+				int roomNum = (int)(Math.random()*49) + 1;
 				level = loader.loadImage("room" + roomNum + ".png");
 				System.out.println("room" + roomNum + " created (next to winning room)");
 			}
 			else {
-				int roomNum = (int)(Math.random()*35) + 1;
+				int roomNum = (int)(Math.random()*49) + 1;
 				level = loader.loadImage("room" + roomNum + ".png");
 				System.out.println("room" + roomNum + " created");
 			}
