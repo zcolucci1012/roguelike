@@ -121,7 +121,7 @@ public class Main extends Canvas implements Runnable{
 	public void render(){
 		BufferStrategy bs = this.getBufferStrategy();
 		if(bs == null){
-			this.createBufferStrategy(3);
+			this.createBufferStrategy(2);
 			return;
 		}
 		g = bs.getDrawGraphics();
@@ -192,7 +192,7 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
 					}
 					if (red == 255 && green == 2 && blue == 0){
-						handler.addObject(new Shooter(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Shooter", handler, screen));
+						handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
 					}
 					if (red == 255 && green == 255 && blue == 0){
 						handler.addObject(new Trapdoor(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Trapdoor"));
