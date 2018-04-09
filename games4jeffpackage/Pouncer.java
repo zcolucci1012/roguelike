@@ -61,18 +61,18 @@ public class Pouncer extends Enemy{
           }
         }
       }
-      if (thing.getId() == "Block" || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){
+      if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){
         if (thing.getBounds().intersects(getBoundsRight())){
-					x = thing.getX() - thing.getWidth();
+					x = thing.getX() - width;
         }
 				if (thing.getBounds().intersects(getBoundsLeft())){
-					x = thing.getX() + thing.getWidth();
+					x = thing.getX() + thing.getBounds().width;
         }
 				if (thing.getBounds().intersects(getBoundsTop())){
-					y = thing.getY() + thing.getHeight();
+					y = thing.getY() + thing.getBounds().height;
 				}
 				if (thing.getBounds().intersects(getBoundsBottom())){
-					y = thing.getY() - thing.getHeight();
+					y = thing.getY() - height;
 				}
       }
     }
@@ -91,11 +91,11 @@ public class Pouncer extends Enemy{
   }
 
   public Rectangle getBoundsLeft(){
-    return new Rectangle((int)x, (int)y+5, (int)5, (int)height-10);
+    return new Rectangle((int)x, (int)y+8, (int)5, (int)height-16);
   }
 
   public Rectangle getBoundsRight(){
-    return new Rectangle((int)x+(int)width-5, (int)y+5, (int)5, (int)height-10);
+    return new Rectangle((int)x+(int)width-5, (int)y+8, (int)5, (int)height-16);
   }
 
   public Rectangle getBoundsTop(){

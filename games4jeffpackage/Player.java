@@ -61,7 +61,7 @@ public class Player extends GameThing{
 					}
 				}
 			}
-			if (thing.getId().equals("Enemy.Chaser") || thing.getId().equals("Enemy.Pouncer")){
+			if (thing.getId().equals("Enemy.Chaser") || thing.getId().equals("Enemy.Pouncer") || thing.getId().equals("Enemy.Boss")){
 				if (getBounds().intersects(thing.getBounds())){
 					if (iTimer == 0) {
 						hp-=10;

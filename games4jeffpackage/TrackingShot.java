@@ -15,12 +15,14 @@ public class TrackingShot extends GameThing{
 	private float tempVelX;
 	private float tempVelY;
 	private float tempVel;
+	private float intensity;
 
-	public TrackingShot(float x, float y, String id, float angle, int damage, int range, Handler handler) {
+	public TrackingShot(float x, float y, String id, float angle, int damage, int range, float intensity, Handler handler) {
 		super(x, y, id);
 		this.angle = angle;
 		this.damage = damage;
 		this.range = range;
+		this.intensity = intensity;
 		this.handler = handler;
 		timer = range;
 
@@ -52,8 +54,8 @@ public class TrackingShot extends GameThing{
 					d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));
 				}
         if (d != 0){
-          velX += (float)(-(x - (int)pX)/d*0.15);
-          velY += (float)(-(y - (int)pY)/d*0.15);
+          velX += (float)(-(x - (int)pX)/d*intensity);
+          velY += (float)(-(y - (int)pY)/d*intensity);
 					float vel = (float)Math.sqrt(Math.pow(velX,2) + Math.pow(velY,2));
 					velX *= (tempVel/vel);
 					velY *= (tempVel/vel);

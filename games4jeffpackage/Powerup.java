@@ -27,7 +27,7 @@ public class Powerup extends Pickup{
       for(int i = 0; i < handler.stuff.size(); i++){
   			GameThing thing = handler.stuff.get(i);
         if (thing.getId().equals("Player")){
-          ((Player)thing).setHp(((Player)thing).getHp()+10);
+          ((Player)thing).setHp(((Player)thing).getHp()+20);
         }
       }
     }

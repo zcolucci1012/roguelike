@@ -198,6 +198,9 @@ public class Screen extends MouseAdapter{
 				}
 			}
 			room.complete();
+			if (room.isPoint(points.get(points.size()-1))){
+				handler.addObject(new Trapdoor(400 + room.getX()*Main.WIDTH, 400 - room.getY()*Main.WIDTH, "Trapdoor"));
+			}
 			doorsUnlocked = true;
 		}
 
@@ -393,7 +396,6 @@ public class Screen extends MouseAdapter{
 			g2d.drawImage(loader.loadImage("start_button.png"), 305, 340, null);
 			return;
 		}
-		g.drawImage(loader.loadImage("cursor.png"), mx, my, null);
 		Graphics2D g2d = (Graphics2D) g.create();
 		float alpha = 0.5f;
 		float alpha2 = (float)(-Math.pow((-introTimer/200.0 + 1), 2) + 1);
@@ -454,6 +456,7 @@ public class Screen extends MouseAdapter{
 			g2d.drawRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 45, mapSize, mapSize);
 			i++;
 		}
+		g.drawImage(loader.loadImage("cursor.png"), mx, my, null);
 		g2d.dispose();
 	}
 
@@ -554,6 +557,10 @@ public class Screen extends MouseAdapter{
 
 	public float getAngle(){
 		return angle;
+	}
+
+	public RoomPoint getRoom(){
+		return room;
 	}
 
 }

@@ -201,7 +201,7 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
 					}
 					if (red == 255 && green == 255 && blue == 0){
-						handler.addObject(new Trapdoor(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Trapdoor"));
+						handler.addObject(new Boss(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Boss", handler, screen));
 					}
 					if (red == 0 && green == 255 && blue == 0){
 						String weapon = chooseWeapon();

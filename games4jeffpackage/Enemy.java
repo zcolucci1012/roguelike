@@ -32,13 +32,13 @@ public abstract class Enemy extends GameThing{
   public void render(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect((int)x, (int)y-10, 20, 5);
+		g2d.fillRect((int)x, (int)y-10, (int)width, 5);
 		if (hp >= 0){
 			g2d.setColor(new Color((int)(255-hp*(255.0/totalHp)), (int)(hp*(255.0/totalHp)), 0));
-			g2d.fillRect((int)x, (int)y-10, (int)(hp*(20.0/totalHp)), 5);
+			g2d.fillRect((int)x, (int)y-10, (int)(hp*(width/totalHp)), 5);
 		}
 		g2d.setColor(Color.BLACK);
-		g2d.drawRect((int)x, (int)y-10, 20, 5);
+		g2d.drawRect((int)x, (int)y-10, (int)width, 5);
 	}
   public abstract Rectangle getBounds();
 }

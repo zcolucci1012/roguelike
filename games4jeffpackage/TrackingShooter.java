@@ -13,7 +13,7 @@ public class TrackingShooter extends Enemy{
   private int timer = 100;
 
   public TrackingShooter (float x, float y, String id, Handler handler, Screen screen){
-    super(x, y, id, 40);
+    super(x, y, id, 30);
     this.handler = handler;
     this.screen = screen;
     timer = (int)(Math.random()*151) + 1;
@@ -69,7 +69,7 @@ public class TrackingShooter extends Enemy{
 			float sVelX = ((sx - (int)xx)/d*5);
 			float sVelY = ((sy - (int)yy)/d*5);
 			float angle = (float)Math.atan(sVelY / sVelX);
-			TrackingShot shot = new TrackingShot((int)xx-width/4, (int)yy-width/4, "TrackingShot", angle, 10, 100, handler);
+			TrackingShot shot = new TrackingShot((int)xx-width/4, (int)yy-width/4, "TrackingShot", angle, 10, 100, 0.15f, handler);
 			shot.setVelX(sVelX);
 			shot.setVelY(sVelY);
 			handler.addObject(shot);
