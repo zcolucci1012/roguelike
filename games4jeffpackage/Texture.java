@@ -16,17 +16,17 @@ public class Texture {
   public BufferedImage[] enemy = new BufferedImage[2];
   public BufferedImage[] weapon = new BufferedImage[11];
   public BufferedImage[] blank_weapon = new BufferedImage[11];
-  public BufferedImage[] powerup = new BufferedImage[1];
+  public BufferedImage[] powerup = new BufferedImage[2];
 
   public Texture(){
     BufferedImageLoader loader = new BufferedImageLoader();
     try {
-      block_sheet = loader.loadImage("block_sheet.png");
-      player_sheet = loader.loadImage("player_sheet.png");
-      enemy_sheet = loader.loadImage("enemy_sheet.png");
-      weapon_sheet = loader.loadImage("weapon_sheet.png");
-      blank_weapon_sheet = loader.loadImage("blank_weapon_sheet.png");
-      powerup_sheet = loader.loadImage("powerup_sheet.png");
+      block_sheet = loader.loadImage("assets/block_sheet.png");
+      player_sheet = loader.loadImage("assets/player_sheet.png");
+      enemy_sheet = loader.loadImage("assets/enemy_sheet.png");
+      weapon_sheet = loader.loadImage("assets/weapon_sheet.png");
+      blank_weapon_sheet = loader.loadImage("assets/blank_weapon_sheet.png");
+      powerup_sheet = loader.loadImage("assets/powerup_sheet.png");
     }catch (Exception e){
       e.printStackTrace();
     }
@@ -83,5 +83,6 @@ public class Texture {
     blank_weapon[10] = bws.grabImage(1, 3, 24, 24); //mauler
 
     powerup[0] = pus.grabImage(1, 1, 24, 24); //health pack
+    powerup[1] = pus.grabImage(2, 1, 24, 24); //damage boost
   }
 }

@@ -8,11 +8,11 @@ import java.awt.Rectangle;
 public class Shot extends GameThing{
 
 	private float angle;
-	private int damage;
+	private float damage;
 	private Handler handler;
 	private int timer = 0;
 
-	public Shot(float x, float y, String id, float angle, int damage, int range, Handler handler) {
+	public Shot(float x, float y, String id, float angle, float damage, int range, Handler handler) {
 		super(x, y, id);
 		this.angle = angle;
 		this.damage = damage;
@@ -30,6 +30,12 @@ public class Shot extends GameThing{
 			GameThing thing = handler.stuff.get(i);
 			if (getBounds().intersects(thing.getBounds()) && thing.getId().equals("Block")){
 				handler.removeObject(this);
+			}
+			if (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.")){
+				if (thing.getBounds().intersects(getBounds())){
+					((Enemy)thing).setHp(((Enemy)thing).getHp()-damage);
+					handler.removeObject(this);
+				}
 			}
 		}
 		timer--;
@@ -50,7 +56,7 @@ public class Shot extends GameThing{
 		return new Rectangle((int)x, (int)y, (int)width, (int)height);
 	}
 
-	public int getDamage(){
+	public float getDamage(){
 		return damage;
 	}
 

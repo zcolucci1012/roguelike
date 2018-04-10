@@ -9,19 +9,21 @@ public class Powerup extends Pickup{
   private String name;
   private String itemType;
   private Handler handler;
+  private Screen screen;
 
-  public Powerup(float x, float y, String id, Handler handler){
+  public Powerup(float x, float y, String id, Handler handler, Screen screen){
     super(x, y, id);
     this.handler = handler;
+    this.screen = screen;
     name = this.id.substring(7);
     setItemTypes();
   }
 
   private void setItemTypes(){
-    if (name.equals("health pack")){
-      itemType = "single use"; //other types are "active" and "passive"
-    }
+    if (name.equals("health pack")) itemType = "single use"; //other types are "active" and "passive"
+    if (name.equals("damage boost")) itemType = "single use";
   }
+
   public void action(){
     if (name.equals("health pack")){
       for(int i = 0; i < handler.stuff.size(); i++){
@@ -30,6 +32,9 @@ public class Powerup extends Pickup{
           ((Player)thing).setHp(((Player)thing).getHp()+20);
         }
       }
+    }
+    if (name.equals("damage boost")){
+      screen.setDamageMod(screen.getDamageMod()*1.2f);
     }
   }
 
@@ -43,5 +48,9 @@ public class Powerup extends Pickup{
 
   public void render(Graphics g){
     g.drawImage(tex.powerup[getType()], (int)x, (int)y, null);
+  }
+
+  public String getName(){
+    return name;
   }
 }

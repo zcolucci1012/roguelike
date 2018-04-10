@@ -8,7 +8,7 @@ import java.awt.Rectangle;
 public class TrackingShot extends GameThing{
 
 	private float angle;
-	private int damage;
+	private float damage;
 	private int range;
 	private Handler handler;
 	private int timer = 0;
@@ -17,7 +17,7 @@ public class TrackingShot extends GameThing{
 	private float tempVel;
 	private float intensity;
 
-	public TrackingShot(float x, float y, String id, float angle, int damage, int range, float intensity, Handler handler) {
+	public TrackingShot(float x, float y, String id, float angle, float damage, int range, float intensity, Handler handler) {
 		super(x, y, id);
 		this.angle = angle;
 		this.damage = damage;
@@ -78,7 +78,7 @@ public class TrackingShot extends GameThing{
 		return new Rectangle((int)x, (int)y, (int)width, (int)height);
 	}
 
-	public int getDamage(){
+	public float getDamage(){
 		return damage;
 	}
 

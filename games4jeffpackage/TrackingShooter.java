@@ -6,15 +6,13 @@ import java.awt.Color;
 
 public class TrackingShooter extends Enemy{
 
-  private Handler handler;
   private Screen screen;
   private float sx;
   private float sy;
   private int timer = 100;
 
   public TrackingShooter (float x, float y, String id, Handler handler, Screen screen){
-    super(x, y, id, 30);
-    this.handler = handler;
+    super(x, y, id, handler, 30);
     this.screen = screen;
     timer = (int)(Math.random()*151) + 1;
 
@@ -23,18 +21,7 @@ public class TrackingShooter extends Enemy{
   }
 
   public void tick(){
-    for(int i = 0; i < handler.stuff.size(); i++){
-      GameThing thing = handler.stuff.get(i);
-      if (thing.getId() == "Shot"){
-        if (thing.getBounds().intersects(getBounds())){
-          hp-=screen.getWeapon().getDamage();
-          handler.removeObject(thing);
-          if (hp <= 0){
-            handler.removeObject(this);
-          }
-        }
-      }
-    }
+    super.tick();
     if (timer != 0){
       timer--;
       if (timer == 0){

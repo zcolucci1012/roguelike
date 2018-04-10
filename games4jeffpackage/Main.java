@@ -29,13 +29,14 @@ public class Main extends Canvas implements Runnable{
 	private Graphics2D g2d;
 	private String state = "menu";
 	private int numWeapons = 10;
-	private int numPowerups = 1;
+	private int numPowerups = 2;
 	private boolean levelCleared = false;
 	private int w;
 	private int h;
 	private int currentLevel;
 	private int itemRoomIndex = 0;
 	private Window window;
+	private int numRooms = 52;
 
 	public Main(){
 		tex = new Texture();
@@ -155,7 +156,7 @@ public class Main extends Canvas implements Runnable{
 		w = image.getWidth();
 		h = image.getHeight();
 
-		int enemyChoice = (int)(Math.random()*4);
+		int enemyChoice = (int)(Math.random()*5);
 		try {
 			currentLevel = Integer.parseInt(state);
 		} catch (Exception e){
@@ -186,7 +187,8 @@ public class Main extends Canvas implements Runnable{
 						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
 						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Pouncer", handler, screen));
 						else if (enemyChoice == 3) handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
-						else handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
+						else if (enemyChoice == 4) handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
+						else handler.addObject(new Bumbler(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Bumbler", handler, screen));
 					}
 					if (red == 255 && green == 1 && blue == 0){
 						handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
@@ -208,7 +210,7 @@ public class Main extends Canvas implements Runnable{
 						String powerup = choosePowerup();
 						int choice = (int)(Math.random()*(numWeapons + numPowerups));
 						if (choice < numWeapons) handler.addObject(new Weapon(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, weapon));
-						else handler.addObject(new Powerup(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, powerup, handler));
+						else handler.addObject(new Powerup(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, powerup, handler, screen));
 					}
 					if (red == 0 && green == 255 && blue == 1){
 						System.out.println("YES!");
@@ -217,7 +219,7 @@ public class Main extends Canvas implements Runnable{
 					}
 					if (red == 0 && green == 255 && blue == 2){
 						String powerup = choosePowerup();
-						handler.addObject(new Powerup(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, powerup, handler));
+						handler.addObject(new Powerup(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, powerup, handler, screen));
 					}
 					if (red == 0 && green == 255 && blue == 3){
 						handler.addObject(new Weapon(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "pistol"));
@@ -291,6 +293,7 @@ public class Main extends Canvas implements Runnable{
 		int powerupChoice = (int)(Math.random()*numPowerups);
 		String powerup = "";
 		if (powerupChoice == 0) powerup = "health pack";
+		else if (powerupChoice == 1) powerup = "damage boost";
 		return powerup;
 	}
 
@@ -313,21 +316,16 @@ public class Main extends Canvas implements Runnable{
 			i++;
 			int [] doors = getDoors(point);
 			if (i == 1){
-				level = loader.loadImage("room0.png");
+				level = loader.loadImage("assets/room0.png");
 				System.out.println("Starting Room created");
 			}
 			else if (i == points.size()){
-				level = loader.loadImage("roomwin.png");
+				level = loader.loadImage("assets/roomwin.png");
 				System.out.println("Winning Room created");
 			}
-			else if (i == points.size()-1){
-				int roomNum = (int)(Math.random()*49) + 1;
-				level = loader.loadImage("room" + roomNum + ".png");
-				System.out.println("room" + roomNum + " created (next to winning room)");
-			}
 			else {
-				int roomNum = (int)(Math.random()*49) + 1;
-				level = loader.loadImage("room" + roomNum + ".png");
+				int roomNum = (int)(Math.random()*numRooms) + 1;
+				level = loader.loadImage("assets/room" + roomNum + ".png");
 				System.out.println("room" + roomNum + " created");
 			}
 			LoadImageLevel(level, point.getX(), -point.getY(), doors);
@@ -349,7 +347,7 @@ public class Main extends Canvas implements Runnable{
 			if (numDoors == 1 && !levelCleared && !point.isPoint(0,0) && !point.isPoint(points.get(points.size()-1))){
 				clearLevel(point.getX(), point.getY());
 				levelCleared = true;
-				level = loader.loadImage("roomItem" + (index+1) + ".png");
+				level = loader.loadImage("assets/roomItem" + (index+1) + ".png");
 				doors[index] = 3;
 				RoomPoint temp;
 				for (Vector vector: vectors){

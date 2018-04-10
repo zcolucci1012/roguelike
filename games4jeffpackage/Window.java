@@ -31,7 +31,7 @@ public class Window extends Canvas{
 
 	public void tick(){
 		state = main.getState();
-		if (!state.equals("menu"))frame.setCursor(frame.getToolkit().createCustomCursor(loader.loadImage("blank.png"), new Point(), null));
+		if (!state.equals("menu"))frame.setCursor(frame.getToolkit().createCustomCursor(loader.loadImage("assets/blank.png"), new Point(), null));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

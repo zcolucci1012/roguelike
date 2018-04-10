@@ -9,12 +9,14 @@ import java.util.Random;
 public abstract class Enemy extends GameThing{
 
 	private Texture tex = Main.getInstance();
-	protected int hp;
-	private int totalHp;
+	protected float hp;
+	private float totalHp;
+	protected Handler handler;
 
-  public Enemy(float x, float y, String id, int hp) {
+  public Enemy(float x, float y, String id, Handler handler, float hp) {
     super(x, y, "Enemy." + id);
 		this.hp = hp;
+		this.handler = handler;
 		totalHp = hp;
   }
 
@@ -28,7 +30,13 @@ public abstract class Enemy extends GameThing{
 		return new RoomPoint (roomX, -roomY);
 	}
 
-  public abstract void tick();
+  public void tick(){
+		x += velX;
+		y += velY;
+		if (hp <= 0){
+			handler.removeObject(this);
+		}
+	}
   public void render(Graphics g){
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setColor(Color.BLACK);
@@ -41,4 +49,11 @@ public abstract class Enemy extends GameThing{
 		g2d.drawRect((int)x, (int)y-10, (int)width, 5);
 	}
   public abstract Rectangle getBounds();
+
+	public void setHp(float hp){
+		this.hp = hp;
+	}
+	public float getHp(){
+		return hp;
+	}
 }

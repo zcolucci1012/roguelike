@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Pouncer extends Enemy{
 
-  private Handler handler;
   private Screen screen;
 	private int randTimer = 0;
 	private int [] imperfections = new int [2];
@@ -17,8 +16,7 @@ public class Pouncer extends Enemy{
 	private Texture tex = Main.getInstance();
 
   public Pouncer(float x, float y, String id, Handler handler, Screen screen) {
-    super(x, y, id, 15);
-    this.handler = handler;
+    super(x, y, id, handler, 15);
     this.screen = screen;
     timer = (int)(Math.random()*11) + 1;
 
@@ -27,8 +25,7 @@ public class Pouncer extends Enemy{
   }
 
   public void tick() {
-    x+=velX;
-    y+=velY;
+    super.tick();
     double max = 7.0;
     float speed = (float)Math.pow((-(Math.pow(max, 1.0/10.0)/2.0*Math.cos(Math.PI*timer/25.0)) + Math.pow(max, 1.0/10.0)/2.0), 10.0) + 1;
 		if (randTimer == 50){
@@ -50,15 +47,6 @@ public class Pouncer extends Enemy{
         if (d != 0){
           velX = -(x - (int)pX)/d*speed;
           velY = -(y - (int)pY)/d*speed;
-        }
-      }
-      if (thing.getId() == "Shot"){
-        if (thing.getBounds().intersects(getBounds())){
-          hp-=screen.getWeapon().getDamage();
-          handler.removeObject(thing);
-          if (hp <= 0){
-            handler.removeObject(this);
-          }
         }
       }
       if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){

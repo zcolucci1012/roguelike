@@ -8,7 +8,7 @@ public class Weapon extends Pickup {
 
   private int fireDelay;
   private int shotSpeed;
-  private int damage;
+  private float damage;
   private int magazine;
   private int reloadTime;
   private int ammo;
@@ -40,11 +40,11 @@ public class Weapon extends Pickup {
     this.shotSpeed = shotSpeed;
   }
 
-  public int getDamage(){
+  public float getDamage(){
     return damage;
   }
 
-  public void setDamage(int damage){
+  public void setDamage(float damage){
     this.damage = damage;
   }
 

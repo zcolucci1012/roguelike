@@ -30,7 +30,7 @@ public class Screen extends MouseAdapter{
 	private Weapon weapon;
 	private int fireDelay = 25;
 	private int shotSpeed = 5;
-	private int damage = 5;
+	private float damage = 5;
 	private int magazine = 0;
 	private int bullets = 0;
 	private int reloadTime = 100;
@@ -45,6 +45,7 @@ public class Screen extends MouseAdapter{
 	private int pickupAlertTimer = 0;
 	private int doorTimer = 0;
 	private int introTimer = 0;
+	private int powerupTimer = 0;
 
 	//lists
 	private ArrayList <Weapon> weapons = new ArrayList <Weapon> ();
@@ -56,9 +57,18 @@ public class Screen extends MouseAdapter{
 	private boolean pickupAlertFlag = false;
 	private boolean doorFlag = false;
 	private boolean doorsUnlocked = false;
+	private boolean powerupFlag = false;
 
 	//texturessss
 	private Texture tex = Main.getInstance();
+
+	//mods
+	private float damageMod = 1;
+	private float speedMod = 1;
+	private float fireDelayMod = 1;
+	private float magazineMod = 1;
+	private float reloadTimeMod = 1;
+	private float inaccuracyMod = 1;
 
 	//etc.
 	private String lastAddedWeapon = "";
@@ -75,6 +85,8 @@ public class Screen extends MouseAdapter{
 	private String levelDescription = "Industrial Zone";
 	private float angle;
 	private int itemRoomIndex = 0;
+	private String powerup = "None";
+
 
 	public Screen (Handler handler, Main main, Camera cam){
 		this.handler = handler;
@@ -280,6 +292,12 @@ public class Screen extends MouseAdapter{
 					pickupAlertFlag = false;
 				}
 			}
+			if (powerupTimer != 0){
+				powerupTimer--;
+				if (powerupTimer == 0){
+					powerupFlag = false;
+				}
+			}
 		}
 
 		if (introTimer != 400){
@@ -316,7 +334,7 @@ public class Screen extends MouseAdapter{
 						float sVelY = ((sy+randY - (int)y)/d*shotSpeed);
 						float dx = (20 * (sx+randX-(int)x))/d;
 						float dy = (20 * (sy+randY-(int)y))/d;
-						Shot shot = new Shot((int)x - thing.getWidth()/8 + dx, (int)y - thing.getHeight()/8 + dy+10, "Shot", angle, damage, (10*range)/shotSpeed, handler);
+						Shot shot = new Shot((int)x - thing.getWidth()/8 + dx, (int)y - thing.getHeight()/8 + dy+10, "Shot", angle, (damage*damageMod), (10*range)/shotSpeed, handler);
 						shot.setVelX(sVelX);
 						shot.setVelY(sVelY);
 						handler.addObject(shot);
@@ -393,7 +411,7 @@ public class Screen extends MouseAdapter{
 			g.setColor(new Color(36,123,160));
 			g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
 			Graphics2D g2d = (Graphics2D) g;
-			g2d.drawImage(loader.loadImage("start_button.png"), 305, 340, null);
+			g2d.drawImage(loader.loadImage("assets/start_button.png"), 305, 340, null);
 			return;
 		}
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -407,7 +425,7 @@ public class Screen extends MouseAdapter{
 		g2d.setColor(Color.BLACK);
 		drawCenteredString(g2d, "Chapter " + level + ": " + levelDescription, new Rectangle(0, 0, Main.WIDTH, Main.HEIGHT), new Font("Trebuchet MS", Font.BOLD, 36));
 		g2d.setComposite(ac);
-		g2d.drawImage(loader.loadImage("weaponGUI.png"), 600, 650, 180, 108, null);
+		g2d.drawImage(loader.loadImage("assets/weaponGUI.png"), 600, 650, 180, 108, null);
 		if (weapon != null){
 			g2d.drawImage(tex.weapon[weapon.getType()], 612, 662, 72, 72, null);
 		}
@@ -430,6 +448,9 @@ public class Screen extends MouseAdapter{
 		g2d.setColor(Color.BLACK);
 		if (pickupAlertFlag && reloading) g2d.drawString("Picked up " + lastAddedWeapon + "!", 600, 625);
 		else if (pickupAlertFlag) g2d.drawString("Picked up " + lastAddedWeapon + "!", 600, 640);
+		if (pickupAlertFlag && reloading && powerupFlag) g2d.drawString("Picked up " + powerup + "!", 600, 610);
+		else if ((reloading && powerupFlag) || (pickupAlertFlag && powerupFlag)) g2d.drawString("Picked up " + powerup + "!", 600, 625);
+		else if (powerupFlag) g2d.drawString("Picked up " + powerup + "!", 600, 640);
 		renderHP(g2d);
 		int mapSize = 20;
 		int maxY = 0;
@@ -456,13 +477,13 @@ public class Screen extends MouseAdapter{
 			g2d.drawRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 45, mapSize, mapSize);
 			i++;
 		}
-		g.drawImage(loader.loadImage("cursor.png"), mx, my, null);
+		g.drawImage(loader.loadImage("assets/cursor.png"), mx, my, null);
 		g2d.dispose();
 	}
 
 	private void renderHP(Graphics2D g2d){
-		int hp = 0;
-		int totalHp = 0;
+		float hp = 0;
+		float totalHp = 0;
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
@@ -561,6 +582,28 @@ public class Screen extends MouseAdapter{
 
 	public RoomPoint getRoom(){
 		return room;
+	}
+
+	public void setDamageMod(float damageMod){
+		this.damageMod = damageMod;
+	}
+
+	public float getDamageMod(){
+		return damageMod;
+	}
+
+	public void setSpeedMod(float speedMod){
+		this.speedMod = speedMod;
+	}
+
+	public float getSpeedMod(){
+		return speedMod;
+	}
+
+	public void notifyPowerup(String powerup){
+		this.powerup = powerup;
+		powerupTimer = 200;
+		powerupFlag = true;
 	}
 
 }

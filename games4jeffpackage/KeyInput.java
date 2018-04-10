@@ -24,10 +24,10 @@ public class KeyInput extends KeyAdapter{
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
 				if (screen.getMovement()){
-					if (key == KeyEvent.VK_W) {thing.setVelY(-4); keyDown[0]=true;}
-					if (key == KeyEvent.VK_S) {thing.setVelY(4); keyDown[1]=true;}
-					if (key == KeyEvent.VK_D) {thing.setVelX(4); keyDown[2]=true;}
-					if (key == KeyEvent.VK_A) {thing.setVelX(-4); keyDown[3]=true;}
+					if (key == KeyEvent.VK_W) {thing.setVelY(-4*screen.getSpeedMod()); keyDown[0]=true;}
+					if (key == KeyEvent.VK_S) {thing.setVelY(4*screen.getSpeedMod()); keyDown[1]=true;}
+					if (key == KeyEvent.VK_D) {thing.setVelX(4*screen.getSpeedMod()); keyDown[2]=true;}
+					if (key == KeyEvent.VK_A) {thing.setVelX(-4*screen.getSpeedMod()); keyDown[3]=true;}
 				}
 			}
 		}

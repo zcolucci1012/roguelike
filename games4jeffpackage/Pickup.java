@@ -16,7 +16,6 @@ public abstract class Pickup extends GameThing{
 		width = 24;
 		height = 24;
 
-		getTexture();
 	}
 
 	public void tick() {
@@ -39,15 +38,11 @@ public abstract class Pickup extends GameThing{
 		if (name.equals("mauler")) return 10;
 
 		if (name.equals("health pack")) return 0;
+		if (name.equals("damage boost")) return 1;
 		return 0;
 	}
 
 	public Rectangle getBounds() {
 		return new Rectangle((int)x, (int)y, (int)width, (int)height);
 	}
-
-	private void getTexture(){
-
-	}
-
 }

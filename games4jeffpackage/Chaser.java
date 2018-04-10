@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Chaser extends Enemy{
 
-  private Handler handler;
   private Screen screen;
 	private int randTimer = 0;
 	private int [] imperfections = new int [2];
@@ -16,8 +15,7 @@ public class Chaser extends Enemy{
 	private Texture tex = Main.getInstance();
 
   public Chaser(float x, float y, String id, Handler handler, Screen screen) {
-    super(x, y, id, 20);
-    this.handler = handler;
+    super(x, y, id, handler, 20);
     this.screen = screen;
 
     width = 28;
@@ -25,8 +23,7 @@ public class Chaser extends Enemy{
   }
 
   public void tick() {
-    x+=velX;
-    y+=velY;
+    super.tick();
 		if (randTimer == 50){
 			imperfections[0] = (int)(Math.random() * 51)-25;
 			imperfections[1] = (int)(Math.random() * 51)-25;
@@ -46,15 +43,6 @@ public class Chaser extends Enemy{
         if (d != 0){
           velX = -(x - (int)pX)/d*2;
           velY = -(y - (int)pY)/d*2;
-        }
-      }
-      if (thing.getId() == "Shot"){
-        if (thing.getBounds().intersects(getBounds())){
-          hp-=screen.getWeapon().getDamage();
-          handler.removeObject(thing);
-          if (hp <= 0){
-            handler.removeObject(this);
-          }
         }
       }
       if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){

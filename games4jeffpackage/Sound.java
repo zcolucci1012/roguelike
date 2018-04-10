@@ -11,17 +11,17 @@ public class Sound {
   private static Clip background;
 
   public Sound(){
-    files.put("background", new File("background.wav"));
-    files.put("background2", new File("background2.wav"));
-    files.put("shotgun", new File("shotgun.wav"));
-    files.put("sniper", new File ("sniper.wav"));
-    files.put("smg", new File ("smg.wav"));
-    files.put("shotgun2", new File("shotgun2.wav"));
-    files.put("dmr", new File("dmr.wav"));
-    files.put("assault rifle", new File("assault_rifle.wav"));
-    files.put("pistol", new File("pistol.wav"));
-    files.put("revolver", new File("revolver.wav"));
-    files.put("minigun", new File("minigun.wav"));
+    files.put("background", new File("sounds/background.wav"));
+    files.put("background2", new File("sounds/background2.wav"));
+    files.put("shotgun", new File("sounds/shotgun.wav"));
+    files.put("sniper", new File ("sounds/sniper.wav"));
+    files.put("smg", new File ("sounds/smg.wav"));
+    files.put("shotgun2", new File("sounds/shotgun2.wav"));
+    files.put("dmr", new File("sounds/dmr.wav"));
+    files.put("assault rifle", new File("sounds/assault_rifle.wav"));
+    files.put("pistol", new File("sounds/pistol.wav"));
+    files.put("revolver", new File("sounds/revolver.wav"));
+    files.put("minigun", new File("sounds/minigun.wav"));
   }
 
   public static void loop(String path, double volume){

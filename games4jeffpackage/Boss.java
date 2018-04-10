@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 
 public class Boss extends Enemy{
 
-  private Handler handler;
   private Screen screen;
   private int timer = 0;
   private float initX;
@@ -29,8 +28,7 @@ public class Boss extends Enemy{
   private Rectangle playerBounds;
 
   public Boss(float x, float y, String id, Handler handler, Screen screen){
-    super(x, y, id, 300);
-    this.handler = handler;
+    super(x, y, id, handler, 300);
     this.screen = screen;
     initX = x;
     initY = y;
@@ -42,8 +40,7 @@ public class Boss extends Enemy{
   }
 
   public void tick(){
-    x += velX;
-    y += velY;
+    super.tick();
     leftWall = false;
     rightWall = false;
     topWall = false;
@@ -56,11 +53,6 @@ public class Boss extends Enemy{
             velX = thing.getVelX()/25;
             velY = thing.getVelY()/25;
             knockbackTimer = 5;
-          }
-          hp-=screen.getWeapon().getDamage();
-          handler.removeObject(thing);
-          if (hp <= 0){
-            handler.removeObject(this);
           }
         }
       }
@@ -89,7 +81,7 @@ public class Boss extends Enemy{
       }
     }
     timer++;
-    if (timer==500){
+    if (timer==400){
       action = (int)(Math.random()*3);
       timer = 0;
     }

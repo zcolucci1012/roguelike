@@ -11,8 +11,8 @@ public class Player extends GameThing{
 	private Handler handler;
 	private Main main;
 	private Screen screen;
-	private int hp = 100;
-	private int totalHp = hp;
+	private float hp = 100;
+	private float totalHp = hp;
 	private int iFrames = 100;
 	private int iTimer = 0;
 	private boolean invincible = false;
@@ -53,6 +53,7 @@ public class Player extends GameThing{
 							if (((Powerup)thing).getItemType().equals("active")){
 
 							}
+							screen.notifyPowerup(((Powerup)thing).getName());
 							handler.removeObject(thing);
 						} catch (Exception e2){
 							System.out.println("oops something happened");
@@ -61,7 +62,10 @@ public class Player extends GameThing{
 					}
 				}
 			}
-			if (thing.getId().equals("Enemy.Chaser") || thing.getId().equals("Enemy.Pouncer") || thing.getId().equals("Enemy.Boss")){
+			if (thing.getId().equals("Enemy.Chaser") ||
+					thing.getId().equals("Enemy.Pouncer") ||
+					thing.getId().equals("Enemy.Boss") ||
+					thing.getId().equals("Enemy.Bumbler")){
 				if (getBounds().intersects(thing.getBounds())){
 					if (iTimer == 0) {
 						hp-=10;
@@ -192,16 +196,16 @@ public class Player extends GameThing{
     return new Rectangle((int)x+(int)width/4, (int)y + (int)height/2, (int)width/2, (int)height/2);
   }
 
-	public int getHp(){
+	public float getHp(){
 		return hp;
 	}
 
-	public void setHp(int hp){
+	public void setHp(float hp){
 		this.hp = hp;
 		if (hp > totalHp) this.hp = totalHp;
 	}
 
-	public int getTotalHp(){
+	public float getTotalHp(){
 		return totalHp;
 	}
 
