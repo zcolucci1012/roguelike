@@ -36,7 +36,7 @@ public class Main extends Canvas implements Runnable{
 	private int currentLevel;
 	private int itemRoomIndex = 0;
 	private Window window;
-	private int numRooms = 52;
+	private int numRooms = 58;
 
 	public Main(){
 		tex = new Texture();
@@ -184,23 +184,26 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new Player(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Player", 0, handler, this, screen));
 					}
 					if (red == 255 && green == 0 && blue == 0){
-						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
-						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Pouncer", handler, screen));
+						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chaser", handler, screen));
+						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Pouncer", handler, screen));
 						else if (enemyChoice == 3) handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
 						else if (enemyChoice == 4) handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
-						else handler.addObject(new Bumbler(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Bumbler", handler, screen));
+						else handler.addObject(new Bumbler(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Bumbler", handler, screen));
 					}
 					if (red == 255 && green == 1 && blue == 0){
-						handler.addObject(new Chaser(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Chaser", handler, screen));
+						handler.addObject(new Chaser(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chaser", handler, screen));
 					}
 					if (red == 255 && green == 2 && blue == 0){
 						handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
 					}
 					if (red == 255 && green == 3 && blue == 0){
-						handler.addObject(new Pouncer(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Pouncer", handler, screen));
+						handler.addObject(new Pouncer(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Pouncer", handler, screen));
 					}
 					if (red == 255 && green == 4 && blue == 0){
 						handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
+					}
+					if (red == 255 && green == 5 && blue == 0){
+						handler.addObject(new Bumbler(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Bumbler", handler, screen));
 					}
 					if (red == 255 && green == 255 && blue == 0){
 						handler.addObject(new Boss(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Boss", handler, screen));

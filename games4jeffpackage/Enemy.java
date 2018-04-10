@@ -8,7 +8,7 @@ import java.util.Random;
 
 public abstract class Enemy extends GameThing{
 
-	private Texture tex = Main.getInstance();
+	protected Texture tex = Main.getInstance();
 	protected float hp;
 	private float totalHp;
 	protected Handler handler;

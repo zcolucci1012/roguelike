@@ -12,8 +12,6 @@ public class Chaser extends Enemy{
 	private int randTimer = 0;
 	private int [] imperfections = new int [2];
 
-	private Texture tex = Main.getInstance();
-
   public Chaser(float x, float y, String id, Handler handler, Screen screen) {
     super(x, y, id, handler, 20);
     this.screen = screen;
