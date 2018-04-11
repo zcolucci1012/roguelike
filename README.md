@@ -9,3 +9,5 @@ How to Play the Game (I think):
 - Compile the files
 - Run the class labeled Main
 - Enjoy!
+
+Made with assistance of tutorials by RealTutsGML - https://www.youtube.com/user/RealTutsGML
