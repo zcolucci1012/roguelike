@@ -11,7 +11,7 @@ public class Player extends GameThing{
 	private Handler handler;
 	private Main main;
 	private Screen screen;
-	private float hp = 100;
+	private float hp = 1000;
 	private float totalHp = hp;
 	private int iFrames = 100;
 	private int iTimer = 0;
@@ -75,13 +75,19 @@ public class Player extends GameThing{
 			}
 			if (thing.getId().equals("EnemyShot")){
 				if (getBounds().intersects(thing.getBounds())){
-					hp -= ((EnemyShot)thing).getDamage();
+					if (iTimer == 0) {
+						hp -= ((EnemyShot)thing).getDamage();
+						iTimer = iFrames;
+					}
 					handler.removeObject(thing);
 				}
 			}
 			if (thing.getId().equals("TrackingShot")){
 				if (getBounds().intersects(thing.getBounds())){
-					hp -= ((TrackingShot)thing).getDamage();
+					if (iTimer == 0) {
+						hp -= ((TrackingShot)thing).getDamage();
+						iTimer = iFrames;
+					}
 					handler.removeObject(thing);
 				}
 			}

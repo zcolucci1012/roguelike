@@ -33,6 +33,8 @@ public class Block extends GameThing {
     */
     if (level == 1) g.drawImage(tex.block[type], (int)x, (int)y, null);
     else if (level == 2) g.drawImage(tex.block[type+4], (int)x, (int)y, null);
+    else if (level == 3) g.drawImage(tex.block[type+8], (int)x, (int)y, null);
+    else if (level == 4) g.drawImage(tex.block[type+12], (int)x, (int)y, null);
   }
 
   public Rectangle getBounds(){

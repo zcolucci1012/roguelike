@@ -38,34 +38,37 @@ public class Main extends Canvas implements Runnable{
 	private Window window;
 	private int numRooms = 58;
 
+	/*instantiate all variables and stuff and run all level creation stuff*/
 	public Main(){
-		tex = new Texture();
+		tex = new Texture(); //get static variable for textures
 
-		handler = new Handler();
+		handler = new Handler(); //create handler which contains a list that manages most game items
 
-		cam = new Camera(0, 0);
+		cam = new Camera(0, 0); //create camera
 
-		window = new Window(WIDTH,HEIGHT,"jeff",this);
+		window = new Window(WIDTH,HEIGHT,"jeff",this); //create a new window called "jeff"
 
-		screen = new Screen(handler, this, cam);
-		this.addKeyListener(new KeyInput(handler, screen));
-		this.addMouseListener(screen);
+		screen = new Screen(handler, this, cam); //create a new screen variable (handles mouse input, gui, and weapon handling)
+		this.addKeyListener(new KeyInput(handler, screen)); //adds a listener of key input
+		this.addMouseListener(screen); //add listener of mouse input
 
-		player = new Player(400,400,"Player", 0, handler, this, screen);
-		handler.addObject(player);
+		player = new Player(400,400,"Player", 0, handler, this, screen); //create player and spawn in first room
+		handler.addObject(player); //add player to the list of objects
 
-		Sound s = new Sound();
-		Sound.loop("background", 0.1);
+		Sound s = new Sound(); //instantiate sounds
+		Sound.loop("background", 0.1); //start the background music
 
-		generateMap();
+		generateMap(); //start map generation
 	}
 
+	/*called at start, starts game*/
 	public synchronized void start(){
 		thread = new Thread(this);
 		thread.start();
 		running = true;
 	}
 
+	/*stops the game*/
 	public synchronized void stop(){
 		try{
 			thread.join();
@@ -75,6 +78,13 @@ public class Main extends Canvas implements Runnable{
 		}
 	}
 
+	/*
+		called at start of game, runs a game loop
+		calls functions called "tick" and "render" which are used in most classes of the game
+		these functions will be called every tenth of a second about
+		tick will handle actions such as position, movement, firing
+		render will draw these elements using the Graphics variable passed to each functions
+	*/
 	public void run() {
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
@@ -103,94 +113,125 @@ public class Main extends Canvas implements Runnable{
 		stop();
 	}
 
+	/*calls tick method on different parts of the game*/
 	public void tick(){
-		if (!state.equals("menu")) {
+		if (!state.equals("menu")) { //if not in the menu screen
 			if (cam != null){
-				handler.tick(cam);
+				handler.tick(cam); //runs the tick method on objects in the game
 			}
-			for (int i=0; i<handler.stuff.size(); i++){
+			for (int i=0; i<handler.stuff.size(); i++){ //iterates through the object handler
 				GameThing thing = handler.stuff.get(i);
 				if (thing.getId().equals("Player")){
-					cam.tick(thing);
+					cam.tick(thing); //tick the camera after passing the player object into the camera class
 				}
 			}
 		}
-		screen.tick();
-		window.tick();
+		screen.tick(); //tick the screen
+		window.tick(); //tick the window (doesn't do much outside of displaying the cursor)
 	}
 
+	/*calls render method on different parts of the game*/
 	public void render(){
-		BufferStrategy bs = this.getBufferStrategy();
+		BufferStrategy bs = this.getBufferStrategy(); //something with buffers idk
 		if(bs == null){
 			this.createBufferStrategy(2);
 			return;
 		}
-		g = bs.getDrawGraphics();
+		g = bs.getDrawGraphics(); //instantiate the graphics variable
 		g2d = (Graphics2D)g;
 
+		//set background color based on level
 		if (state.equals("1")) g.setColor(new Color(239, 172, 117));
 		if (state.equals("2")) g.setColor(new Color(61, 61, 61));
+		if (state.equals("3")) g.setColor(new Color(178, 120, 76));
+		if (state.equals("4")) g.setColor(new Color(212, 244, 244));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
 		if (!state.equals("menu")) {
 			g2d.translate(cam.getX(), cam.getY()); //begin of cam
 
-			handler.render(g, cam);
+			handler.render(g, cam); //render the items in the handler after passing camera
 
 			g2d.translate(-cam.getX(), -cam.getY()); //end of cam
 		}
 
-		screen.render(g);
+		screen.render(g); //render screen
 
-		g.dispose();
+		g.dispose(); //dispose graphics
 
-		bs.show();
-
-		/*
-		g.dispose();
-		bs.show();
-		*/
+		bs.show(); //show the screen
 	}
 
+	/*
+		converts an image into a level
+		takes in the image of the level,
+		its distance on a grid away from the origin (0,0) (ex. just above would be dx=0, dy=1)
+		and whether a door is present on one of the four given sides of the room
+		(the door array consists of four values, zero being no door, 1 being a basic door,
+		and further values being special doors. the order of the array is (top, right, bottom, left))
+	*/
 	private void LoadImageLevel(BufferedImage image, int dx, int dy, int [] doors){
+		//save width and height of the image
 		w = image.getWidth();
 		h = image.getHeight();
 
-		int enemyChoice = (int)(Math.random()*5);
+		int enemyChoice = (int)(Math.random()*6); //randomly choose enemy to add (random by room not by enemy)
+		//get current level
 		try {
 			currentLevel = Integer.parseInt(state);
 		} catch (Exception e){
 			currentLevel = 1;
 		}
 
-		addDoors(dx, dy, doors);
+		addDoors(dx, dy, doors); //adds doors dependent on values entered
 
+		//iterate through pixels of the image
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
+				//get rgb value of pixel
 				int pixel = image.getRGB(xx,yy);
 				int red = (pixel >> 16) & 0xff;
 				int green = (pixel >> 8) & 0xff;
 				int blue = (pixel) & 0xff;
 
+				//conditions added to prevent placing blocks over doors
 				if (!((xx==11 || xx==12) && yy==0 && doors[0] != 0) &&
 						!(xx==23 && (yy==11 || yy==12) && doors[1] != 0) &&
 						!((xx==11 || xx==12) && yy==23 && doors[2] != 0) &&
 						!(xx==0 && (yy==11 || yy==12) && doors[3] != 0)){
-					if (red == 0 && green == 0 && blue == 0){
+					if (red == 0 && green == 0 && blue == 0){ //select random block from block types and place at point
 						int type = (int)(Math.random()*4);
 						handler.addObject(new Block(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Block", type, currentLevel));
+						/*
+							values in the object above can be explained as such:
+							the position is the current location of the pixel (xx/yy),
+							multiplied by the in-game distance of the pixels (33/32),
+							and added to the change in x or y of the room (dx/dy),
+							multiplied by the size of each room (WIDTH/HEIGHT).
+							then the objects ID ("BLOCK", usually name of the class),
+							and in this case the type of block and the currentLevel.
+							many objects require certain variables outside of the position and ID,
+							(often the main class, handler, or screen) because they will be
+							referenced within the object
+						*/
 					}
-					if (red == 0 && green == 0 && blue == 255){
+					if (red == 0 && green == 0 && blue == 255){ //most likely shouldn't be used, adds player
 						handler.addObject(new Player(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Player", 0, handler, this, screen));
 					}
-					if (red == 255 && green == 0 && blue == 0){
+					if (red == 255 && green == 0 && blue == 0){ //adds a random enemy
 						if (enemyChoice == 1) handler.addObject(new Chaser(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chaser", handler, screen));
 						else if (enemyChoice == 2) handler.addObject(new Pouncer(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Pouncer", handler, screen));
 						else if (enemyChoice == 3) handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
 						else if (enemyChoice == 4) handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
-						else handler.addObject(new Bumbler(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Bumbler", handler, screen));
+						else if (enemyChoice == 5) handler.addObject(new Bumbler(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Bumbler", handler, screen));
+						else handler.addObject(new Chicken(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chicken", handler));
 					}
-					if (red == 255 && green == 1 && blue == 0){
+					/*
+						adds an enemy based on the green value to represent somewhat
+						of a numerical ID. enemies will have a red value 255 and a
+						unique green value as new enemies are added
+					*/
+					if (red == 255 && green == 1 && blue == 0){ //note a +5 is added simply to center the object
 						handler.addObject(new Chaser(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chaser", handler, screen));
 					}
 					if (red == 255 && green == 2 && blue == 0){
@@ -205,37 +246,43 @@ public class Main extends Canvas implements Runnable{
 					if (red == 255 && green == 5 && blue == 0){
 						handler.addObject(new Bumbler(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Bumbler", handler, screen));
 					}
+					if (red == 255 && green == 6 && blue == 0){
+						handler.addObject(new Chicken(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chicken", handler));
+					}
 					if (red == 255 && green == 255 && blue == 0){
 						handler.addObject(new Boss(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Boss", handler, screen));
 					}
-					if (red == 0 && green == 255 && blue == 0){
-						String weapon = chooseWeapon();
-						String powerup = choosePowerup();
-						int choice = (int)(Math.random()*(numWeapons + numPowerups));
+					if (red == 0 && green == 255 && blue == 0){ //add a random weapon or powerup
+						String weapon = chooseWeapon(); //chooses from a list of weapons
+						String powerup = choosePowerup(); //chooses from a list of powerups
+						int choice = (int)(Math.random()*(numWeapons + numPowerups)); //numWeapons and numPowerups must be changed when new one added
+						//note that currently all weapons/powerups have equal chance of spawning
 						if (choice < numWeapons) handler.addObject(new Weapon(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, weapon));
 						else handler.addObject(new Powerup(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, powerup, handler, screen));
 					}
-					if (red == 0 && green == 255 && blue == 1){
-						System.out.println("YES!");
+					if (red == 0 && green == 255 && blue == 1){ //adds random weapon
 						String weapon = chooseWeapon();
 						handler.addObject(new Weapon(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, weapon));
 					}
-					if (red == 0 && green == 255 && blue == 2){
+					if (red == 0 && green == 255 && blue == 2){ //adds random powerup
 						String powerup = choosePowerup();
 						handler.addObject(new Powerup(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, powerup, handler, screen));
 					}
-					if (red == 0 && green == 255 && blue == 3){
+					if (red == 0 && green == 255 && blue == 3){ //adds pistol (never used)
 						handler.addObject(new Weapon(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "pistol"));
 					}
 				}
 			}
 		}
 
+		//blocks added between rooms because player used to be able to escape between opening between rooms
 		handler.addObject(new Block(10*33 + WIDTH*dx, -1*32 + HEIGHT*dy, "Block", 0, currentLevel));
 		handler.addObject(new Block(13*33 + WIDTH*dx, -1*32 + HEIGHT*dy, "Block", 0, currentLevel));
 	}
 
+	/* takes in the level's position and the door values and adds doors*/
 	private void addDoors(int dx, int dy, int [] doors){
+		//iterate through image, look at door conditions, add door
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
 				if (xx==11 && yy==0 && doors[0] != 0){
@@ -264,6 +311,8 @@ public class Main extends Canvas implements Runnable{
 				}
 			}
 		}
+
+		//add blocks over the doors so that the doors are under blocks when opened
 		for (int xx = 0; xx < w; xx++){
 			for (int yy = 0; yy < h; yy++){
 				if (((xx==10 || xx==13) && (yy==0 || yy==23)) ||
@@ -275,7 +324,7 @@ public class Main extends Canvas implements Runnable{
 		}
 	}
 
-
+	/*returns a random weapon name*/
 	private String chooseWeapon(){
 		int weaponChoice = (int)(Math.random()*numWeapons);
 		System.out.println(weaponChoice);
@@ -292,6 +341,8 @@ public class Main extends Canvas implements Runnable{
 		else if (weaponChoice == 9) weapon = "mauler";
 		return weapon;
 	}
+
+	/*returns a random powerup name*/
 	private String choosePowerup(){
 		int powerupChoice = (int)(Math.random()*numPowerups);
 		String powerup = "";
@@ -300,58 +351,66 @@ public class Main extends Canvas implements Runnable{
 		return powerup;
 	}
 
+	/*
+		starts map generation
+		called from main constructor
+		generates a series of random vectors from a starting point
+		then generates random vectors off of those points (randVectors())
+		until size of the room reaches at least 8, at most 12
+	*/
 	private void generateMap(){
 		points.clear();
 		vectors.clear();
 		RoomPoint startRoom = new RoomPoint(0, 0);
-		points.add(startRoom);
+		points.add(startRoom); //adds starting point to list of points
 		while (points.size() < 8){
 			for (int i=0; i<points.size(); i++){
-				randVectors(points.get(i));
+				randVectors(points.get(i)); //adds random vectors based off point given
 				if (points.size() > 12){
 					break;
 				}
 			}
 		}
 
+		//loads rooms at each point in the list of points
 		int i=0;
 		for (RoomPoint point: points){
 			i++;
-			int [] doors = getDoors(point);
-			if (i == 1){
-				level = loader.loadImage("assets/room0.png");
-				System.out.println("Starting Room created");
+			int [] doors = getDoors(point); //returns the value of the doors present at each side
+			if (i == 1){ //create starting room
+				level = loader.loadImage("assets/room0.png"); //loads the image with the current file name
 			}
-			else if (i == points.size()){
+			else if (i == points.size()){ //create boss room at final point
 				level = loader.loadImage("assets/roomwin.png");
-				System.out.println("Winning Room created");
 			}
-			else {
+			else { //create random room from list of rooms
 				int roomNum = (int)(Math.random()*numRooms) + 1;
 				level = loader.loadImage("assets/room" + roomNum + ".png");
-				System.out.println("room" + roomNum + " created");
 			}
-			LoadImageLevel(level, point.getX(), -point.getY(), doors);
+			LoadImageLevel(level, point.getX(), -point.getY(), doors); //load level with information gathered
 		}
 
+		//finds a room with only one door, turns it into an item room
 		int k=0;
 		for (RoomPoint point: points){
 			int j = 0;
 			int numDoors = 0;
 			int index = 0;
 			int [] doors = getDoors(point);
-			for (int num: doors){
+			for (int num: doors){ //finds how many doors (if 1, save location of door)
 				if (num != 0) {
 					numDoors++;
 					index = j;
 				}
 				j++;
 			}
+
+			//if the room has one door, no level has been cleared yet, and isn't the start nor end points
 			if (numDoors == 1 && !levelCleared && !point.isPoint(0,0) && !point.isPoint(points.get(points.size()-1))){
-				clearLevel(point.getX(), point.getY());
+				clearLevel(point.getX(), point.getY()); //clears whatever is at the current point
 				levelCleared = true;
-				level = loader.loadImage("assets/roomItem" + (index+1) + ".png");
-				doors[index] = 3;
+				level = loader.loadImage("assets/roomItem" + (index+1) + ".png"); //generates item room based off door location
+				doors[index] = 3; //sets the inside door to a green door
 				RoomPoint temp;
 				for (Vector vector: vectors){
 					if (vector.hasPoint(point) == 1 || vector.hasPoint(point) == 2){
@@ -359,17 +418,18 @@ public class Main extends Canvas implements Runnable{
 						int [] tempDoors = getDoors(temp);
 						int tempIndex = index + 2;
 						if (tempIndex > 3) tempIndex -= 4;
-						tempDoors[tempIndex] = 3;
+						tempDoors[tempIndex] = 3; //sets the outside door to a green door
 						addDoors(temp.getX(), -temp.getY(), tempDoors);
 					}
 				}
-				LoadImageLevel(level, point.getX(), -point.getY(), doors);
-				itemRoomIndex = k;
+				LoadImageLevel(level, point.getX(), -point.getY(), doors); //regenerates level with new doors
+				itemRoomIndex = k; //get location of item room
 			}
 			k++;
 		}
 	}
 
+	/*clears room at a given point*/
 	private void clearLevel(int dx, int dy){
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
@@ -380,9 +440,9 @@ public class Main extends Canvas implements Runnable{
 				}
 			}
 		}
-		System.out.println("Level cleared at " + dx + ", " + dy);
 	}
 
+	/*possibly generates four random vectors*/
 	private void randVectors(RoomPoint A){
 		if (points.size() < 12) randVector(1, 0, A);
     if (points.size() < 12) randVector(-1, 0, A);
@@ -390,32 +450,33 @@ public class Main extends Canvas implements Runnable{
     if (points.size() < 12) randVector(0, -1, A);
 	}
 
+	/*adds a new vector if random chance successful*/
 	private void randVector(int dx, int dy, RoomPoint A){
 		if ((int)(Math.random()*2) == 1){
       RoomPoint point = new RoomPoint(A.getX()+dx, A.getY()+dy);
       boolean found = false;
-      for (RoomPoint point2: points){
+      for (RoomPoint point2: points){ //finds if point already present
         if (point2.getX() == point.getX() && point2.getY() == point.getY()){
           found = true;
         }
       }
-      if (!found){
+      if (!found){ //add if not already found
         points.add(point);
-        vectors.add(new Vector(A, point));
+        vectors.add(new Vector(A, point)); //add a vector between starting point and random point
       }
     }
 	}
 
 	private int [] getDoors(RoomPoint A){
-
 		int [] doors = {0, 0, 0, 0};
-		for (Vector vector: vectors){
+		for (Vector vector: vectors){ //iterate through current list of vector
 			int doorType = 1;
-			if (vector.isVector(new Vector(A, points.get(points.size()-1)))){
+			if (vector.isVector(new Vector(A, points.get(points.size()-1)))){ //change to red door if boss room (endpoint)
 				doorType = 2;
 			}
 			int dx = 0;
 			int dy = 0;
+			//add doors based on the change in x or change in y of the vector (changes value of door from 0)
 			if (vector.hasPoint(A) == 1){
 				dx = vector.getDX();
 				dy = vector.getDY();
@@ -436,20 +497,21 @@ public class Main extends Canvas implements Runnable{
 		return doors;
 	}
 
+	/*called at end of level, clears level and changes state*/
 	public void restart(){
-		handler.clear();
+		handler.clear(); //clears all objects (except player)
 		for (int i=0; i<handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
-			if (thing.getId().equals("Player")){
+			if (thing.getId().equals("Player")){ //set location of player
 				thing.setX(400);
 				thing.setY(400);
 			}
 		}
-		changeMusic(screen.getLevel());
-		state = screen.getLevel() + "";
-		levelCleared = false;
+		changeMusic(screen.getLevel()); //change background music
+		state = screen.getLevel() + ""; //change game's current state
+		levelCleared = false; //this means a new item room can be generated
 		itemRoomIndex = 0;
-		generateMap();
+		generateMap(); //generate a new map
 	}
 
 	public ArrayList <RoomPoint> getPoints(){
@@ -472,6 +534,7 @@ public class Main extends Canvas implements Runnable{
 		return tex;
 	}
 
+	/*takes in numerical value, plays according sound*/
 	public void changeMusic(int level){
 		if (level == 2){
 			Sound.loop("background2", 0.1);
@@ -485,6 +548,7 @@ public class Main extends Canvas implements Runnable{
 
 	public static void main(String [] args){
 		new Main();
+		//nothing else should go here
 	}
 
 }

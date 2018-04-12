@@ -12,8 +12,8 @@ public class Texture {
   private BufferedImage powerup_sheet = null;
 
   public BufferedImage[] player = new BufferedImage[4];
-  public BufferedImage[] block = new BufferedImage[8];
-  public BufferedImage[] enemy = new BufferedImage[6];
+  public BufferedImage[] block = new BufferedImage[16];
+  public BufferedImage[] enemy = new BufferedImage[8];
   public BufferedImage[] weapon = new BufferedImage[11];
   public BufferedImage[] blank_weapon = new BufferedImage[11];
   public BufferedImage[] powerup = new BufferedImage[2];
@@ -54,6 +54,14 @@ public class Texture {
     block[5] = bs.grabImage(2, 2, 33, 32); //grey 2
     block[6] = bs.grabImage(3, 2, 33, 32); //grey 3
     block[7] = bs.grabImage(4, 2, 33, 32); //grey 4
+    block[8] = bs.grabImage(1, 3, 33, 32); //jungle 1
+    block[9] = bs.grabImage(2, 3, 33, 32); //jungle 2
+    block[10] = bs.grabImage(3, 3, 33, 32); //jungle 3
+    block[11] = bs.grabImage(4, 3, 33, 32); //jungle 4
+    block[12] = bs.grabImage(1, 4, 33, 32); //ice 1
+    block[13] = bs.grabImage(2, 4, 33, 32); //ice 2
+    block[14] = bs.grabImage(3, 4, 33, 32); //ice 3
+    block[15] = bs.grabImage(4, 4, 33, 32); //ice 4
 
     enemy[0] = es.grabImage(1, 1, 28, 28); //look right
     enemy[1] = es.grabImage(2, 1, 28, 28); //look left
@@ -61,6 +69,8 @@ public class Texture {
     enemy[3] = es.grabImage(2, 2, 28, 28); //base
     enemy[4] = es.grabImage(1, 4, 28, 28); //tracker turret
     enemy[5] = es.grabImage(2, 4, 28, 28); //tracker base
+    enemy[6] = es.grabImage(1, 6, 28, 28, 24, 24); //chicken left
+    enemy[7] = es.grabImage(2, 6, 28, 28, 24, 24); //chicken right
 
     weapon[0] = ws.grabImage(1, 1, 24, 24); //pistol
     weapon[1] = ws.grabImage(2, 1, 24, 24); //smg

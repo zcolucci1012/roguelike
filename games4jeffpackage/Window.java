@@ -23,6 +23,7 @@ public class Window extends Canvas{
 		frame.setMinimumSize(new Dimension(width, height));
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(main);
 		frame.setVisible(true);
 		main.start();
@@ -32,6 +33,5 @@ public class Window extends Canvas{
 	public void tick(){
 		state = main.getState();
 		if (!state.equals("menu"))frame.setCursor(frame.getToolkit().createCustomCursor(loader.loadImage("assets/blank.png"), new Point(), null));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
