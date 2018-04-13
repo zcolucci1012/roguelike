@@ -43,6 +43,7 @@ public abstract class Pickup extends GameThing{
 
 		if (name.equals("health pack")) return 0;
 		if (name.equals("damage boost")) return 1;
+		if (name.equals("speed boost")) return 2;
 		return 0;
 	}
 

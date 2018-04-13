@@ -33,8 +33,8 @@ public class Player extends GameThing{
 
 	public void tick() {
 		//if not already specified, have these statements in each moving object's class
-		x += velX;
-		y += velY;
+		x += velX*screen.getSpeedMod();
+		y += velY*screen.getSpeedMod();
 
 		//iterating through all objects in the handler is often used
 		for(int i = 0; i < handler.stuff.size(); i++){
