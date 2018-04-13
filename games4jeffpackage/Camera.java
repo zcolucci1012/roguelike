@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 public class Camera {
   private float x, y;

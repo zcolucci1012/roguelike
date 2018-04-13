@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -199,7 +199,7 @@ public class Player extends GameThing{
 			BufferedImage weaponImage = tex.blank_weapon[screen.getWeapon().getType()]; //get image of current weapon
 			float angle = screen.getAngle();
 			g2d.rotate(angle, x + width/2, y + height/2 + 10); //rotate the gun
-			if (angle > Math.PI/2 && angle < 3*Math.PI/2 //flip image if passes the vertical line
+			if (angle > Math.PI/2 && angle < 3*Math.PI/2){ //flip image if passes the vertical line
 				g2d.drawImage(weaponImage, (int)x+10, (int)y+ weaponImage.getHeight()+20, weaponImage.getWidth(), -weaponImage.getHeight(), null);
 			}
 			else {

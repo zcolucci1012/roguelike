@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.Canvas;
 import java.awt.Color;

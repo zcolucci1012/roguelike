@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.Graphics;
 import java.util.LinkedList; // <--- never use this they stink
