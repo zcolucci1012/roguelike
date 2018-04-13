@@ -17,7 +17,7 @@ public class Shot extends GameThing{
 		this.angle = angle;
 		this.damage = damage;
 		this.handler = handler;
-		timer = range;
+		timer = range; //set timer as the range specified
 
 		width = 8;
 		height = 4;
@@ -29,22 +29,22 @@ public class Shot extends GameThing{
 		for (int i=0; i<handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (getBounds().intersects(thing.getBounds()) && thing.getId().equals("Block")){
-				handler.removeObject(this);
+				handler.removeObject(this); //removes after hitting a block
 			}
 			if (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.")){
 				if (thing.getBounds().intersects(getBounds())){
-					((Enemy)thing).setHp(((Enemy)thing).getHp()-damage);
-					handler.removeObject(this);
+					((Enemy)thing).setHp(((Enemy)thing).getHp()-damage); //takes specified damage from enemy
+					handler.removeObject(this); //removes after hitting an enemy
 				}
 			}
 		}
 		timer--;
-		if (timer == 0) handler.removeObject(this);
+		if (timer == 0) handler.removeObject(this); //remove after range timer expended
 	}
 
 	public void render(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g.create();
-		g2d.rotate(angle, x + width/2, y + height/2);
+		g2d.rotate(angle, x + width/2, y + height/2); //rotate graphics based on angle specified
 		g2d.setColor(Color.BLACK);
 		g2d.fill(getBounds());
 		g2d.setColor(Color.WHITE);

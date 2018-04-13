@@ -18,7 +18,7 @@ public class Shooter extends Enemy{
   public Shooter (float x, float y, String id, Handler handler, Screen screen){
     super(x, y, id, handler, 40);
     this.screen = screen;
-    timer = (int)(Math.random()*51);
+    timer = (int)(Math.random()*51); //random timer start point
 
     width = 24;
     height = 24;
@@ -30,11 +30,12 @@ public class Shooter extends Enemy{
     if (timer != 0){
       timer--;
       if (timer == 0){
-        fire();
+        fire(); //fire every 100 ticks
         timer = 100;
       }
     }
 
+    //get location of player and set angle
     xx = x + width/2;
 		yy = y + height/2;
     for(int i = 0; i < handler.stuff.size(); i++){
@@ -52,9 +53,9 @@ public class Shooter extends Enemy{
 
   public void render(Graphics g){
     super.render(g);
-    g.drawImage(tex.enemy[3], (int)x, (int)y, null);
+    g.drawImage(tex.enemy[3], (int)x, (int)y, null); //draw base
     Graphics2D g2d = (Graphics2D)g.create();
-    g2d.rotate(angle, x+width/2+2, y+height/2+2);
+    g2d.rotate(angle, x+width/2+2, y+height/2+2); //rotate image of turret based on angle to player
     g2d.drawImage(tex.enemy[2], (int)x, (int)y, null);
     g2d.dispose();
   }
@@ -63,6 +64,7 @@ public class Shooter extends Enemy{
     return new Rectangle((int)x, (int)y, (int)width, (int)height);
   }
 
+  /* spawn an enemy shot toward player */
   private void fire(){
 		float d = (float)Math.sqrt(Math.pow((sx-(int)xx),2) + Math.pow((sy-(int)yy),2));
 		if (d != 0){

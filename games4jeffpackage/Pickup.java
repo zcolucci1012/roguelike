@@ -10,7 +10,7 @@ public abstract class Pickup extends GameThing{
 	private String name;
 
 	public Pickup(float x, float y, String id) {
-		super(x, y, "Pickup." + id);
+		super(x, y, "Pickup." + id); //adds "Pickup." to current ID
 		this.name = id;
 
 		width = 24;
@@ -24,6 +24,10 @@ public abstract class Pickup extends GameThing{
 
 	public abstract void render(Graphics g);
 
+	/*
+		return the numerical ID of the weapon or powerup
+		used to locate image in texture image list
+	*/
 	public int getType(){
 		if (name.equals("pistol")) return 0;
 		if (name.equals("smg")) return 1;

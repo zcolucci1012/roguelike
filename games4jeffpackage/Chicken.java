@@ -15,11 +15,12 @@ public class Chicken extends Enemy{
   public Chicken(float x, float y, String id, Handler handler){
     super(x, y, id, handler, 20);
 
-    angle = (float)(((Math.random()*2)-1)*2*Math.PI);
+    //get random direction
+    angle = (float)(((Math.random()*2)-1)*2*Math.PI); //random angle
     tempVelX = 3*(float)(Math.cos((double)angle));
     tempVelY = 3*(float)(Math.sin((double)angle));
     tempVel = (float)Math.sqrt(Math.pow(tempVelX, 2) + Math.pow(tempVelY, 2));
-    velX = tempVelX;
+    velX = tempVelX; //set velocity
     velY = tempVelY;
 
     width = 24;
@@ -35,16 +36,19 @@ public class Chicken extends Enemy{
       angle = (float)(((Math.random()*2)-1)*2*Math.PI);
     }
     if (timer == 150){
-      poo();
+      poo(); //poop an egg every 150 ticks
       timer = 0;
     }
 
+    //add vector
     velX += (float)(Math.cos((double)angle));
     velY += (float)(Math.sin((double)angle));
     float vel = (float)Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+    //normalize
     velX *= (tempVel/vel);
     velY *= (tempVel/vel);
 
+    //collision
     for(int i = 0; i < handler.stuff.size(); i++){
       GameThing thing = handler.stuff.get(i);
       if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){
@@ -64,10 +68,12 @@ public class Chicken extends Enemy{
     }
   }
 
+  /* add a mine directly below enemy */
   public void poo(){
     handler.addObject(new Mine(x+6, y+6, "Mine", handler, this));
   }
 
+  /* render based on enemy direction */
   public void render(Graphics g){
     super.render(g);
     if (velX < 0) g.drawImage(tex.enemy[6], (int)x, (int)y, null);

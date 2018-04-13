@@ -7,6 +7,11 @@ import java.util.ArrayList;
 public class Handler {
 	ArrayList <GameThing> stuff = new ArrayList <GameThing> ();
 
+	/*
+		runs through every object added to the list
+		call the tick method on each object unless
+		it's an enemy outside of the player's room
+	*/
 	public void tick(Camera cam){
 		float camX = -cam.getX();
 		float camY = -cam.getY();
@@ -23,6 +28,12 @@ public class Handler {
 		}
 	}
 
+	/*
+		runs through every object added to the list
+		call the render method on each object unless
+		the object is outside of the player's current room
+		finally renders the player over all other objects
+	*/
 	public void render(Graphics g, Camera cam){
 		float camX = -cam.getX();
 		float camY = -cam.getY();
@@ -46,14 +57,16 @@ public class Handler {
 		}
 	}
 
+	/*adds an object to the stuff list*/
 	public void addObject(GameThing thing){
 		stuff.add(thing);
 	}
-
+	/*removes an object to the stuff list*/
 	public void removeObject(GameThing thing){
 		stuff.remove(thing);
 	}
 
+	/*clears objects bar the player*/
 	public void clear(){
 		for (int i = 0; i < stuff.size(); i++){
 			GameThing thing = stuff.get(i);

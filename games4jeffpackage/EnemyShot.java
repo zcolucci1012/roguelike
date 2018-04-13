@@ -29,17 +29,17 @@ public class EnemyShot extends GameThing{
 		for (int i=0; i<handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (getBounds().intersects(thing.getBounds()) && thing.getId().equals("Block")){
-				handler.removeObject(this);
+				handler.removeObject(this); //remove if block is hit
 			}
 		}
 		timer--;
-		if (timer == 0) handler.removeObject(this);
+		if (timer == 0) handler.removeObject(this); //remove after range timer expended
 	}
 
 	public void render(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g.create();
 		g2d.setColor(Color.RED);
-		g2d.rotate(angle, x + width/2, y + height/2);
+		g2d.rotate(angle, x + width/2, y + height/2); //set angle of render
 		g2d.fill(getBounds());
 		g2d.dispose();
 	}

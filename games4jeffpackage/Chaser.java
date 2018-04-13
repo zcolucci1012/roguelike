@@ -23,26 +23,29 @@ public class Chaser extends Enemy{
   public void tick() {
     super.tick();
 		if (randTimer == 50){
+      //makes AI movement imperfect by altering target every 50 ticks
 			imperfections[0] = (int)(Math.random() * 51)-25;
 			imperfections[1] = (int)(Math.random() * 51)-25;
 			randTimer = 0;
 		}
     for(int i = 0; i < handler.stuff.size(); i++){
       GameThing thing = handler.stuff.get(i);
-      if (thing.getId() == "Player"){
+      if (thing.getId() == "Player"){ //get distance between player and enemy
         float pX = thing.getX();
         float pY = thing.getY();
         float d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));
-				if (d > 50) {
+				if (d > 50) { //if enemy is close enough, ignore imperfections in movement
 					pX = thing.getX() + thing.getWidth()/2 + imperfections[0];
 	        pY = thing.getY() + thing.getHeight()/2 + imperfections[1];
-					d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2));
+					d = (float)Math.sqrt(Math.pow((x-(int)pX),2) + Math.pow((y-(int)pY),2)); //get new distance
 				}
-        if (d != 0){
+        if (d != 0){ //set velocity, 2 represents overall speed
           velX = -(x - (int)pX)/d*2;
           velY = -(y - (int)pY)/d*2;
         }
       }
+
+      //collision with blocks, doors, other enemies
       if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){
         if (thing.getBounds().intersects(getBoundsRight())){
 					x = thing.getX() - width;
@@ -61,12 +64,14 @@ public class Chaser extends Enemy{
 		randTimer++;
   }
 
+  /* draw different texture based off direction */
   public void render(Graphics g) {
 		super.render(g);
 		if (velX > 0) g.drawImage(tex.enemy[0], (int)x, (int)y, null);
 		else g.drawImage(tex.enemy[1], (int)x, (int)y, null);
   }
 
+  //collision bounds
   public Rectangle getBounds() {
     return new Rectangle((int)x, (int)y, (int)width, (int)height);
   }

@@ -24,6 +24,7 @@ public class Block extends GameThing {
 
   }
 
+  /*draw block given its randomly generated type and current level*/
   public void render(Graphics g){
     /*
     g.setColor(new Color(178,219,191));

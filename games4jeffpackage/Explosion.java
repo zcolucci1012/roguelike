@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 
 public class Explosion extends GameThing{
 
+  /*adds enemy shots going in eight directions*/
   public Explosion(float x, float y, String id, Handler handler){
     super(x, y, id);
     EnemyShot shot1 = new EnemyShot((int)x, (int)y, "EnemyShot", (float)(Math.PI/2), 10, 10, handler);

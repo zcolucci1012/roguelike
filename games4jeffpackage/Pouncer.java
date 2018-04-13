@@ -15,6 +15,12 @@ public class Pouncer extends Enemy{
 
 	private Texture tex = Main.getInstance();
 
+  /*
+    pouncers are exactly like chasers but their speed
+    is a modified cosine function (see below)
+  */
+
+
   public Pouncer(float x, float y, String id, Handler handler, Screen screen) {
     super(x, y, id, handler, 15);
     this.screen = screen;
@@ -27,6 +33,7 @@ public class Pouncer extends Enemy{
   public void tick() {
     super.tick();
     double max = 7.0;
+    //defines the speed dependent on the timer
     float speed = (float)Math.pow((-(Math.pow(max, 1.0/10.0)/2.0*Math.cos(Math.PI*timer/25.0)) + Math.pow(max, 1.0/10.0)/2.0), 10.0) + 1;
 		if (randTimer == 50){
 			imperfections[0] = (int)(Math.random() * 51)-25;

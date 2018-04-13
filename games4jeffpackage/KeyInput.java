@@ -18,11 +18,13 @@ public class KeyInput extends KeyAdapter{
 		keyDown[3] = false;
 	}
 
+	/* ran whenever a key is pressed */
 	public void keyPressed(KeyEvent e){
-		int key = e.getKeyCode();
+		int key = e.getKeyCode(); //get what the key pressed is
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
+				//takes in the key and changes the player's velocity depending on key input
 				if (screen.getMovement()){
 					if (key == KeyEvent.VK_W) {thing.setVelY(-4*screen.getSpeedMod()); keyDown[0]=true;}
 					if (key == KeyEvent.VK_S) {thing.setVelY(4*screen.getSpeedMod()); keyDown[1]=true;}
@@ -32,18 +34,20 @@ public class KeyInput extends KeyAdapter{
 			}
 		}
 		if (key == KeyEvent.VK_SPACE){
-			screen.changeWeapon();
+			screen.changeWeapon(); //changes weapon when space pressed
 		}
 		if (key == KeyEvent.VK_R){
-			screen.reload();
+			screen.reload(); //reloads weapon when R pressed
 		}
 	}
 
+	/* ran when keys are pressed */
 	public void keyReleased(KeyEvent e){
 		int key = e.getKeyCode();
 		for(int i = 0; i < handler.stuff.size(); i++){
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){
+				//stops the player's movement when keys are released
 				if (key == KeyEvent.VK_W){ keyDown[0]=false;}
 				if (key == KeyEvent.VK_S) { keyDown[1]=false;}
 				if (key == KeyEvent.VK_D) { keyDown[2]=false;}

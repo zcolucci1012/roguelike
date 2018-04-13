@@ -3,7 +3,10 @@ package games4jeffpackage;
 import java.awt.image.BufferedImage;
 
 public class Texture {
+  //inititalizes spritesheet classes
   private SpriteSheet ps, bs, es, ws, bws, pus;
+
+  //initializes spritesheet images
   private BufferedImage player_sheet = null;
   private BufferedImage block_sheet = null;
   private BufferedImage enemy_sheet = null;
@@ -11,6 +14,7 @@ public class Texture {
   private BufferedImage blank_weapon_sheet = null;
   private BufferedImage powerup_sheet = null;
 
+  //initialize image lists
   public BufferedImage[] player = new BufferedImage[4];
   public BufferedImage[] block = new BufferedImage[16];
   public BufferedImage[] enemy = new BufferedImage[8];
@@ -20,6 +24,7 @@ public class Texture {
 
   public Texture(){
     BufferedImageLoader loader = new BufferedImageLoader();
+    //loads images
     try {
       block_sheet = loader.loadImage("assets/block_sheet.png");
       player_sheet = loader.loadImage("assets/player_sheet.png");
@@ -30,6 +35,7 @@ public class Texture {
     }catch (Exception e){
       e.printStackTrace();
     }
+    //create spritesheet classes based off of images
     ps = new SpriteSheet(player_sheet);
     bs = new SpriteSheet(block_sheet);
     es = new SpriteSheet(enemy_sheet);
@@ -37,9 +43,10 @@ public class Texture {
     bws = new SpriteSheet(blank_weapon_sheet);
     pus = new SpriteSheet(powerup_sheet);
 
-    getTextures();
+    getTextures(); //initializes lists of images
   }
 
+  /*gets subimages of spritesheet and adds them to a list of textures */
   private void getTextures(){
     player[0] = ps.grabImage(1, 1, 32, 32); //right view
     player[1] = ps.grabImage(2, 1, 32, 32); //front view

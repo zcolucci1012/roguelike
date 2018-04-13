@@ -25,7 +25,6 @@ public class Boss extends Enemy{
   private float tempVelY;
   private float tempVel;
   private float d;
-  private Rectangle playerBounds;
 
   public Boss(float x, float y, String id, Handler handler, Screen screen){
     super(x, y, id, handler, 300);
@@ -33,7 +32,7 @@ public class Boss extends Enemy{
     initX = x;
     initY = y;
 
-    movement = (int)(Math.random()*4);
+    movement = (int)(Math.random()*4); //randomizes initial movment
 
     width = 64;
     height = 64;
@@ -41,30 +40,37 @@ public class Boss extends Enemy{
 
   public void tick(){
     super.tick();
+
+    //flags that alert whether a wall is touched
     leftWall = false;
     rightWall = false;
     topWall = false;
     bottomWall = false;
+
     for(int i = 0; i < handler.stuff.size(); i++){
       GameThing thing = handler.stuff.get(i);
       if (thing.getId() == "Shot"){
         if (thing.getBounds().intersects(getBounds())){
           if (action != 1) {
+            //adjusts for knockback (currently dependent on shot speed)
             velX = thing.getVelX()/25;
             velY = thing.getVelY()/25;
             knockbackTimer = 5;
           }
         }
       }
+
+      //get location of player
       if (thing.getId() == "Player"){
         sx = thing.getX() + thing.getWidth()/2;
         sy = thing.getY() + thing.getHeight()/2;
-        playerBounds = thing.getBounds();
       }
+
+      //collision
       if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){
         if (thing.getBounds().intersects(getBoundsRight())){
 					x = thing.getX() - width;
-          rightWall = true;
+          rightWall = true; //activates flag
         }
 				if (thing.getBounds().intersects(getBoundsLeft())){
 					x = thing.getX() + thing.getBounds().width;
@@ -80,22 +86,28 @@ public class Boss extends Enemy{
 				}
       }
     }
+
     timer++;
     if (timer==400){
-      action = (int)(Math.random()*3);
+      action = (int)(Math.random()*3); //chooses a random action every 400 ticks
       timer = 0;
     }
     if (timer % 100 == 0){
-      movement = (int)(Math.random()*4);
+      movement = (int)(Math.random()*4); //chooses a random direction to move every 100 ticks
     }
+
+    //the following functions ran continuously until timer runs out
     if (action == 0) action1();
     if (action == 1) action2();
     if (action == 2) action3();
+
     if (knockbackTimer == 0 && action != 1){
+      //adjusts movement if touching wall
       if (leftWall) movement = 0;
       if (rightWall) movement = 1;
       if (topWall) movement = 2;
       if (bottomWall) movement = 3;
+      //sets velocity
       if (movement == 0) {velX = 2f; velY = 0;}
       if (movement == 1) {velX = -2f; velY = 0;}
       if (movement == 2) {velY = 2f; velX = 0;}
@@ -115,6 +127,7 @@ public class Boss extends Enemy{
     g.drawString((action+1) + "", (int)(x+width/2), (int)(y+height/2));
   }
 
+  /*//shoots tracking bullets in cardinal directions, then diagonal*/
   public void action1(){
     if (timer == 100){
       TrackingShot shot1 = new TrackingShot((int)x + width/2, (int)y, "TrackingShot", (float)(Math.PI/2), 10, 100, 0.25f, handler);
@@ -130,6 +143,7 @@ public class Boss extends Enemy{
       handler.addObject(shot3);
       handler.addObject(shot4);
     }
+
     if (timer == 200){
       TrackingShot shot1 = new TrackingShot((int)x+width, (int)y, "TrackingShot", (float)(Math.PI/4), 10, 100, 0.25f, handler);
 			shot1.setVelX((float)(5 * Math.sin(Math.PI/4)));
@@ -150,6 +164,7 @@ public class Boss extends Enemy{
     }
   }
 
+  /*treats self like a tracking bullet and launches at player*/
   public void action2(){
     float xx = x + width/2;
     float yy = y + height/2;
@@ -163,7 +178,7 @@ public class Boss extends Enemy{
         tempVel = (float)Math.sqrt(Math.pow(tempVelX,2) + Math.pow(tempVelY,2));
       }
     }
-    if (timer < 350 && timer > 50){
+    if (timer < 350 && timer > 50){ //boss should be stopped before 50 ticks and after 350 ticks
       if (d != 0){
         velX += (float)(((int)sx - xx)/d*0.5);
         velY += (float)(((int)sy - yy)/d*0.5);
@@ -178,6 +193,7 @@ public class Boss extends Enemy{
     }
   }
 
+  /*spawn a trackingshooter if location not occupied*/
   public void action3(){
     if (timer == 0){
       TrackingShooter trackingshooter = null;
@@ -185,7 +201,7 @@ public class Boss extends Enemy{
       int dx = screen.getRoom().getX()*Main.WIDTH;
       int dy = -screen.getRoom().getY()*Main.HEIGHT;
       int [] places = {-1, -1, -1, -1};
-      for (int i=0; i<4; i++){
+      for (int i=0; i<4; i++){ //generates list of random corners to attempt
         int place = -1;
         boolean found = true;
         while (found){
@@ -201,11 +217,11 @@ public class Boss extends Enemy{
       }
 
       int k = 0;
-      while (k < 4){
+      while (k < 4){ //try placing enemy at all four random corners
         if (places[k] == 0) trackingshooter = new TrackingShooter(dx + 100, dy + 100, "TrackingShooter", handler, screen);
         if (places[k] == 1) trackingshooter = new TrackingShooter(dx + 700, dy + 100, "TrackingShooter", handler, screen);
-        if (places[k] == 2) trackingshooter = new TrackingShooter(dx + 700, dy + 600, "TrackingShooter", handler, screen);
-        if (places[k] == 3) trackingshooter = new TrackingShooter(dx + 100, dy + 600, "TrackingShooter", handler, screen);
+        if (places[k] == 2) trackingshooter = new TrackingShooter(dx + 700, dy + 650, "TrackingShooter", handler, screen);
+        if (places[k] == 3) trackingshooter = new TrackingShooter(dx + 100, dy + 650, "TrackingShooter", handler, screen);
         intersecting = false;
         for (int i=0; i<handler.stuff.size(); i++){
           GameThing thing = handler.stuff.get(i);
@@ -216,7 +232,7 @@ public class Boss extends Enemy{
         if (intersecting) k++;
         else break;
       }
-      handler.addObject(trackingshooter);
+      handler.addObject(trackingshooter); //finally add the enemy
     }
   }
 

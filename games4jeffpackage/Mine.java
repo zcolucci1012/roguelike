@@ -21,11 +21,12 @@ public class Mine extends GameThing{
 
   public void tick(){
     timer++;
-    if (timer == 250){
+    if (timer == 250){ //explode after 250 ticks
       explode();
     }
   }
 
+  /*adds an explosion at current location*/
   public void explode(){
     handler.addObject(new Explosion(x+width/2, y+height/2, "Explosion", handler));
     handler.removeObject(this);
@@ -35,7 +36,7 @@ public class Mine extends GameThing{
     g.setColor(new Color(67, 119, 139));
     g.fillRect((int)x, (int)y, (int)width, (int)height);
     if (handler.stuff.contains(chicken)){
-      chicken.render(g);
+      chicken.render(g); //render chicken over the mine if it still exists
     }
   }
 

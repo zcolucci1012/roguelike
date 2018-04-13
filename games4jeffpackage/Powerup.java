@@ -15,17 +15,26 @@ public class Powerup extends Pickup{
     super(x, y, id);
     this.handler = handler;
     this.screen = screen;
-    name = this.id.substring(7);
+    name = this.id.substring(7); //gets rid of "Pickup." like in Weapon
     setItemTypes();
   }
 
+  /*defines the type of powerup by name*/
   private void setItemTypes(){
     if (name.equals("health pack")) itemType = "single use"; //other types are "active" and "passive"
     if (name.equals("damage boost")) itemType = "single use";
   }
 
+  /*
+    the action that will be performed with the powerup
+    dependent on the item type, this method will either be called
+    single use: one time when picked up
+    passive: every tick after picked up
+    active: when user activates item
+    *note* passive and active items have not been implemented yet
+  */
   public void action(){
-    if (name.equals("health pack")){
+    if (name.equals("health pack")){ //adds 20 to current hp
       for(int i = 0; i < handler.stuff.size(); i++){
   			GameThing thing = handler.stuff.get(i);
         if (thing.getId().equals("Player")){
@@ -33,7 +42,7 @@ public class Powerup extends Pickup{
         }
       }
     }
-    if (name.equals("damage boost")){
+    if (name.equals("damage boost")){ //boosts damage by 20%
       screen.setDamageMod(screen.getDamageMod()*1.2f);
     }
   }

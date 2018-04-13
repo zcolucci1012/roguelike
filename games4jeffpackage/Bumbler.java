@@ -17,27 +17,28 @@ public class Bumbler extends Enemy{
     super(x, y, id, handler, 25);
     this.screen = screen;
 
+    //get initial velocity and random angle and set speed
     angle = (float)(((Math.random()*2)-1)*2*Math.PI);
     tempVelX = (float)(Math.cos((double)angle));
     tempVelY = (float)(Math.sin((double)angle));
     tempVel = (float)Math.sqrt(Math.pow(tempVelX, 2) + Math.pow(tempVelY, 2));
-    velX = tempVelX;
+    velX = tempVelX; //set velocity
     velY = tempVelY;
 
     width = 28;
     height = 28;
 
-    timer += (int)(Math.random()*50);
+    timer += (int)(Math.random()*50); //random start point of timer
   }
 
   public void tick(){
     super.tick();
     timer++;
     if (timer % 20 == 0){
-      angle = (float)(((Math.random()*2)-1)*2*Math.PI);
+      angle = (float)(((Math.random()*2)-1)*2*Math.PI); //random angle
     }
     if (timer == 100){
-      int shot = (int)(Math.random()*2);
+      int shot = (int)(Math.random()*2); //randomly chooses between cardinal or diagonal shots
       if (shot == 0){
         EnemyShot shot1 = new EnemyShot((int)x + width/2, (int)y, "EnemyShot", (float)(Math.PI/2), 10, 100, handler);
   			shot1.setVelY(-5);
@@ -72,11 +73,15 @@ public class Bumbler extends Enemy{
       }
       timer = 0;
     }
+    //add to velocity
     velX += (float)(5*Math.cos((double)angle));
     velY += (float)(5*Math.sin((double)angle));
     float vel = (float)Math.sqrt(Math.pow(velX, 2) + Math.pow(velY, 2));
+    //normalize vector
     velX *= (tempVel/vel);
     velY *= (tempVel/vel);
+
+    //collision
     for(int i = 0; i < handler.stuff.size(); i++){
       GameThing thing = handler.stuff.get(i);
       if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){
