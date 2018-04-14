@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.image.BufferedImage;
 
@@ -20,7 +20,7 @@ public class Texture {
   public BufferedImage[] enemy = new BufferedImage[8];
   public BufferedImage[] weapon = new BufferedImage[11];
   public BufferedImage[] blank_weapon = new BufferedImage[11];
-  public BufferedImage[] powerup = new BufferedImage[2];
+  public BufferedImage[] powerup = new BufferedImage[3];
 
   public Texture(){
     BufferedImageLoader loader = new BufferedImageLoader();
@@ -105,5 +105,6 @@ public class Texture {
 
     powerup[0] = pus.grabImage(1, 1, 24, 24); //health pack
     powerup[1] = pus.grabImage(2, 1, 24, 24); //damage boost
+    powerup[2] = pus.grabImage(3, 1, 24, 24); //speed boost
   }
 }

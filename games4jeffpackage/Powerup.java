@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -23,6 +23,7 @@ public class Powerup extends Pickup{
   private void setItemTypes(){
     if (name.equals("health pack")) itemType = "single use"; //other types are "active" and "passive"
     if (name.equals("damage boost")) itemType = "single use";
+    if (name.equals("speed boost")) itemType = "single use";
   }
 
   /*
@@ -44,6 +45,9 @@ public class Powerup extends Pickup{
     }
     if (name.equals("damage boost")){ //boosts damage by 20%
       screen.setDamageMod(screen.getDamageMod()*1.2f);
+    }
+    if (name.equals("speed boost")){ //boosts speed by 10%
+      screen.setSpeedMod(screen.getSpeedMod()*1.1f);
     }
   }
 
