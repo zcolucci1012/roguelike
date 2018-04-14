@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -29,7 +29,7 @@ public class Main extends Canvas implements Runnable{
 	private Graphics2D g2d;
 	private String state = "menu";
 	private int numWeapons = 10;
-	private int numPowerups = 2;
+	private int numPowerups = 3;
 	private boolean levelCleared = false;
 	private int w;
 	private int h;
@@ -348,6 +348,7 @@ public class Main extends Canvas implements Runnable{
 		String powerup = "";
 		if (powerupChoice == 0) powerup = "health pack";
 		else if (powerupChoice == 1) powerup = "damage boost";
+		else if (powerupChoice == 2) powerup = "speed boost";
 		return powerup;
 	}
 
