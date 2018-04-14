@@ -18,7 +18,7 @@ public class TrackingShooter extends Enemy{
   public TrackingShooter (float x, float y, String id, Handler handler, Screen screen){
     super(x, y, id, handler, 30);
     this.screen = screen;
-    timer = (int)(Math.random()*51); //random timer start point
+    timer = (int)(Math.random()*50)+1; //random timer start point
 
     width = 24;
     height = 24;
@@ -69,9 +69,9 @@ public class TrackingShooter extends Enemy{
 		if (d != 0){
 			float sVelX = ((sx - (int)xx)/d*5);
 			float sVelY = ((sy - (int)yy)/d*5);
-			angle = (float)Math.atan(sVelY / sVelX);
       float dx = (float)(20*Math.cos((double)angle));
       float dy = (float)(20*Math.sin((double)angle));
+      angle = (float)Math.atan(sVelY / sVelX);
 			TrackingShot shot = new TrackingShot((int)xx-width/4+dx, (int)yy-width/4+dy, "TrackingShot", angle, 10, 100, 0.15f, handler);
 			shot.setVelX(sVelX);
 			shot.setVelY(sVelY);

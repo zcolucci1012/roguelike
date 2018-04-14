@@ -14,6 +14,8 @@ public class Sound {
     //put files into a map with its title and file associated with it
     files.put("background", new File("sounds/background.wav"));
     files.put("background2", new File("sounds/background2.wav"));
+    files.put("background3", new File("sounds/background3.wav"));
+    files.put("background4", new File("sounds/background4.wav"));
     files.put("shotgun", new File("sounds/shotgun.wav"));
     files.put("sniper", new File ("sounds/sniper.wav"));
     files.put("smg", new File ("sounds/smg.wav"));

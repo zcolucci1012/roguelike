@@ -18,7 +18,7 @@ public class Shooter extends Enemy{
   public Shooter (float x, float y, String id, Handler handler, Screen screen){
     super(x, y, id, handler, 40);
     this.screen = screen;
-    timer = (int)(Math.random()*51); //random timer start point
+    timer = (int)(Math.random()*51)+1; //random timer start point
 
     width = 24;
     height = 24;

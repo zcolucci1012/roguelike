@@ -36,7 +36,7 @@ public class Main extends Canvas implements Runnable{
 	private int currentLevel;
 	private int itemRoomIndex = 0;
 	private Window window;
-	private int numRooms = 58;
+	private int numRooms = 59;
 
 	/*instantiate all variables and stuff and run all level creation stuff*/
 	public Main(){
@@ -538,6 +538,12 @@ public class Main extends Canvas implements Runnable{
 	public void changeMusic(int level){
 		if (level == 2){
 			Sound.loop("background2", 0.1);
+		}
+		else if (level == 3){
+			Sound.loop("background3", 0.1);
+		}
+		else if (level == 4){
+			Sound.loop("background4", 0.1);
 		}
 		else Sound.loop("background", 0.1);
 	}

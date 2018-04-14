@@ -227,7 +227,7 @@ public class Weapon extends Pickup {
       reloadTime = 100;
       inaccuracy = 150;
       fireType = "auto";
-      shotsFired = 10;
+      shotsFired = 6;
       range = 10;
     }
     ammo = magazine;
