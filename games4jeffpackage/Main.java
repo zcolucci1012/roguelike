@@ -344,7 +344,7 @@ public class Main extends Canvas implements Runnable{
 
 	/*returns a random powerup name*/
 	private String choosePowerup(){
-		int powerupChoice = 5;//(int)(Math.random()*numPowerups);
+		int powerupChoice = (int)(Math.random()*numPowerups);
 		String powerup = "";
 		if (powerupChoice == 0) powerup = "health pack";
 		else if (powerupChoice == 1) powerup = "damage boost";
