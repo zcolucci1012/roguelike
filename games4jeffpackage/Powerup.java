@@ -59,7 +59,7 @@ public class Powerup extends Pickup{
       screen.setFireRateMod(screen.getFireRateMod()*1.2f);
     }
     if (name.equals("accuracy boost")){ //boosts accuracy by 20%
-      screen.setAccuracyMod(screen.getAccuracyMod()*1000.2f);
+      screen.setAccuracyMod(screen.getAccuracyMod()*1.2f);
     }
   }
 
