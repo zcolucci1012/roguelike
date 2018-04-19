@@ -24,6 +24,9 @@ public class Powerup extends Pickup{
     if (name.equals("health pack")) itemType = "single use"; //other types are "active" and "passive"
     if (name.equals("damage boost")) itemType = "single use";
     if (name.equals("speed boost")) itemType = "single use";
+    if (name.equals("defense boost")) itemType = "single use";
+    if (name.equals("fire rate boost")) itemType = "single use";
+    if (name.equals("accuracy boost")) itemType = "single use";
   }
 
   /*
@@ -48,6 +51,15 @@ public class Powerup extends Pickup{
     }
     if (name.equals("speed boost")){ //boosts speed by 10%
       screen.setSpeedMod(screen.getSpeedMod()*1.1f);
+    }
+    if (name.equals("defense boost")){ //boosts defense by 20%
+      screen.setDefenseMod(screen.getDefenseMod()*1.2f);
+    }
+    if (name.equals("fire rate boost")){ //boosts fire rate by 20%
+      screen.setFireRateMod(screen.getFireRateMod()*1.2f);
+    }
+    if (name.equals("accuracy boost")){ //boosts accuracy by 20%
+      screen.setAccuracyMod(screen.getAccuracyMod()*1000.2f);
     }
   }
 

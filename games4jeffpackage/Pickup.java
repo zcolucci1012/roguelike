@@ -29,22 +29,28 @@ public abstract class Pickup extends GameThing{
 		used to locate image in texture image list
 	*/
 	public int getType(){
-		if (name.equals("pistol")) return 0;
-		if (name.equals("smg")) return 1;
-		if (name.equals("sniper")) return 2;
-		if (name.equals("assault rifle")) return 3;
-		if (name.equals("DMR")) return 4;
-		if (name.equals("slugshot")) return 5;
-		if (name.equals("minigun")) return 6;
-		if (name.equals("revolver")) return 7;
-		if (name.equals("pump shotgun")) return 8;
-		if (name.equals("tac shotgun")) return 9;
-		if (name.equals("mauler")) return 10;
-
-		if (name.equals("health pack")) return 0;
-		if (name.equals("damage boost")) return 1;
-		if (name.equals("speed boost")) return 2;
-		return 0;
+		switch(name){
+		    case "pistol": return 0;
+		    case "smg": return 1;
+		    case "sniper": return 2;
+		    case "assault rifle": return 3;
+		    case "DMR": return 4;
+		    case "slugshot": return 5;
+		    case "minigun": return 6;
+		    case "revolver": return 7;
+		    case "pump shotgun": return 8;
+		    case "tac shotgun": return 9;
+		    case "mauler": return 10;
+		    
+		    case "health pack": return 0;
+		    case "damage boost": return 1;
+		    case "speed boost": return 2;
+		    case "defense boost": return 3;
+		    case "fire rate boost": return 4;
+		    case "accuracy boost": return 5;
+		    
+		    default: return 0;
+		  }
 	}
 
 	public Rectangle getBounds() {

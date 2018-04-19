@@ -68,7 +68,9 @@ public class Screen extends MouseAdapter{
 	private float fireDelayMod = 1;
 	private float magazineMod = 1;
 	private float reloadTimeMod = 1;
-	private float inaccuracyMod = 1;
+	private float accuracyMod = 1;
+	private float defenseMod = 1;
+	private float fireRateMod = 1;
 
 	//etc.
 	private String lastAddedWeapon = "";
@@ -408,17 +410,17 @@ public class Screen extends MouseAdapter{
 	/*get the properties from the desired weapon and set them to variables in the class*/
 	public void setWeapon(Weapon weapon){
 		this.weapon = weapon;
-		fireDelay = weapon.getFireDelay();
+		fireDelay = (int)(weapon.getFireDelay()/fireRateMod);
 		shotSpeed = weapon.getShotSpeed();
 		damage = weapon.getDamage();
 		magazine = weapon.getMagazine();
 		reloadTime = weapon.getReloadTime();
 		bullets = weapon.getAmmo();
-		inaccuracy = weapon.getInaccuracy();
+		inaccuracy = (int)(weapon.getInaccuracy()/accuracyMod);
 		fireType = weapon.getFireType();
 		shotsFired = weapon.getShotsFired();
 		range = weapon.getRange();
-		time = weapon.getFireDelay(); //set the timer to the fireDelay so that shots can be fired right away
+		time = fireDelay; //set the timer to the fireDelay so that shots can be fired right away
 	}
 
 	/*switches the current weapon to the next in the list*/
@@ -671,6 +673,31 @@ public class Screen extends MouseAdapter{
 
 	public float getSpeedMod(){
 		return speedMod;
+	}
+	
+	public void setDefenseMod(float defenseMod){
+	    this.defenseMod = defenseMod;
+	}
+	
+	public float getDefenseMod(){
+	    return defenseMod;
+	}
+	
+	public void setFireRateMod(float fireRateMod){
+	    this.fireRateMod = fireRateMod;
+	}
+	
+	public float getFireRateMod(){
+	    return fireRateMod;
+	}
+	
+	public void setAccuracyMod(float accuracyMod){
+	    inaccuracy = (int)(inaccuracy*this.accuracyMod/accuracyMod);
+	    this.accuracyMod = accuracyMod;
+	}
+	
+	public float getAccuracyMod(){
+	    return accuracyMod;
 	}
 
 	/*sets timer when powerup obtained*/

@@ -29,7 +29,7 @@ public class Main extends Canvas implements Runnable{
 	private Graphics2D g2d;
 	private String state = "menu";
 	private int numWeapons = 10;
-	private int numPowerups = 3;
+	private int numPowerups = 6;
 	private boolean levelCleared = false;
 	private int w;
 	private int h;
@@ -344,11 +344,14 @@ public class Main extends Canvas implements Runnable{
 
 	/*returns a random powerup name*/
 	private String choosePowerup(){
-		int powerupChoice = (int)(Math.random()*numPowerups);
+		int powerupChoice = 5;//(int)(Math.random()*numPowerups);
 		String powerup = "";
 		if (powerupChoice == 0) powerup = "health pack";
 		else if (powerupChoice == 1) powerup = "damage boost";
 		else if (powerupChoice == 2) powerup = "speed boost";
+		else if (powerupChoice == 3) powerup = "defense boost";
+		else if (powerupChoice == 4) powerup = "fire rate boost";
+		else if (powerupChoice == 5) powerup = "accuracy boost";
 		return powerup;
 	}
 

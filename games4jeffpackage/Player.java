@@ -76,7 +76,7 @@ public class Player extends GameThing{
 					thing.getId().equals("Enemy.Bumbler")){
 				if (getBounds().intersects(thing.getBounds())){
 					if (iTimer == 0) {
-						hp-=10;
+						hp-=10/screen.getDefenseMod();
 						iTimer = iFrames; //set the player to an invincible state for a short while
 					}
 				}
@@ -86,7 +86,7 @@ public class Player extends GameThing{
 			if (thing.getId().equals("EnemyShot")){
 				if (getBounds().intersects(thing.getBounds())){
 					if (iTimer == 0) {
-						hp -= ((EnemyShot)thing).getDamage();
+						hp -= ((EnemyShot)thing).getDamage()/screen.getDefenseMod();
 						iTimer = iFrames; //set the player to an invincible state for a short while
 					}
 					handler.removeObject(thing);
@@ -97,7 +97,7 @@ public class Player extends GameThing{
 			if (thing.getId().equals("TrackingShot")){
 				if (getBounds().intersects(thing.getBounds())){
 					if (iTimer == 0) {
-						hp -= ((TrackingShot)thing).getDamage();
+						hp -= ((TrackingShot)thing).getDamage()/screen.getDefenseMod();
 						iTimer = iFrames; //set the player to an invincible state for a short while
 					}
 					handler.removeObject(thing);
