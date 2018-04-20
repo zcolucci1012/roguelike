@@ -32,7 +32,7 @@ public class Mine extends GameThing{
 
   /*adds an explosion at current location*/
   public void explode(){
-    handler.addObject(new Explosion(x+width/2, y+height/2, "Explosion", handler, "Enemy", screen));
+    handler.addObject(new Explosion(x+width/2, y+height/2, "Explosion", handler, screen, "Enemy"));
     handler.removeObject(this);
   }
 

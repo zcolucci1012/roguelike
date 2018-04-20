@@ -31,7 +31,7 @@ public class Grenade extends GameThing{
 
   /*adds an explosion at current location*/
   public void explode(){
-    handler.addObject(new Explosion(x+width/2, y+height/2, "Explosion", handler, "Player", screen));
+    handler.addObject(new Explosion(x+width/2, y+height/2, "Explosion", handler, screen, "Player"));
     handler.removeObject(this);
   }
 
