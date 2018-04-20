@@ -200,7 +200,7 @@ public class Screen extends MouseAdapter{
 				GameThing thing = handler.stuff.get(i);
 				if (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.")){
 					if (((Enemy)thing).getRoom().isPoint(room)){
-						doorTimer = 10;
+						doorTimer = 15;
 						break;
 					}
 				}
@@ -289,7 +289,7 @@ public class Screen extends MouseAdapter{
 		if (weapon != null){ //if player has a weapon
 			if (time2 == 0){ //if done reloading (time2 is the reload timer)
 				if (time == fireDelay){ //if time between shots ends (time is fire delay timer)
-					if (firing){ //if the user is attempting to fire the weapon
+					if (firing && bullets > 0){ //if the user is attempting to fire the weapon
 						fire();
 						if (fireType.equals("semiauto")) firing = false; //reset weapon firing if gun not automatic
 						time = 0;
@@ -596,9 +596,9 @@ public class Screen extends MouseAdapter{
 			GameThing thing = handler.stuff.get(i);
 			if (thing.getId() == "Player"){ //change players velocity based on which direction they must go in
 				if (dx == 1) { thing.setVelX(5); thing.setVelY(0);}
-				if (dx == -1) { thing.setVelX(-6); thing.setVelY(0);}
-				if (dy == 1) { thing.setVelX(0); thing.setVelY(-8);}
-				if (dy == -1) { thing.setVelX(0); thing.setVelY(8);}
+				if (dx == -1) { thing.setVelX(-5); thing.setVelY(0);}
+				if (dy == 1) { thing.setVelX(0); thing.setVelY(-5);}
+				if (dy == -1) { thing.setVelX(0); thing.setVelY(5);}
 			}
 		}
 	}

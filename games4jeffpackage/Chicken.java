@@ -11,9 +11,11 @@ public class Chicken extends Enemy{
   private float tempVelY;
   private float tempVel;
   private float angle;
+  private Screen screen;
 
-  public Chicken(float x, float y, String id, Handler handler){
+  public Chicken(float x, float y, String id, Handler handler, Screen screen){
     super(x, y, id, handler, 20);
+    this.screen = screen;
 
     //get random direction
     angle = (float)(((Math.random()*2)-1)*2*Math.PI); //random angle
@@ -70,7 +72,7 @@ public class Chicken extends Enemy{
 
   /* add a mine directly below enemy */
   public void poo(){
-    handler.addObject(new Mine(x+6, y+6, "Mine", handler, this));
+    handler.addObject(new Mine(x+6, y+6, "Mine", handler, this, screen));
   }
 
   /* render based on enemy direction */

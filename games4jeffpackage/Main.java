@@ -143,8 +143,8 @@ public class Main extends Canvas implements Runnable{
 		//set background color based on level
 		if (state.equals("1")) g.setColor(new Color(239, 172, 117));
 		if (state.equals("2")) g.setColor(new Color(61, 61, 61));
-		if (state.equals("3")) g.setColor(new Color(178, 120, 76));
-		if (state.equals("4")) g.setColor(new Color(212, 244, 244));
+		if (state.equals("3")) g.setColor(new Color(104, 81, 53));
+		if (state.equals("4")) g.setColor(new Color(184, 239, 238));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
 		if (!state.equals("menu")) {
@@ -224,7 +224,7 @@ public class Main extends Canvas implements Runnable{
 						else if (enemyChoice == 3) handler.addObject(new TrackingShooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "TrackingShooter", handler, screen));
 						else if (enemyChoice == 4) handler.addObject(new Shooter(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Shooter", handler, screen));
 						else if (enemyChoice == 5) handler.addObject(new Bumbler(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Bumbler", handler, screen));
-						else handler.addObject(new Chicken(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chicken", handler));
+						else handler.addObject(new Chicken(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chicken", handler, screen));
 					}
 					/*
 						adds an enemy based on the green value to represent somewhat
@@ -247,7 +247,7 @@ public class Main extends Canvas implements Runnable{
 						handler.addObject(new Bumbler(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Bumbler", handler, screen));
 					}
 					if (red == 255 && green == 6 && blue == 0){
-						handler.addObject(new Chicken(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chicken", handler));
+						handler.addObject(new Chicken(xx*33 + WIDTH*dx + 5, yy*32 + HEIGHT*dy + 5, "Chicken", handler, screen));
 					}
 					if (red == 255 && green == 255 && blue == 0){
 						handler.addObject(new Boss(xx*33 + WIDTH*dx, yy*32 + HEIGHT*dy, "Boss", handler, screen));

@@ -230,6 +230,11 @@ public class Weapon extends Pickup {
       shotsFired = 6;
       range = 10;
     }
+    if (name.equals("grenade launcher")){
+      fireDelay = 50;
+      shotSpeed = 4;
+      //damage
+    }
     ammo = magazine;
   }
 
