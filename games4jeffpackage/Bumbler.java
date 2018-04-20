@@ -1,4 +1,4 @@
- 
+
 
 import java.awt.Rectangle;
 import java.awt.Graphics;
@@ -40,13 +40,13 @@ public class Bumbler extends Enemy{
     if (timer == 100){
       int shot = (int)(Math.random()*2); //randomly chooses between cardinal or diagonal shots
       if (shot == 0){
-        EnemyShot shot1 = new EnemyShot((int)x + width/2, (int)y, "EnemyShot", (float)(Math.PI/2), 10, 100, handler);
+        EnemyShot shot1 = new EnemyShot((int)x + width/2, (int)y, "EnemyShot", (float)(Math.PI/2), 10, 20, handler);
   			shot1.setVelY(-5);
-        EnemyShot shot2 = new EnemyShot((int)x + width, (int)y + height/2, "EnemyShot", 0, 10, 100, handler);
+        EnemyShot shot2 = new EnemyShot((int)x + width, (int)y + height/2, "EnemyShot", 0, 10, 20, handler);
   			shot2.setVelX(5);
-        EnemyShot shot3 = new EnemyShot((int)x + width/2, (int)y + height, "EnemyShot", (float)(3*Math.PI/2), 10, 100, handler);
+        EnemyShot shot3 = new EnemyShot((int)x + width/2, (int)y + height, "EnemyShot", (float)(3*Math.PI/2), 10, 20, handler);
   			shot3.setVelY(5);
-        EnemyShot shot4 = new EnemyShot((int)x, (int)y + height/2, "EnemyShot", (float)(Math.PI), 10, 100, handler);
+        EnemyShot shot4 = new EnemyShot((int)x, (int)y + height/2, "EnemyShot", (float)(Math.PI), 10, 20, handler);
   			shot4.setVelX(-5);
         handler.addObject(shot1);
         handler.addObject(shot2);
@@ -54,16 +54,16 @@ public class Bumbler extends Enemy{
         handler.addObject(shot4);
       }
       else {
-        EnemyShot shot5 = new EnemyShot((int)x+width, (int)y, "EnemyShot", -(float)(Math.PI/4), 10, 100, handler);
+        EnemyShot shot5 = new EnemyShot((int)x+width, (int)y, "EnemyShot", -(float)(Math.PI/4), 10, 20, handler);
   			shot5.setVelX((float)(5 * Math.cos(Math.PI/4)));
         shot5.setVelY((float)(-5 * Math.sin(Math.PI/4)));
-        EnemyShot shot6 = new EnemyShot((int)x + width, (int)y + height, "EnemyShot", -(float)(7*Math.PI/4), 10, 100, handler);
+        EnemyShot shot6 = new EnemyShot((int)x + width, (int)y + height, "EnemyShot", -(float)(7*Math.PI/4), 10, 20, handler);
         shot6.setVelX((float)(5 * Math.cos(7*Math.PI/4)));
         shot6.setVelY((float)(-5 * Math.sin(7*Math.PI/4)));
-        EnemyShot shot7 = new EnemyShot((int)x, (int)y + height, "EnemyShot", -(float)(5*Math.PI/4), 10, 100, handler);
+        EnemyShot shot7 = new EnemyShot((int)x, (int)y + height, "EnemyShot", -(float)(5*Math.PI/4), 10, 20, handler);
         shot7.setVelX((float)(5 * Math.cos(5*Math.PI/4)));
         shot7.setVelY((float)(-5 * Math.sin(5*Math.PI/4)));
-        EnemyShot shot8 = new EnemyShot((int)x, (int)y, "EnemyShot", -(float)(3*Math.PI/4), 10, 100, handler);
+        EnemyShot shot8 = new EnemyShot((int)x, (int)y, "EnemyShot", -(float)(3*Math.PI/4), 10, 20, handler);
         shot8.setVelX((float)(5 * Math.cos(3*Math.PI/4)));
         shot8.setVelY((float)(-5 * Math.sin(3*Math.PI/4)));
         handler.addObject(shot5);
