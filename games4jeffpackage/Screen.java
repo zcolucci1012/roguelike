@@ -1,4 +1,4 @@
- 
+
 
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -38,6 +38,7 @@ public class Screen extends MouseAdapter{
     private String fireType = "semiauto";
     private int shotsFired = 1;
     private int range = 50;
+    private String weaponClass = "";
 
     //timers
     private int time = fireDelay;
@@ -374,10 +375,18 @@ public class Screen extends MouseAdapter{
                         float dy = (20 * (sy+randY-(int)y))/d;
 
                         //add shot with given position, angle, damage, range, and velocity
-                        Shot shot = new Shot((int)x - thing.getWidth()/8 + dx, (int)y - thing.getHeight()/8 + dy+10, "Shot", angle, (damage*damageMod), (10*range)/shotSpeed, handler);
-                        shot.setVelX(sVelX);
-                        shot.setVelY(sVelY);
-                        handler.addObject(shot);
+                        if (weaponClass.equals("grenade launcher")){
+                          Grenade grenade = new Grenade((int)x - thing.getWidth()/8 + dx, (int)y - thing.getHeight()/8 + dy+10, "Grenade", angle, (damage*damageMod), (10*range)/shotSpeed, handler);
+                          grenade.setVelX(sVelX);
+                          grenade.setVelY(sVelY);
+                          handler.addObject(grenade);
+                        }
+                        else {
+                          Shot shot = new Shot((int)x - thing.getWidth()/8 + dx, (int)y - thing.getHeight()/8 + dy+10, "Shot", angle, (damage*damageMod), (10*range)/shotSpeed, handler);
+                          shot.setVelX(sVelX);
+                          shot.setVelY(sVelY);
+                          handler.addObject(shot);
+                        }
                     }
                     tempShots--;
                 }
@@ -420,6 +429,7 @@ public class Screen extends MouseAdapter{
         fireType = weapon.getFireType();
         shotsFired = weapon.getShotsFired();
         range = weapon.getRange();
+        weaponClass = weapon.getWeaponClass();
         time = fireDelay; //set the timer to the fireDelay so that shots can be fired right away
     }
 
@@ -658,11 +668,11 @@ public class Screen extends MouseAdapter{
     public RoomPoint getRoom(){
         return room;
     }
-    
+
     public float getDamage(){
 		return damage;
 	}
-	
+
     public void setDamageMod(float damageMod){
         this.damageMod = damageMod;
     }
@@ -678,28 +688,28 @@ public class Screen extends MouseAdapter{
     public float getSpeedMod(){
         return speedMod;
     }
-    
+
     public void setDefenseMod(float defenseMod){
         this.defenseMod = defenseMod;
     }
-    
+
     public float getDefenseMod(){
         return defenseMod;
     }
-    
+
     public void setFireRateMod(float fireRateMod){
         this.fireRateMod = fireRateMod;
     }
-    
+
     public float getFireRateMod(){
         return fireRateMod;
     }
-    
+
     public void setAccuracyMod(float accuracyMod){
         inaccuracy = (int)(inaccuracy*this.accuracyMod/accuracyMod);
         this.accuracyMod = accuracyMod;
     }
-    
+
     public float getAccuracyMod(){
         return accuracyMod;
     }

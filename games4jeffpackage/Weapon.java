@@ -1,4 +1,4 @@
- 
+
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,6 +17,7 @@ public class Weapon extends Pickup {
   private int range; //how far the bullet travels
   private int shotsFired = 1; //bullets fired every time shot
   private String name; //name of weapon
+  private String weaponClass = ""; //handles specific types of weapons (i.e. burst, grenade launcher)
 
   public Weapon (float x, float y, String id){
     super(x, y, id);
@@ -102,6 +103,14 @@ public class Weapon extends Pickup {
 
   public void setRange(int range){
     this.range = range;
+  }
+
+  public String getWeaponClass(){
+    return weaponClass;
+  }
+
+  public void setWeaponClass(String weaponClass){
+    this.weaponClass = weaponClass;
   }
 
   /*
@@ -232,8 +241,14 @@ public class Weapon extends Pickup {
     }
     if (name.equals("grenade launcher")){
       fireDelay = 50;
-      shotSpeed = 4;
-      //damage
+      shotSpeed = 5;
+      damage = 10;
+      magazine = 7;
+      reloadTime = 200;
+      inaccuracy = 30;
+      fireType = "semi-auto";
+      range = 50;
+      weaponClass = "grenade launcher";
     }
     ammo = magazine;
   }

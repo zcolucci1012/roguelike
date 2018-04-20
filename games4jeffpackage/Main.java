@@ -1,4 +1,4 @@
- 
+
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -28,7 +28,7 @@ public class Main extends Canvas implements Runnable{
 	private Graphics g;
 	private Graphics2D g2d;
 	private String state = "menu";
-	private int numWeapons = 10;
+	private int numWeapons = 11;
 	private int numPowerups = 6;
 	private boolean levelCleared = false;
 	private int w;
@@ -339,6 +339,7 @@ public class Main extends Canvas implements Runnable{
 		else if (weaponChoice == 7) weapon = "pump shotgun";
 		else if (weaponChoice == 8) weapon = "tac shotgun";
 		else if (weaponChoice == 9) weapon = "mauler";
+    else if (weaponChoice == 10) weapon = "grenade launcher";
 		return weapon;
 	}
 
