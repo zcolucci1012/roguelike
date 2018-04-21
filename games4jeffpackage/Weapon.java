@@ -16,12 +16,10 @@ public class Weapon extends Pickup {
   private String fireType; //semi-auto or auto
   private int range; //how far the bullet travels
   private int shotsFired = 1; //bullets fired every time shot
-  private String name; //name of weapon
   private String weaponClass = ""; //handles specific types of weapons (i.e. burst, grenade launcher)
 
   public Weapon (float x, float y, String id){
     super(x, y, id);
-    name = this.id.substring(7); //gets rid of start of id which is "Pickup."
     makeWeapons(); //set qualities of each weapon
   }
 
@@ -251,10 +249,6 @@ public class Weapon extends Pickup {
       weaponClass = "grenade launcher";
     }
     ammo = magazine;
-  }
-
-  public String getName(){
-    return name;
   }
 
   public void render(Graphics g){

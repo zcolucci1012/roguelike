@@ -1,4 +1,4 @@
- 
+
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 
 public class Powerup extends Pickup{
 
-  private String name;
   private String itemType;
   private Handler handler;
   private Screen screen;
@@ -15,7 +14,6 @@ public class Powerup extends Pickup{
     super(x, y, id);
     this.handler = handler;
     this.screen = screen;
-    name = this.id.substring(7); //gets rid of "Pickup." like in Weapon
     setItemTypes();
   }
 
@@ -73,9 +71,5 @@ public class Powerup extends Pickup{
 
   public void render(Graphics g){
     g.drawImage(tex.powerup[getType()], (int)x, (int)y, null);
-  }
-
-  public String getName(){
-    return name;
   }
 }

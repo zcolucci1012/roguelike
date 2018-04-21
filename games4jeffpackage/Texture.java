@@ -1,10 +1,10 @@
- 
+
 
 import java.awt.image.BufferedImage;
 
 public class Texture {
   //inititalizes spritesheet classes
-  private SpriteSheet ps, bs, es, ws, bws, pus;
+  private SpriteSheet ps, bs, es, ws, bws, pus, cs;
 
   //initializes spritesheet images
   private BufferedImage player_sheet = null;
@@ -13,6 +13,7 @@ public class Texture {
   private BufferedImage weapon_sheet = null;
   private BufferedImage blank_weapon_sheet = null;
   private BufferedImage powerup_sheet = null;
+  private BufferedImage core_item_sheet = null;
 
   //initialize image lists
   public BufferedImage[] player = new BufferedImage[4];
@@ -21,6 +22,7 @@ public class Texture {
   public BufferedImage[] weapon = new BufferedImage[11];
   public BufferedImage[] blank_weapon = new BufferedImage[11];
   public BufferedImage[] powerup = new BufferedImage[6];
+  public BufferedImage[] core_item = new BufferedImage[2];
 
   public Texture(){
     BufferedImageLoader loader = new BufferedImageLoader();
@@ -32,6 +34,7 @@ public class Texture {
       weapon_sheet = loader.loadImage("assets/weapon_sheet.png");
       blank_weapon_sheet = loader.loadImage("assets/blank_weapon_sheet.png");
       powerup_sheet = loader.loadImage("assets/powerup_sheet.png");
+      core_item_sheet = loader.loadImage("assets/core_item_sheet.png");
     }catch (Exception e){
       e.printStackTrace();
     }
@@ -42,6 +45,7 @@ public class Texture {
     ws = new SpriteSheet(weapon_sheet);
     bws = new SpriteSheet(blank_weapon_sheet);
     pus = new SpriteSheet(powerup_sheet);
+    cs = new SpriteSheet(core_item_sheet);
 
     getTextures(); //initializes lists of images
   }
@@ -51,11 +55,11 @@ public class Texture {
     for(int i = 0; i < 4; i++){
         player[i] = ps.grabImage(i+1, 1, 32, 32);
     }
-    
+
     for(int i = 0; i < 16; i++){
         block[i] = bs.grabImage(1+i%4, 1+i/4, 33, 32);
     }
-    
+
     enemy[0] = es.grabImage(1, 1, 28, 28); //look right
     enemy[1] = es.grabImage(2, 1, 28, 28); //look left
     enemy[2] = es.grabImage(1, 2, 28, 28); //turret
@@ -68,13 +72,16 @@ public class Texture {
     for(int i = 0; i < 11; i++){
         weapon[i] = ws.grabImage(1+i%5, 1+i/5, 24, 24);
     }
-    
+
     for(int i = 0; i < 11; i++){
         blank_weapon[i] = bws.grabImage(1+i%5, 1+i/5, 24, 24);
     }
-    
+
     for(int i = 0; i < 6; i++){
         powerup[i] = pus.grabImage(1+i%5, 1+i/5, 24, 24);
     }
+
+    core_item[0] = cs.grabImage(1, 1, 24, 24);
+    core_item[1] = cs.grabImage(2, 1, 24, 24);
   }
 }

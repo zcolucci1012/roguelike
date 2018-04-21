@@ -1,9 +1,10 @@
- 
+
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
+import java.awt.AlphaComposite;
 
 public class Block extends GameThing {
 
@@ -32,10 +33,15 @@ public class Block extends GameThing {
     g.setColor(new Color(0,0,0));
     g.drawRect((int)x, (int)y, (int)width, (int)height);
     */
+    Graphics2D g2d = (Graphics2D)g.create();
     if (level == 1) g.drawImage(tex.block[type], (int)x, (int)y, null);
     else if (level == 2) g.drawImage(tex.block[type+4], (int)x, (int)y, null);
     else if (level == 3) g.drawImage(tex.block[type+8], (int)x, (int)y, null);
-    else if (level == 4) g.drawImage(tex.block[type+12], (int)x, (int)y, null);
+    else if (level == 4) {
+      g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+      g2d.drawImage(tex.block[type+12], (int)x, (int)y, null);
+    }
+    g2d.dispose();
   }
 
   public Rectangle getBounds(){

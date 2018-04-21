@@ -79,8 +79,8 @@ public class Screen extends MouseAdapter{
     private RoomPoint room = null;
     private RoomPoint tempRoom = null;
     private boolean movement = true;
-    private float dx;
-    private float dy;
+    private int dx;
+    private int dy;
     private ArrayList <RoomPoint> points = new ArrayList <RoomPoint> ();
     private ArrayList <Vector> vectors = new ArrayList <Vector> ();
     private ArrayList <RoomPoint> visible = new ArrayList <RoomPoint> ();
@@ -169,7 +169,12 @@ public class Screen extends MouseAdapter{
         //finds points adjacent to (and including) the current room
         //(if room has changed since last time it was checked),
         //adds them to list of rooms visible on the map
-        room = new RoomPoint ((int)(-cam.getX()/Main.WIDTH), (int)(cam.getY()/Main.HEIGHT));
+        for (RoomPoint point: points){
+          if (point.isPoint(new RoomPoint ((int)(-cam.getX()/Main.WIDTH), (int)(cam.getY()/Main.HEIGHT)))){
+            room = point;
+            break;
+          }
+        }
         if (tempRoom != null && !room.isPoint(tempRoom)){
             doorsUnlocked = false;
             Vector pair = new Vector(tempRoom, room);
@@ -222,7 +227,8 @@ public class Screen extends MouseAdapter{
 
         //if no enemies are found and the doors haven't been unlocked,
         //unlock the doors and set the rooms to completed
-        if (!found  && !doorsUnlocked){
+        //also possibly spawn a random core item
+        if (!found  && !doorsUnlocked && !room.isComplete()){
             unlockDoors();
             for (RoomPoint point: visible){
                 if (room.isPoint(point)){
@@ -235,6 +241,7 @@ public class Screen extends MouseAdapter{
                 handler.addObject(new Trapdoor(400 + room.getX()*Main.WIDTH, 400 - room.getY()*Main.WIDTH, "Trapdoor"));
             }
             doorsUnlocked = true;
+            if(!room.isPoint(0, 0) && !room.isPoint(points.get(main.getItemRoomIndex()))) spawnItem();
         }
 
         //move the player until timer is over
@@ -647,11 +654,11 @@ public class Screen extends MouseAdapter{
 
     /*draws a centered string*/
     public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
-    FontMetrics metrics = g.getFontMetrics(font);
-    int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
-    int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
-    g.setFont(font);
-    g.drawString(text, x, y);
+      FontMetrics metrics = g.getFontMetrics(font);
+      int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
+      int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
+      g.setFont(font);
+      g.drawString(text, x, y);
     }
 
     public void changeLevelDescription(){
@@ -659,6 +666,31 @@ public class Screen extends MouseAdapter{
         if (level == 2) levelDescription = "Cavernous Confine";
         if (level == 3) levelDescription = "Jungle Junction";
         if (level == 4) levelDescription = "Freezing Fields";
+    }
+
+    private void spawnItem(){
+      System.out.println("Tried to spawn an item.");
+      int chance = (int)(Math.random()*100) + 1;
+      int x;
+      int y;
+      boolean intersecting = true;
+      CoreItem item = null;
+      while (intersecting){
+        x = ((int)(Math.random()*21)+1)*32 + Main.WIDTH*room.getX();
+        y = ((int)(Math.random()*21)+1)*32 - Main.HEIGHT*room.getY();
+        if (chance < 25) item = new CoreItem((int)x+4, (int)y+4, "heart");
+        else if (chance < 35) item = new CoreItem((int)x+4, (int)y+4, "chest");
+        intersecting = false;
+        if (item != null){
+          for (int i=0; i<handler.stuff.size(); i++){
+            GameThing thing = handler.stuff.get(i);
+            if (item.getBounds().intersects(thing.getBounds())){
+              intersecting = true;
+            }
+          }
+        }
+      }
+      if (item != null) handler.addObject(item);
     }
 
     public float getAngle(){
@@ -699,6 +731,7 @@ public class Screen extends MouseAdapter{
 
     public void setFireRateMod(float fireRateMod){
         this.fireRateMod = fireRateMod;
+        fireDelay = (int)(weapon.getFireDelay()/fireRateMod);
     }
 
     public float getFireRateMod(){

@@ -1,4 +1,4 @@
- 
+
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,7 +7,9 @@ import java.awt.Rectangle;
 public abstract class Pickup extends GameThing{
 
 	protected Texture tex = Main.getInstance();
-	private String name;
+	protected String name;
+  protected boolean pickupable = false;
+  private int timer = 0;
 
 	public Pickup(float x, float y, String id) {
 		super(x, y, "Pickup." + id); //adds "Pickup." to current ID
@@ -19,7 +21,10 @@ public abstract class Pickup extends GameThing{
 	}
 
 	public void tick() {
-
+    timer++;
+    if (timer == 20){
+      pickupable = true;
+    }
 	}
 
 	public abstract void render(Graphics g);
@@ -41,14 +46,17 @@ public abstract class Pickup extends GameThing{
 		    case "pump shotgun": return 8;
 		    case "tac shotgun": return 9;
 		    case "mauler": return 10;
-		    
+
 		    case "health pack": return 0;
 		    case "damage boost": return 1;
 		    case "speed boost": return 2;
 		    case "defense boost": return 3;
 		    case "fire rate boost": return 4;
 		    case "accuracy boost": return 5;
-		    
+
+        case "heart": return 0;
+        case "chest": return 1;
+
 		    default: return 0;
 		  }
 	}
@@ -56,4 +64,12 @@ public abstract class Pickup extends GameThing{
 	public Rectangle getBounds() {
 		return new Rectangle((int)x, (int)y, (int)width, (int)height);
 	}
+
+  public String getName(){
+    return name;
+  }
+
+  public boolean isPickupable(){
+    return pickupable;
+  }
 }

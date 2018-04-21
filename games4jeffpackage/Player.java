@@ -1,4 +1,4 @@
- 
+
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -44,7 +44,7 @@ public class Player extends GameThing{
 			//note all pickups (weapons/powerups) are initialized with an ID "Pickup.name"
 			//similarly, enemies have an ID of "Enemy.name"
 			if (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Pickup")){
-				if (getBounds().intersects(thing.getBounds())){
+				if (getBounds().intersects(thing.getBounds()) && ((Pickup)thing).isPickupable()){
 					try {
 						screen.addWeapon((Weapon)thing); //add weapon to inventory if it's a weapon
 						handler.removeObject(thing);
@@ -62,8 +62,24 @@ public class Player extends GameThing{
 							screen.notifyPowerup(((Powerup)thing).getName()); //send powerup that is picked up to screen
 							handler.removeObject(thing);
 						} catch (Exception e2){
-							System.out.println("oops something happened");
-							e2.printStackTrace();
+							try {
+                if (((CoreItem)thing).getName().equals("heart") && hp < 100){
+                  setHp(hp+10);
+                  handler.removeObject(thing);
+                }
+                if (((CoreItem)thing).getName().equals("chest")){
+                  int chance = (int)(Math.random()*100)+1;
+                  String weapon = main.chooseWeapon();
+                  String powerup = main.choosePowerup();
+                  if (chance <= 10) handler.addObject(new Weapon(thing.getX(), thing.getY(), weapon));
+                  else if (chance <= 20) handler.addObject(new Powerup(thing.getX(), thing.getY(), powerup, handler, screen));
+                  else handler.addObject(new CoreItem(thing.getX(), thing.getY(), "heart"));
+                  handler.removeObject(thing);
+                }
+              } catch (Exception e3){
+                System.out.println("oops something happened");
+  							e3.printStackTrace();
+              }
 						}
 					}
 				}

@@ -144,7 +144,7 @@ public class Main extends Canvas implements Runnable{
 		if (state.equals("1")) g.setColor(new Color(239, 172, 117));
 		if (state.equals("2")) g.setColor(new Color(61, 61, 61));
 		if (state.equals("3")) g.setColor(new Color(104, 81, 53));
-		if (state.equals("4")) g.setColor(new Color(184, 239, 238));
+		if (state.equals("4")) g.setColor(new Color(73, 142, 163));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
 		if (!state.equals("menu")) {
@@ -208,7 +208,7 @@ public class Main extends Canvas implements Runnable{
 							multiplied by the in-game distance of the pixels (33/32),
 							and added to the change in x or y of the room (dx/dy),
 							multiplied by the size of each room (WIDTH/HEIGHT).
-							then the objects ID ("BLOCK", usually name of the class),
+							then the objects ID ("Block", usually name of the class),
 							and in this case the type of block and the currentLevel.
 							many objects require certain variables outside of the position and ID,
 							(often the main class, handler, or screen) because they will be
@@ -325,9 +325,8 @@ public class Main extends Canvas implements Runnable{
 	}
 
 	/*returns a random weapon name*/
-	private String chooseWeapon(){
+	public String chooseWeapon(){
 		int weaponChoice = (int)(Math.random()*numWeapons);
-		System.out.println(weaponChoice);
 		String weapon = "";
 		if (weaponChoice == 0) weapon = "smg";
 		else if (weaponChoice == 1) weapon = "sniper";
@@ -344,7 +343,7 @@ public class Main extends Canvas implements Runnable{
 	}
 
 	/*returns a random powerup name*/
-	private String choosePowerup(){
+	public String choosePowerup(){
 		int powerupChoice = (int)(Math.random()*numPowerups);
 		String powerup = "";
 		if (powerupChoice == 0) powerup = "health pack";
@@ -560,6 +559,14 @@ public class Main extends Canvas implements Runnable{
 	public static void main(String [] args){
 		new Main();
 		//nothing else should go here
+	}
+
+	public int getNumWeapons(){
+		return numWeapons;
+	}
+
+	public int getNumPowerups(){
+		return numPowerups;
 	}
 
 }
