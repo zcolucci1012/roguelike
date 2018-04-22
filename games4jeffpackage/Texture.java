@@ -19,8 +19,8 @@ public class Texture {
   public BufferedImage[] player = new BufferedImage[4];
   public BufferedImage[] block = new BufferedImage[16];
   public BufferedImage[] enemy = new BufferedImage[8];
-  public BufferedImage[] weapon = new BufferedImage[11];
-  public BufferedImage[] blank_weapon = new BufferedImage[11];
+  public BufferedImage[] weapon = new BufferedImage[12];
+  public BufferedImage[] blank_weapon = new BufferedImage[12];
   public BufferedImage[] powerup = new BufferedImage[6];
   public BufferedImage[] core_item = new BufferedImage[2];
 
@@ -52,11 +52,11 @@ public class Texture {
 
   /*gets subimages of spritesheet and adds them to a list of textures */
   private void getTextures(){
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < player.length; i++){
         player[i] = ps.grabImage(i+1, 1, 32, 32);
     }
 
-    for(int i = 0; i < 16; i++){
+    for(int i = 0; i < block.length; i++){
         block[i] = bs.grabImage(1+i%4, 1+i/4, 33, 32);
     }
 
@@ -69,15 +69,15 @@ public class Texture {
     enemy[6] = es.grabImage(1, 6, 28, 28, 24, 24); //chicken left
     enemy[7] = es.grabImage(2, 6, 28, 28, 24, 24); //chicken right
 
-    for(int i = 0; i < 11; i++){
+    for(int i = 0; i < weapon.length; i++){
         weapon[i] = ws.grabImage(1+i%5, 1+i/5, 24, 24);
     }
 
-    for(int i = 0; i < 11; i++){
+    for(int i = 0; i < blank_weapon.length; i++){
         blank_weapon[i] = bws.grabImage(1+i%5, 1+i/5, 24, 24);
     }
 
-    for(int i = 0; i < 6; i++){
+    for(int i = 0; i < powerup.length; i++){
         powerup[i] = pus.grabImage(1+i%5, 1+i/5, 24, 24);
     }
 

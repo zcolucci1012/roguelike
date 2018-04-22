@@ -46,6 +46,7 @@ public abstract class Pickup extends GameThing{
 		    case "pump shotgun": return 8;
 		    case "tac shotgun": return 9;
 		    case "mauler": return 10;
+        case "grenade launcher": return 11;
 
 		    case "health pack": return 0;
 		    case "damage boost": return 1;
