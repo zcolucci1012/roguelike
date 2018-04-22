@@ -40,44 +40,53 @@ public class Grenade extends GameThing{
       explode();
     }
     if (velX > 0) {
-      velX-=(float)range*tempVelX/10000f;
+      velX-=(float)tempVelX/(2f*range);
       if (velX <= 0) velX = 0;
     }
     if (velX < 0) {
-      velX-=(float)range*tempVelX/10000f;
+      velX-=(float)tempVelX/(2f*range);
       if (velX >= 0) velX = 0;
     }
     if (velY > 0) {
-      velY-=(float)range*tempVelY/10000f;
+      velY-=(float)tempVelY/(2f*range);
       if (velY <= 0) velY = 0;
     }
     if (velY < 0) {
-      velY-=(float)range*tempVelY/10000f;
+      velY-=(float)tempVelY/(2f*range);
       if (velY >= 0) velY = 0;
     }
 
+    int f = 4;
     for(int i = 0; i < handler.stuff.size(); i++){
       GameThing thing = handler.stuff.get(i);
       if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy."))){
         if (thing.getBounds().intersects(getBoundsRight())){
           x = thing.getX() - width;
-          velX = -velX;
-          tempVelX = -tempVelX;
+          velX = -velX/f;
+          velY = velY/f;
+          tempVelX = -tempVelX/f;
+          tempVelY = velY/f;
         }
         if (thing.getBounds().intersects(getBoundsLeft())){
           x = thing.getX() + thing.getBounds().width;
-          velX = -velX;
-          tempVelX = -tempVelX;
+          velX = -velX/f;
+          velY = velY/f;
+          tempVelX = -tempVelX/f;
+          tempVelY = velY/f;
         }
         if (thing.getBounds().intersects(getBoundsTop())){
           y = thing.getY() + thing.getBounds().height;
-          velY = -velY;
-          tempVelY = -tempVelY;
+          velY = -velY/f;
+          velX = velX/f;
+          tempVelY = -tempVelY/f;
+          tempVelX = tempVelX/f;
         }
         if (thing.getBounds().intersects(getBoundsBottom())){
           y = thing.getY() - height;
-          velY = -velY;
-          tempVelY = -tempVelY;
+          velY = -velY/f;
+          velX = velX/f;
+          tempVelY = -tempVelY/f;
+          tempVelX = tempVelX/f;
         }
       }
       if (thing.getId().equals("Shot")){

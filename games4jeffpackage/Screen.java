@@ -107,7 +107,7 @@ public class Screen extends MouseAdapter{
         points = main.getPoints();
         vectors = main.getVectors();
 
-        addWeapon(new Weapon(0, 0, "pistol"));
+        addWeapon(new Weapon(0, 0 , "pistol"));
     }
 
     /*ran whenever mouse is clicked, tries to fire weapon if not in menu*/

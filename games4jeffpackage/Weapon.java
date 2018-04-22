@@ -248,6 +248,17 @@ public class Weapon extends Pickup {
       range = 50;
       weaponClass = "grenade launcher";
     }
+    if (name.equals("rainmaker")){
+      fireDelay = 25;
+      shotSpeed = 5;
+      damage = 5;
+      magazine = 10;
+      reloadTime = 175;
+      inaccuracy = 50;
+      fireType = "auto";
+      range = 75;
+      weaponClass = "grenade launcher";
+    }
     ammo = magazine;
   }
 

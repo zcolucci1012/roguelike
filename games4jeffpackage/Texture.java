@@ -19,8 +19,8 @@ public class Texture {
   public BufferedImage[] player = new BufferedImage[4];
   public BufferedImage[] block = new BufferedImage[16];
   public BufferedImage[] enemy = new BufferedImage[8];
-  public BufferedImage[] weapon = new BufferedImage[12];
-  public BufferedImage[] blank_weapon = new BufferedImage[12];
+  public BufferedImage[] weapon = new BufferedImage[13];
+  public BufferedImage[] blank_weapon = new BufferedImage[13];
   public BufferedImage[] powerup = new BufferedImage[6];
   public BufferedImage[] core_item = new BufferedImage[2];
 
