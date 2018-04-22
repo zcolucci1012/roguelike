@@ -59,6 +59,9 @@ public class Screen extends MouseAdapter{
     private boolean doorFlag = false;
     private boolean doorsUnlocked = false;
     private boolean powerupFlag = false;
+    private boolean weaponGUIFlag = false;
+    private boolean hpFlag = false;
+    private boolean mapFlag = false;
 
     //texturessss
     private Texture tex = Main.getInstance();
@@ -89,6 +92,9 @@ public class Screen extends MouseAdapter{
     private float angle;
     private int itemRoomIndex = 0;
     private String powerup = "None";
+    private int mapSize;
+    private int xd;
+    private int yd;
 
 
     /*instantiate stuff, get some things from the main, add pistol to player's inventory*/
@@ -126,9 +132,9 @@ public class Screen extends MouseAdapter{
     }
 
     /*finds if mouse is over a certain area*/
-    private boolean mouseOver(int mx, int my, int x1, int y1, int x2, int y2){
-        if(mx > x1 && mx < x2){
-            if (my > y1 && my < y2){
+    private boolean mouseOver(int x, int y, int x1, int y1, int x2, int y2){
+        if(x > x1 && x < x2){
+            if (y > y1 && y < y2){
                 return true;
             }
             else return false;
@@ -277,20 +283,56 @@ public class Screen extends MouseAdapter{
 
         //set the texture of the player based on what direction the mouse is in
         for(int i = 0; i < handler.stuff.size(); i++){
-            GameThing thing = handler.stuff.get(i);
-            if (thing.getId() == "Player"){
-                float x = thing.getX() + thing.getWidth()/2;
-                float y = thing.getY() + thing.getHeight()/2;
-                angle = (float)Math.atan((sy-y)/(sx-x));
-                if ((sx-x) < 0){
-                    angle += Math.PI;
-                }
-                if (Math.abs(sy-y) < Math.abs(sx-x) && sx > thing.getX()) ((Player)thing).setType(0);
-                if (Math.abs(sy-y) > Math.abs(sx-x) && sy > thing.getY()) ((Player)thing).setType(1);
-                if (Math.abs(sy-y) < Math.abs(sx-x) && sx < thing.getX()) ((Player)thing).setType(2);
-                if (Math.abs(sy-y) > Math.abs(sx-x) && sy < thing.getY()) ((Player)thing).setType(3);
-                break;
+          GameThing thing = handler.stuff.get(i);
+          if (thing.getId() == "Player"){
+            float x = thing.getX() + thing.getWidth()/2;
+            float y = thing.getY() + thing.getHeight()/2;
+            angle = (float)Math.atan((sy-y)/(sx-x));
+            if ((sx-x) < 0){
+                angle += Math.PI;
             }
+            if (Math.abs(sy-y) < Math.abs(sx-x) && sx > thing.getX()) ((Player)thing).setType(0);
+            if (Math.abs(sy-y) > Math.abs(sx-x) && sy > thing.getY()) ((Player)thing).setType(1);
+            if (Math.abs(sy-y) < Math.abs(sx-x) && sx < thing.getX()) ((Player)thing).setType(2);
+            if (Math.abs(sy-y) > Math.abs(sx-x) && sy < thing.getY()) ((Player)thing).setType(3);
+            break;
+          }
+        }
+
+        //make GUI transparent if something underneath it
+        for(int i = 0; i < handler.stuff.size(); i++){
+          GameThing thing = handler.stuff.get(i);
+          if (!thing.getId().equals("Block")){
+            weaponGUIFlag = false;
+            if (thing.getBounds().intersects(new Rectangle(600+Main.WIDTH*room.getX(), 650-Main.HEIGHT*room.getY(), 180, 108))){
+              weaponGUIFlag = true;
+              break;
+            }
+          }
+        }
+
+        //make HP transparent if something underneath it
+        for(int i = 0; i < handler.stuff.size(); i++){
+          GameThing thing = handler.stuff.get(i);
+          if (!thing.getId().equals("Block")){
+            hpFlag = false;
+            if (thing.getBounds().intersects(new Rectangle(24+Main.WIDTH*room.getX(), 24-Main.HEIGHT*room.getY(), 101, 26))){
+              hpFlag = true;
+              break;
+            }
+          }
+        }
+
+        //make map transparent if something underneath it
+        for(int i = 0; i < handler.stuff.size(); i++){
+          GameThing thing = handler.stuff.get(i);
+          if (!thing.getId().equals("Block")){
+            mapFlag = false;
+            if (thing.getBounds().intersects(new Rectangle(730-xd+mapSize-5+Main.WIDTH*room.getX(), 45-5-Main.HEIGHT*room.getY(), xd+10, yd+10))){
+              mapFlag = true;
+              break;
+            }
+          }
         }
 
         //weapon firing
@@ -479,8 +521,10 @@ public class Screen extends MouseAdapter{
         Graphics2D g2d = (Graphics2D) g.create(); //create temporary graphics variable to be made transparent
         float alpha = 0.5f; //transparency of GUI
         float alpha2 = (float)(-Math.pow((-introTimer/200.0 + 1), 2) + 1); //transparency of intro
+        float alpha3 = 0.10f; //transparency of hovered GUI
         AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
         AlphaComposite ac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha2);
+        AlphaComposite ac3 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha3);
 
         //display intro text
         g2d.setComposite(ac2);
@@ -493,6 +537,7 @@ public class Screen extends MouseAdapter{
         g2d.setComposite(ac);
 
         //render weapon GUI
+        if (mouseOver(mx, my, 600, 650, 780, 758) || weaponGUIFlag) g2d.setComposite(ac3);
         g2d.drawImage(loader.loadImage("assets/weaponGUI.png"), 600, 650, 180, 108, null);
         if (weapon != null){
             g2d.drawImage(tex.weapon[weapon.getType()], 612, 662, 72, 72, null); //draw equipped weapon
@@ -522,21 +567,35 @@ public class Screen extends MouseAdapter{
         if (pickupAlertFlag && reloading && powerupFlag) g2d.drawString("Picked up " + powerup + "!", 600, 610);
         else if ((reloading && powerupFlag) || (pickupAlertFlag && powerupFlag)) g2d.drawString("Picked up " + powerup + "!", 600, 625);
         else if (powerupFlag) g2d.drawString("Picked up " + powerup + "!", 600, 640);
+        g2d.setComposite(ac);
 
         //render HP
+        if (mouseOver(mx, my, 24, 24, 125, 50) || hpFlag) g2d.setComposite(ac3);
         renderHP(g2d);
+        g2d.setComposite(ac);
 
         //render map
-        int mapSize = 20; //size of individual square side
+        mapSize = 20; //size of individual square side
         int maxY = 0;
         int maxX = 0;
+        int minX = 0;
+        int minY = 0;
         for (RoomPoint point: visible){ //get the maximum distance from main room
             if (point.getY() > maxY) maxY = point.getY();
             if (point.getX() > maxX) maxX = point.getX();
+            if (point.getY() < minY) minY = point.getY();
+            if (point.getX() < minX) minX = point.getX();
         }
         maxX *= mapSize;
         maxY *= mapSize;
+        minX *= mapSize;
+        minY *= mapSize;
+        xd = maxX-minX+mapSize;
+        yd = maxY-minY+mapSize;
         int i = 0;
+        if (mouseOver(mx, my, 730-xd-5+mapSize, 45-5, 730+mapSize+xd+5, 45+yd+5) || mapFlag) g2d.setComposite(ac3);
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(730-xd-5+mapSize, 45-5, xd+10, yd+10);
         for (RoomPoint point: visible){
             if (point.isPoint(0,0)) g2d.setColor(Color.BLUE); //color of start point
             else if (point.isPoint(points.get(points.size()-1))) g2d.setColor(Color.RED); //color of boss room
@@ -552,9 +611,10 @@ public class Screen extends MouseAdapter{
             g2d.drawRect(mapSize*point.getX() + 730 - maxX, -mapSize*point.getY() + maxY + 45, mapSize, mapSize);
             i++;
         }
+        g2d.setComposite(ac);
 
         //render cursor image
-        g.drawImage(loader.loadImage("assets/cursor.png"), mx, my, null);
+        g.drawImage(loader.loadImage("assets/cursor.png"), mx-8, my-8, null);
 
         g2d.dispose();
     }
@@ -669,7 +729,6 @@ public class Screen extends MouseAdapter{
     }
 
     private void spawnItem(){
-      System.out.println("Tried to spawn an item.");
       int chance = (int)(Math.random()*100) + 1;
       int x;
       int y;
