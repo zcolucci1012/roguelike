@@ -39,7 +39,7 @@ public class Window extends Canvas{
 	/*if the player isn't in the menu, clear the current cursor*/
 	public void tick(){
 		state = main.getState();
-		if (!state.equals("menu") && !state.equals("pause"))frame.setCursor(frame.getToolkit().createCustomCursor(loader.loadImage("assets/blank.png"), new Point(), null));
+		if (!state.equals("menu") && !state.equals("pause") && !state.equals("death"))frame.setCursor(frame.getToolkit().createCustomCursor(loader.loadImage("assets/blank.png"), new Point(), null));
     else frame.setCursor(Cursor.getDefaultCursor());
 	}
 }

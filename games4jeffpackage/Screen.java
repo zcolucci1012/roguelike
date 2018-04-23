@@ -47,6 +47,7 @@ public class Screen extends MouseAdapter{
     private int doorTimer = 0;
     private int introTimer = 0;
     private int powerupTimer = 0;
+    private int deathTimer = 255;
 
     //lists
     private ArrayList <Weapon> weapons = new ArrayList <Weapon> ();
@@ -64,6 +65,7 @@ public class Screen extends MouseAdapter{
     private boolean mapFlag = false;
     private boolean effectFlag = false;
     private boolean backgroundFlag = false;
+    private boolean deathFlag = false;
 
     //textures and sounds
     private Texture tex = Main.getInstance();
@@ -110,7 +112,7 @@ public class Screen extends MouseAdapter{
         points = main.getPoints();
         vectors = main.getVectors();
 
-        addWeapon(new Weapon(0, 0 , "pistol"));
+        addWeapon(new Weapon(0, 0 , "grenade launcher"));
     }
 
     /*ran whenever mouse is clicked, tries to fire weapon if not in menu*/
@@ -393,7 +395,17 @@ public class Screen extends MouseAdapter{
         if (introTimer != 400){
             introTimer++;
         }
-
+        
+        if (deathFlag){
+            deathTimer = 0;
+            main.setState("death");
+            deathFlag = false;
+        }
+        
+        if (deathTimer != 255){
+            deathTimer++;
+        }
+        
         tempRoom = room; //save old room for comparison
     }
 
@@ -637,7 +649,15 @@ public class Screen extends MouseAdapter{
           if (!backgroundFlag) g.drawImage(tex.sound_button[0], 724, 45, null);
           else g.drawImage(tex.sound_button[1], 724, 45, null);
         }
-
+        
+        if (main.getState().equals("death")) {
+          g.setColor(new Color(0, 0, 0, deathTimer));
+          g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
+          g.setColor(new Color(255, 25, 25, deathTimer));
+          g.setFont(new Font("Trebuchet MS", Font.BOLD, 72));
+          g.drawString("YOU DIED", 240, 350);
+        }
+        
         g2d.dispose();
     }
 
@@ -783,8 +803,8 @@ public class Screen extends MouseAdapter{
     }
 
     public float getDamage(){
-		return damage;
-	}
+        return damage;
+    }
 
     public void setDamageMod(float damageMod){
         this.damageMod = damageMod;
@@ -833,6 +853,10 @@ public class Screen extends MouseAdapter{
         this.powerup = powerup;
         powerupTimer = 200;
         powerupFlag = true;
+    }
+    
+    public void setDeathFlag(boolean deathFlag){
+        this.deathFlag = deathFlag;
     }
 
 }

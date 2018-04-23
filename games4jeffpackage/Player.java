@@ -195,6 +195,7 @@ public class Player extends GameThing{
 
 		//remove player when hp is less than or equal to zero
 		if (hp <= 0){
+		    screen.setDeathFlag(true);
 			handler.removeObject(this);
 		}
 
