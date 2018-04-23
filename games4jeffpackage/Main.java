@@ -21,7 +21,7 @@ public class Main extends Canvas implements Runnable{
 	private BufferedImage level = null;
 	private BufferedImageLoader loader = new BufferedImageLoader();
 	private ArrayList <RoomPoint> points = new ArrayList <RoomPoint> ();
-  private ArrayList <Vector> vectors = new ArrayList <Vector> ();
+    private ArrayList <Vector> vectors = new ArrayList <Vector> ();
 	private Camera cam;
 	private Player player;
 	public static Texture tex;
@@ -329,32 +329,34 @@ public class Main extends Canvas implements Runnable{
 	/*returns a random weapon name*/
 	public String chooseWeapon(){
 		int weaponChoice = (int)(Math.random()*numWeapons);
-		String weapon = "";
-		if (weaponChoice == 0) weapon = "smg";
-		else if (weaponChoice == 1) weapon = "sniper";
-		else if (weaponChoice == 2) weapon = "assault rifle";
-		else if (weaponChoice == 3) weapon = "DMR";
-		else if (weaponChoice == 4) weapon = "slugshot";
-		else if (weaponChoice == 5) weapon = "minigun";
-		else if (weaponChoice == 6) weapon = "revolver";
-		else if (weaponChoice == 7) weapon = "pump shotgun";
-		else if (weaponChoice == 8) weapon = "tac shotgun";
-		else if (weaponChoice == 9) weapon = "mauler";
-    else if (weaponChoice == 10) weapon = "grenade launcher";
-		return weapon;
+		switch(weaponChoice){
+    		case 0: return "smg";
+    		case 1: return "sniper";
+    		case 2: return "assault rifle";
+    		case 3: return "DMR";
+    		case 4: return "slugshot";
+    		case 5: return "minigun";
+    		case 6: return "revolver";
+    		case 7: return "pump shotgun";
+    		case 8: return "tac shotgun";
+    		case 9: return "mauler";
+            case 10: return "grenade launcher";
+            default: return "";
+        }
 	}
 
 	/*returns a random powerup name*/
 	public String choosePowerup(){
 		int powerupChoice = (int)(Math.random()*numPowerups);
-		String powerup = "";
-		if (powerupChoice == 0) powerup = "health pack";
-		else if (powerupChoice == 1) powerup = "damage boost";
-		else if (powerupChoice == 2) powerup = "speed boost";
-		else if (powerupChoice == 3) powerup = "defense boost";
-		else if (powerupChoice == 4) powerup = "fire rate boost";
-		else if (powerupChoice == 5) powerup = "accuracy boost";
-		return powerup;
+		switch(powerupChoice){
+       		case 0: return "health pack";
+       		case 1: return "damage boost";
+       		case 2: return "speed boost";
+       		case 3: return "defense boost";
+        	case 4: return "fire rate boost";
+        	case 5: return "accuracy boost";
+        	default: return "";
+        }
 	}
 
 	/*
