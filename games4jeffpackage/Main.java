@@ -37,10 +37,12 @@ public class Main extends Canvas implements Runnable{
 	private int itemRoomIndex = 0;
 	private Window window;
 	private int numRooms = 59;
+	public static Sound sound;
 
 	/*instantiate all variables and stuff and run all level creation stuff*/
 	public Main(){
 		tex = new Texture(); //get static variable for textures
+		sound = new Sound();
 
 		handler = new Handler(); //create handler which contains a list that manages most game items
 
@@ -49,14 +51,13 @@ public class Main extends Canvas implements Runnable{
 		window = new Window(WIDTH,HEIGHT,"jeff",this); //create a new window called "jeff"
 
 		screen = new Screen(handler, this, cam); //create a new screen variable (handles mouse input, gui, and weapon handling)
-		this.addKeyListener(new KeyInput(handler, screen)); //adds a listener of key input
+		this.addKeyListener(new KeyInput(handler, screen, this)); //adds a listener of key input
 		this.addMouseListener(screen); //add listener of mouse input
 
 		player = new Player(400,400,"Player", 0, handler, this, screen); //create player and spawn in first room
 		handler.addObject(player); //add player to the list of objects
 
-		Sound s = new Sound(); //instantiate sounds
-		Sound.loop("background", 0.1); //start the background music
+		sound.loop("background"); //start the background music
 
 		generateMap(); //start map generation
 	}
@@ -115,7 +116,7 @@ public class Main extends Canvas implements Runnable{
 
 	/*calls tick method on different parts of the game*/
 	public void tick(){
-		if (!state.equals("menu")) { //if not in the menu screen
+		if (!state.equals("menu") && !state.equals("pause")) { //if not in the menu screen
 			if (cam != null){
 				handler.tick(cam); //runs the tick method on objects in the game
 			}
@@ -125,8 +126,9 @@ public class Main extends Canvas implements Runnable{
 					cam.tick(thing); //tick the camera after passing the player object into the camera class
 				}
 			}
+			screen.tick(); //tick the screen
 		}
-		screen.tick(); //tick the screen
+
 		window.tick(); //tick the window (doesn't do much outside of displaying the cursor)
 	}
 
@@ -141,10 +143,10 @@ public class Main extends Canvas implements Runnable{
 		g2d = (Graphics2D)g;
 
 		//set background color based on level
-		if (state.equals("1")) g.setColor(new Color(239, 172, 117));
-		if (state.equals("2")) g.setColor(new Color(61, 61, 61));
-		if (state.equals("3")) g.setColor(new Color(104, 81, 53));
-		if (state.equals("4")) g.setColor(new Color(73, 142, 163));
+		if (state.equals("1") || currentLevel == 1) g.setColor(new Color(239, 172, 117));
+		if (state.equals("2") || currentLevel == 2) g.setColor(new Color(61, 61, 61));
+		if (state.equals("3") || currentLevel == 3) g.setColor(new Color(104, 81, 53));
+		if (state.equals("4") || currentLevel == 4) g.setColor(new Color(73, 142, 163));
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 
 		if (!state.equals("menu")) {
@@ -541,15 +543,15 @@ public class Main extends Canvas implements Runnable{
 	/*takes in numerical value, plays according sound*/
 	public void changeMusic(int level){
 		if (level == 2){
-			Sound.loop("background2", 0.1);
+			sound.loop("background2");
 		}
 		else if (level == 3){
-			Sound.loop("background3", 0.1);
+			sound.loop("background3");
 		}
 		else if (level == 4){
-			Sound.loop("background4", 0.1);
+			sound.loop("background4");
 		}
-		else Sound.loop("background", 0.1);
+		else sound.loop("background");
 	}
 
 	public int getItemRoomIndex(){
@@ -567,6 +569,17 @@ public class Main extends Canvas implements Runnable{
 
 	public int getNumPowerups(){
 		return numPowerups;
+	}
+
+	public static Sound getSound(){
+		return sound;
+	}
+
+	public void togglePause(){
+		if (!state.equals("menu")){
+			if (state.equals("pause")) state = currentLevel+"";
+			else state = "pause";
+		}
 	}
 
 }

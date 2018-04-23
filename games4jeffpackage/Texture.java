@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Texture {
   //inititalizes spritesheet classes
-  private SpriteSheet ps, bs, es, ws, bws, pus, cs;
+  private SpriteSheet ps, bs, es, ws, bws, pus, cs, ss;
 
   //initializes spritesheet images
   private BufferedImage player_sheet = null;
@@ -14,6 +14,7 @@ public class Texture {
   private BufferedImage blank_weapon_sheet = null;
   private BufferedImage powerup_sheet = null;
   private BufferedImage core_item_sheet = null;
+  private BufferedImage sound_button_sheet = null;
 
   //initialize image lists
   public BufferedImage[] player = new BufferedImage[4];
@@ -23,6 +24,7 @@ public class Texture {
   public BufferedImage[] blank_weapon = new BufferedImage[13];
   public BufferedImage[] powerup = new BufferedImage[6];
   public BufferedImage[] core_item = new BufferedImage[2];
+  public BufferedImage[] sound_button = new BufferedImage[4];
 
   public Texture(){
     BufferedImageLoader loader = new BufferedImageLoader();
@@ -35,6 +37,7 @@ public class Texture {
       blank_weapon_sheet = loader.loadImage("assets/blank_weapon_sheet.png");
       powerup_sheet = loader.loadImage("assets/powerup_sheet.png");
       core_item_sheet = loader.loadImage("assets/core_item_sheet.png");
+      sound_button_sheet = loader.loadImage("assets/sound_button_sheet.png");
     }catch (Exception e){
       e.printStackTrace();
     }
@@ -46,6 +49,7 @@ public class Texture {
     bws = new SpriteSheet(blank_weapon_sheet);
     pus = new SpriteSheet(powerup_sheet);
     cs = new SpriteSheet(core_item_sheet);
+    ss = new SpriteSheet(sound_button_sheet);
 
     getTextures(); //initializes lists of images
   }
@@ -83,5 +87,9 @@ public class Texture {
 
     core_item[0] = cs.grabImage(1, 1, 24, 24);
     core_item[1] = cs.grabImage(2, 1, 24, 24);
+
+    for (int i = 0; i < sound_button.length; i++){
+      sound_button[i] = ss.grabImage(1+i%2, 1+i/2, 24, 24);
+    }
   }
 }

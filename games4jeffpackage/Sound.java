@@ -1,4 +1,4 @@
- 
+
 
 import java.io.File;
 import java.util.HashMap;
@@ -9,6 +9,9 @@ import javax.sound.sampled.FloatControl;
 public class Sound {
   private static HashMap <String, File> files = new HashMap <String, File>();
   private static Clip background;
+  private static Clip effect;
+  private double backgroundVolume = 0.05;
+  private double effectVolume = 1;
 
   public Sound(){
     //put files into a map with its title and file associated with it
@@ -28,15 +31,14 @@ public class Sound {
   }
 
   /*begin looping the background music*/
-  public static void loop(String path, double volume){
+  public void loop(String path){
     try{
       if (background != null) background.stop(); //stop the old background music
       background = AudioSystem.getClip();
       background.open(AudioSystem.getAudioInputStream(files.get(path))); //open new background music
       FloatControl gainControl = (FloatControl) background.getControl(FloatControl.Type.MASTER_GAIN);
       background.loop(Clip.LOOP_CONTINUOUSLY); //loop audio continuously
-      double gain = volume; // number between 0 and 1 (loudest)
-      float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0); //control volume
+      float dB = (float) (Math.log(backgroundVolume) / Math.log(10.0) * 20.0); //control volume
       gainControl.setValue(dB);
       //Thread.sleep(clip.getMicrosecondLength()/1000);
     }catch (Exception e){
@@ -44,15 +46,38 @@ public class Sound {
     }
   }
 
+  public void updateBackgroundVolume(double volume){
+    FloatControl gainControl = (FloatControl) background.getControl(FloatControl.Type.MASTER_GAIN);
+    backgroundVolume = volume;
+    float dB = (float) (Math.log(backgroundVolume) / Math.log(10.0) * 20.0); //control volume
+    gainControl.setValue(dB);
+  }
+
+  public void updateEffectVolume(double volume){
+    effectVolume = volume; // number between 0 and 1 (loudest)
+  }
+
+  public void toggleEffectMute(){
+    if (effectVolume != 0) effectVolume = 0;
+    else effectVolume = 1;
+  }
+
+  public void toggleBackgroundMute(){
+    if (backgroundVolume != 0) backgroundVolume = 0;
+    else backgroundVolume = 0.05;
+    FloatControl gainControl = (FloatControl) background.getControl(FloatControl.Type.MASTER_GAIN);
+    float dB = (float) (Math.log(backgroundVolume) / Math.log(10.0) * 20.0); //control volume
+    gainControl.setValue(dB);
+  }
+
   /*play a sound given its title*/
-  public static void play(String path, double volume){
+  public void play(String path){
     try{
-      Clip clip = AudioSystem.getClip();
-      clip.open(AudioSystem.getAudioInputStream(files.get(path))); //get sound
-      FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-      clip.start(); //play sound
-      double gain = volume; // number between 0 and 1 (loudest)
-      float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0); //control volume
+      effect = AudioSystem.getClip();
+      effect.open(AudioSystem.getAudioInputStream(files.get(path))); //get sound
+      FloatControl gainControl = (FloatControl) effect.getControl(FloatControl.Type.MASTER_GAIN);
+      effect.start(); //play sound
+      float dB = (float) (Math.log(effectVolume) / Math.log(10.0) * 20.0); //control volume
       gainControl.setValue(dB);
       //Thread.sleep(clip.getMicrosecondLength()/1000);
     }catch (Exception e){

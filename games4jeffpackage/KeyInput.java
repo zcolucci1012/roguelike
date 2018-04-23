@@ -1,4 +1,4 @@
- 
+
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -6,11 +6,13 @@ import java.awt.event.KeyEvent;
 public class KeyInput extends KeyAdapter{
 	private Handler handler;
 	private Screen screen;
+  private Main main;
 	private boolean [] keyDown = new boolean [4];
 
-	public KeyInput(Handler handler, Screen screen){
+	public KeyInput(Handler handler, Screen screen, Main main){
 		this.handler = handler;
 		this.screen = screen;
+    this.main = main;
 
 		keyDown[0] = false;
 		keyDown[1] = false;
@@ -39,6 +41,9 @@ public class KeyInput extends KeyAdapter{
 		if (key == KeyEvent.VK_R){
 			screen.reload(); //reloads weapon when R pressed
 		}
+    if (key == KeyEvent.VK_P){
+      main.togglePause();
+    }
 	}
 
 	/* ran when keys are pressed */

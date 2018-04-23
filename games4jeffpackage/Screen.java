@@ -62,9 +62,12 @@ public class Screen extends MouseAdapter{
     private boolean weaponGUIFlag = false;
     private boolean hpFlag = false;
     private boolean mapFlag = false;
+    private boolean effectFlag = false;
+    private boolean backgroundFlag = false;
 
-    //texturessss
+    //textures and sounds
     private Texture tex = Main.getInstance();
+    private Sound sound = Main.getSound();
 
     //mods
     private float damageMod = 1;
@@ -116,9 +119,19 @@ public class Screen extends MouseAdapter{
         my = e.getY();
 
         if (main.getState().equals("menu")){
-            if (mouseOver(mx, my, 305, 340, 505, 440)){
+            if (mouseOver(mx, my, 305, 340, 200, 100)){
                 main.setState("1"); //will start the level if this area is clicked
             }
+        }
+        if (main.getState().equals("pause")){
+          if (mouseOver(mx, my, 688, 45, 24, 24)){
+            sound.toggleEffectMute();
+            effectFlag = !effectFlag;
+          }
+          if (mouseOver(mx, my, 724, 45, 24, 24)){
+            sound.toggleBackgroundMute();
+            backgroundFlag = !backgroundFlag;
+          }
         }
         else firing = true;
     }
@@ -132,9 +145,9 @@ public class Screen extends MouseAdapter{
     }
 
     /*finds if mouse is over a certain area*/
-    private boolean mouseOver(int x, int y, int x1, int y1, int x2, int y2){
-        if(x > x1 && x < x2){
-            if (y > y1 && y < y2){
+    private boolean mouseOver(int x, int y, int x1, int y1, int w, int h){
+        if(x > x1 && x < x1+w){
+            if (y > y1 && y < y1+h){
                 return true;
             }
             else return false;
@@ -387,15 +400,15 @@ public class Screen extends MouseAdapter{
     /*fire a bullet or a few*/
     private void fire(){
         //play sound based on weapon name
-        if (weapon.getName().equals("slugshot") || weapon.getName().equals("pump shotgun")) Sound.play("shotgun", 1);
-        if (weapon.getName().equals("tac shotgun") || weapon.getName().equals("mauler")) Sound.play("shotgun2", 1);
-        if (weapon.getName().equals("sniper")) Sound.play("sniper", 1);
-        if (weapon.getName().equals("smg")) Sound.play("smg", 1);
-        if (weapon.getName().equals("DMR")) Sound.play("dmr", 1);
-        if (weapon.getName().equals("assault rifle")) Sound.play("assault rifle", 1);
-        if (weapon.getName().equals("pistol")) Sound.play("pistol", 1);
-        if (weapon.getName().equals("revolver")) Sound.play("revolver", 1);
-        if (weapon.getName().equals("minigun")) Sound.play("minigun", 1);
+        if (weapon.getName().equals("slugshot") || weapon.getName().equals("pump shotgun")) sound.play("shotgun");
+        if (weapon.getName().equals("tac shotgun") || weapon.getName().equals("mauler")) sound.play("shotgun2");
+        if (weapon.getName().equals("sniper")) sound.play("sniper");
+        if (weapon.getName().equals("smg")) sound.play("smg");
+        if (weapon.getName().equals("DMR")) sound.play("dmr");
+        if (weapon.getName().equals("assault rifle")) sound.play("assault rifle");
+        if (weapon.getName().equals("pistol")) sound.play("pistol");
+        if (weapon.getName().equals("revolver")) sound.play("revolver");
+        if (weapon.getName().equals("minigun")) sound.play("minigun");
 
         //shoots a bullet from the player to the point where clicked
         for(int i = 0; i < handler.stuff.size(); i++){
@@ -537,7 +550,7 @@ public class Screen extends MouseAdapter{
         g2d.setComposite(ac);
 
         //render weapon GUI
-        if (mouseOver(mx, my, 600, 650, 780, 758) || weaponGUIFlag) g2d.setComposite(ac3);
+        if (mouseOver(mx, my, 600, 650, 180, 108) || weaponGUIFlag) g2d.setComposite(ac3);
         g2d.drawImage(loader.loadImage("assets/weaponGUI.png"), 600, 650, 180, 108, null);
         if (weapon != null){
             g2d.drawImage(tex.weapon[weapon.getType()], 612, 662, 72, 72, null); //draw equipped weapon
@@ -570,7 +583,7 @@ public class Screen extends MouseAdapter{
         g2d.setComposite(ac);
 
         //render HP
-        if (mouseOver(mx, my, 24, 24, 125, 50) || hpFlag) g2d.setComposite(ac3);
+        if (mouseOver(mx, my, 24, 24, 101, 26) || hpFlag) g2d.setComposite(ac3);
         renderHP(g2d);
         g2d.setComposite(ac);
 
@@ -593,7 +606,7 @@ public class Screen extends MouseAdapter{
         xd = maxX-minX+mapSize;
         yd = maxY-minY+mapSize;
         int i = 0;
-        if (mouseOver(mx, my, 730-xd-5+mapSize, 45-5, 730+mapSize+xd+5, 45+yd+5) || mapFlag) g2d.setComposite(ac3);
+        if (mouseOver(mx, my, 730-xd-5+mapSize, 45-5, xd+10, yd+10) || mapFlag) g2d.setComposite(ac3);
         g2d.setColor(Color.WHITE);
         g2d.fillRect(730-xd-5+mapSize, 45-5, xd+10, yd+10);
         for (RoomPoint point: visible){
@@ -615,6 +628,15 @@ public class Screen extends MouseAdapter{
 
         //render cursor image
         g.drawImage(loader.loadImage("assets/cursor.png"), mx-8, my-8, null);
+
+        if (main.getState().equals("pause")) {
+          g.setColor(new Color(0, 0, 0, 150));
+          g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);//transparent pause screen
+          if (!effectFlag) g.drawImage(tex.sound_button[2], 688, 45, null);
+          else g.drawImage(tex.sound_button[3], 688, 45, null);
+          if (!backgroundFlag) g.drawImage(tex.sound_button[0], 724, 45, null);
+          else g.drawImage(tex.sound_button[1], 724, 45, null);
+        }
 
         g2d.dispose();
     }

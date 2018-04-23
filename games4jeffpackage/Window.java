@@ -1,8 +1,9 @@
- 
+
 
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Cursor;
 
 import javax.swing.JFrame;
 
@@ -38,6 +39,7 @@ public class Window extends Canvas{
 	/*if the player isn't in the menu, clear the current cursor*/
 	public void tick(){
 		state = main.getState();
-		if (!state.equals("menu"))frame.setCursor(frame.getToolkit().createCustomCursor(loader.loadImage("assets/blank.png"), new Point(), null));
+		if (!state.equals("menu") && !state.equals("pause"))frame.setCursor(frame.getToolkit().createCustomCursor(loader.loadImage("assets/blank.png"), new Point(), null));
+    else frame.setCursor(Cursor.getDefaultCursor());
 	}
 }
