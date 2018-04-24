@@ -28,7 +28,7 @@ public class Main extends Canvas implements Runnable{
 	private Graphics g;
 	private Graphics2D g2d;
 	private String state = "menu";
-	private int numWeapons = 11;
+	private int numWeapons = 12;
 	private int numPowerups = 6;
 	private boolean levelCleared = false;
 	private int w;
@@ -36,7 +36,7 @@ public class Main extends Canvas implements Runnable{
 	private int currentLevel;
 	private int itemRoomIndex = 0;
 	private Window window;
-	private int numRooms = 59;
+	private int numRooms = 62;
 	public static Sound sound;
 
 	/*instantiate all variables and stuff and run all level creation stuff*/
@@ -340,9 +340,10 @@ public class Main extends Canvas implements Runnable{
     		case 7: return "pump shotgun";
     		case 8: return "tac shotgun";
     		case 9: return "mauler";
-            case 10: return "grenade launcher";
-            default: return "";
-        }
+        case 10: return "grenade launcher";
+				case 11: return "rainmaker";
+        default: return "";
+      }
 	}
 
 	/*returns a random powerup name*/

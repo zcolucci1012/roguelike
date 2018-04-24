@@ -112,7 +112,7 @@ public class Screen extends MouseAdapter{
         points = main.getPoints();
         vectors = main.getVectors();
 
-        addWeapon(new Weapon(0, 0 , "grenade launcher"));
+        addWeapon(new Weapon(0, 0 , "pistol"));
     }
 
     /*ran whenever mouse is clicked, tries to fire weapon if not in menu*/
@@ -395,17 +395,17 @@ public class Screen extends MouseAdapter{
         if (introTimer != 400){
             introTimer++;
         }
-        
+
         if (deathFlag){
             deathTimer = 0;
             main.setState("death");
             deathFlag = false;
         }
-        
+
         if (deathTimer != 255){
             deathTimer++;
         }
-        
+
         tempRoom = room; //save old room for comparison
     }
 
@@ -649,7 +649,7 @@ public class Screen extends MouseAdapter{
           if (!backgroundFlag) g.drawImage(tex.sound_button[0], 724, 45, null);
           else g.drawImage(tex.sound_button[1], 724, 45, null);
         }
-        
+
         if (main.getState().equals("death")) {
           g.setColor(new Color(0, 0, 0, deathTimer));
           g.fillRect(0, 0, Main.WIDTH, Main.HEIGHT);
@@ -657,7 +657,7 @@ public class Screen extends MouseAdapter{
           g.setFont(new Font("Trebuchet MS", Font.BOLD, 72));
           g.drawString("YOU DIED", 240, 350);
         }
-        
+
         g2d.dispose();
     }
 
@@ -854,7 +854,7 @@ public class Screen extends MouseAdapter{
         powerupTimer = 200;
         powerupFlag = true;
     }
-    
+
     public void setDeathFlag(boolean deathFlag){
         this.deathFlag = deathFlag;
     }
