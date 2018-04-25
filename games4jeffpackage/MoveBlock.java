@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,6 +7,11 @@ import java.awt.Graphics2D;
 
 public class MoveBlock extends GameThing {
   private Handler handler;
+
+  /*
+    this class isn't properly implemented
+    it is currently deprecated
+  */
 
   public MoveBlock (float x, float y, String id, Handler handler){
     super(x, y, id);

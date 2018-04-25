@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Pouncer extends Enemy{
 
-  private Handler handler;
   private Screen screen;
 	private int randTimer = 0;
 	private int [] imperfections = new int [2];
@@ -16,9 +15,14 @@ public class Pouncer extends Enemy{
 
 	private Texture tex = Main.getInstance();
 
+  /*
+    pouncers are exactly like chasers but their speed
+    is a modified cosine function (see below)
+  */
+
+
   public Pouncer(float x, float y, String id, Handler handler, Screen screen) {
-    super(x, y, id, 15);
-    this.handler = handler;
+    super(x, y, id, handler, 15);
     this.screen = screen;
     timer = (int)(Math.random()*11) + 1;
 
@@ -27,9 +31,9 @@ public class Pouncer extends Enemy{
   }
 
   public void tick() {
-    x+=velX;
-    y+=velY;
+    super.tick();
     double max = 7.0;
+    //defines the speed dependent on the timer
     float speed = (float)Math.pow((-(Math.pow(max, 1.0/10.0)/2.0*Math.cos(Math.PI*timer/25.0)) + Math.pow(max, 1.0/10.0)/2.0), 10.0) + 1;
 		if (randTimer == 50){
 			imperfections[0] = (int)(Math.random() * 51)-25;
@@ -52,27 +56,18 @@ public class Pouncer extends Enemy{
           velY = -(y - (int)pY)/d*speed;
         }
       }
-      if (thing.getId() == "Shot"){
-        if (thing.getBounds().intersects(getBounds())){
-          hp-=screen.getWeapon().getDamage();
-          handler.removeObject(thing);
-          if (hp <= 0){
-            handler.removeObject(this);
-          }
-        }
-      }
-      if (thing.getId() == "Block" || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){
+      if (thing.getId().equals("Block") || thing.getId().equals("Door") || (thing.getId().length() >= 6 && thing.getId().substring(0,6).equals("Enemy.") && thing != this)){
         if (thing.getBounds().intersects(getBoundsRight())){
-					x = thing.getX() - thing.getWidth();
+					x = thing.getX() - width;
         }
 				if (thing.getBounds().intersects(getBoundsLeft())){
-					x = thing.getX() + thing.getWidth();
+					x = thing.getX() + thing.getBounds().width;
         }
 				if (thing.getBounds().intersects(getBoundsTop())){
-					y = thing.getY() + thing.getHeight();
+					y = thing.getY() + thing.getBounds().height;
 				}
 				if (thing.getBounds().intersects(getBoundsBottom())){
-					y = thing.getY() - thing.getHeight();
+					y = thing.getY() - height;
 				}
       }
     }
@@ -91,11 +86,11 @@ public class Pouncer extends Enemy{
   }
 
   public Rectangle getBoundsLeft(){
-    return new Rectangle((int)x, (int)y+5, (int)5, (int)height-10);
+    return new Rectangle((int)x, (int)y+8, (int)5, (int)height-16);
   }
 
   public Rectangle getBoundsRight(){
-    return new Rectangle((int)x+(int)width-5, (int)y+5, (int)5, (int)height-10);
+    return new Rectangle((int)x+(int)width-5, (int)y+8, (int)5, (int)height-16);
   }
 
   public Rectangle getBoundsTop(){

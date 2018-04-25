@@ -1,4 +1,4 @@
-package games4jeffpackage;
+ 
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,6 +19,7 @@ public class Door extends GameThing{
     this.openType = openType;
     this.doorType = doorType;
 
+    //set orientation of the door based on door type (1-top, 2-right, 3-bottom, 4-left)
     if (type == 1){
       this.width = 33;
       this.height = 12;
@@ -44,6 +45,7 @@ public class Door extends GameThing{
   }
 
   public void render(Graphics g){
+    //changes color of door based on type
     if (doorType == 1) g.setColor(Color.ORANGE);
     if (doorType == 2) g.setColor(Color.RED);
     if (doorType == 3) g.setColor(Color.GREEN);
@@ -54,6 +56,7 @@ public class Door extends GameThing{
     return new Rectangle((int)x, (int)y, (int)width, (int)height);
   }
 
+  //opens door a certain direction depending on direction specified (1-down, 2-left, 3-up, 4-right)
   public void open(){
     if (!open && unlocked){
       if (openType == 1){
@@ -72,6 +75,7 @@ public class Door extends GameThing{
     }
   }
 
+  //closes the doors opposite of how they're opened (if already open)
   public void close(){
     if (open){
       if (openType == 1){
@@ -88,13 +92,14 @@ public class Door extends GameThing{
       }
     }
     open = false;
-    unlocked = false;
+    unlocked = false; //lock the doors when closed by default
   }
 
   public void unlock(){
     unlocked = true;
   }
 
+  //get current room of the door
   public RoomPoint getRoom(){
     int roomX;
 		int roomY;

@@ -1,4 +1,4 @@
-package games4jeffpackage;
+
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,22 +6,21 @@ import java.awt.Rectangle;
 
 public class Weapon extends Pickup {
 
-  private int fireDelay;
-  private int shotSpeed;
-  private int damage;
-  private int magazine;
-  private int reloadTime;
-  private int ammo;
-  private int inaccuracy;
-  private String fireType;
-  private int range;
-  private int shotsFired = 1;
-  private String name;
+  private int fireDelay; //tick delay between shots
+  private int shotSpeed; //speed of bullets
+  private float damage; //damage of one bullet
+  private int magazine; //bullets in clip
+  private int reloadTime; //amount of ticks to complete reload
+  private int ammo; //current ammo in the weapon (will be automatically set on pickup)
+  private int inaccuracy; //how much shot is affected by random chance
+  private String fireType; //semi-auto or auto
+  private int range; //how far the bullet travels
+  private int shotsFired = 1; //bullets fired every time shot
+  private String weaponClass = ""; //handles specific types of weapons (i.e. burst, grenade launcher)
 
   public Weapon (float x, float y, String id){
     super(x, y, id);
-    name = this.id.substring(7);
-    makeWeapons();
+    makeWeapons(); //set qualities of each weapon
   }
 
   public int getFireDelay(){
@@ -40,11 +39,11 @@ public class Weapon extends Pickup {
     this.shotSpeed = shotSpeed;
   }
 
-  public int getDamage(){
+  public float getDamage(){
     return damage;
   }
 
-  public void setDamage(int damage){
+  public void setDamage(float damage){
     this.damage = damage;
   }
 
@@ -104,6 +103,26 @@ public class Weapon extends Pickup {
     this.range = range;
   }
 
+  public String getWeaponClass(){
+    return weaponClass;
+  }
+
+  public void setWeaponClass(String weaponClass){
+    this.weaponClass = weaponClass;
+  }
+
+  /*
+    how to create weapons:
+    - copy one of the templates below between the brackets of the if statement
+    - change the name and qualities of the weapon using current weapons as references
+    - adjust the chooseWeapon() method in the main class so the weapon can randomly spawn
+      (don't forget to change numWeapons to the correct number of weapons [excluding pistol])
+    - once textures are complete, add to the Texture class at a certain index, and have the getType() method
+      of the Pickup class return that index when your weapon is referenced. this way the render method will
+      recognize that the weapon has a texture, but it will otherwise show a pistol
+    - *note* When adding textures, add to both the weapon spritesheet with a light blue background
+      and the blank weapon spritesheet with no background
+  */
   private void makeWeapons(){
     if (name.equals("pistol")){
       fireDelay = 15;
@@ -215,14 +234,32 @@ public class Weapon extends Pickup {
       reloadTime = 100;
       inaccuracy = 150;
       fireType = "auto";
-      shotsFired = 10;
+      shotsFired = 6;
       range = 10;
     }
+    if (name.equals("grenade launcher")){
+      fireDelay = 50;
+      shotSpeed = 5;
+      damage = 10;
+      magazine = 7;
+      reloadTime = 200;
+      inaccuracy = 30;
+      fireType = "semi-auto";
+      range = 50;
+      weaponClass = "grenade launcher";
+    }
+    if (name.equals("rainmaker")){
+      fireDelay = 25;
+      shotSpeed = 5;
+      damage = 5;
+      magazine = 10;
+      reloadTime = 175;
+      inaccuracy = 50;
+      fireType = "auto";
+      range = 75;
+      weaponClass = "grenade launcher";
+    }
     ammo = magazine;
-  }
-
-  public String getName(){
-    return name;
   }
 
   public void render(Graphics g){

@@ -1,20 +1,27 @@
-package games4jeffpackage;
+
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public abstract class GameThing {
-	protected float x, y, velX, velY, width, height;
+	protected float x, y, velX, velY, width, height; //the position, velocity, and size of the object held here
 
-	protected String id;
+	protected String id; //each object type has their own id (ex. "Player" or "Enemy")
 
 	public GameThing(float x, float y, String id){
 		this.x = x;
 		this.y = y;
 		this.id = id;
+
+		//for more info on how to create gamethings, check out Player class and others that extend GameThing
 	}
+
+	//tick method controls parts of the object not involved with rendering (i.e. movement, firing)
 	public abstract void tick();
+	//render method will draw each object
 	public abstract void render(Graphics g);
+	//returns a rectangle describing the bounds of the object
+	//(function could possibly be altered to handle other shapes)
 	public abstract Rectangle getBounds();
 
 	public float getX() {
