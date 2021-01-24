@@ -1,5 +1,4 @@
-# games4jeff
-A Game Intended Intentionally and Specifically for Jeffery
+# roguelike
 
 Rules:
 - Make it through each room without getting killed by enemies
