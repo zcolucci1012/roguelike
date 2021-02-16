@@ -19,7 +19,7 @@ To play the game, either open the provided .jar file (https://drive.google.com/o
 
 - Download onto Github Desktop / Download the Zip file
 - Go into a java compiler (such as BlueJ, possibly Eclipse but I haven't gotten it to work yet)
-- Locate the folder within the Github folder labeled "games4jeffpackage"
+- Locate the folder within the Github folder labeled "roguelike"
 - Import folder into java compiler
 - Compile the files
 - Run the class labeled Main
