@@ -15,7 +15,7 @@ Controls:
 - R to reload
 - P to pause
 
-To play the game, either open the provided .jar file (https://drive.google.com/open?id=1z9B7tci82v57cQw6GftT3Xq7Ev-ewFaS) or follow these instructions:
+To play the game, either open the provided .jar file (https://drive.google.com/file/d/1AKyveb2QiXKh6G-QXgEjt5sUAf7Hrh0T/view?usp=sharing) or follow these instructions:
 
 - Download onto Github Desktop / Download the Zip file
 - Go into a java compiler (such as BlueJ, possibly Eclipse but I haven't gotten it to work yet)
